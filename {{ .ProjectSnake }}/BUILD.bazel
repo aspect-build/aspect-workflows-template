@@ -1,0 +1,8 @@
+"Targets in the workspace root"
+
+{{ if .Scaffold.fmt -}}
+alias(
+    name = "format",
+    actual = "//tools/format",
+)
+{{ end }}

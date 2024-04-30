@@ -1,0 +1,30 @@
+messages:
+  pre: |
+    # Aspect starter
+
+    Generate boilerplate code for a new Bazel project using Aspect CLI
+
+  post: |
+    # Get Started
+
+    ```sh
+    cd {{ .ProjectSnake }}
+    aspect test ...
+    ```
+questions:
+  - name: fmt
+    prompt:
+      confirm: "Setup formatter?"
+  - name: langs
+    prompt:
+      multi: true
+      message: "Languages to be used in the project"
+      options:
+        - "javascript"
+        - "go"
+        - "python"
+        - "java"
+features:
+  - value: "{{ .Scaffold.fmt }}"
+    globs:
+      - "**/tools/format/*"
