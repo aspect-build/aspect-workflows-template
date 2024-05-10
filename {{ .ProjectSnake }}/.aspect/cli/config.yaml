@@ -1,3 +1,7 @@
 configure:
     languages:
-        javascript: false
+{{- range .Scaffold.langs}}
+{{- if eq . "JavaScript"}}
+        javascript: true
+{{- end}}
+{{- end}}
