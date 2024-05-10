@@ -1,24 +1,22 @@
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.1")
-bazel_dep(name = "aspect_rules_lint", version = "0.18.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.3")
+bazel_dep(name = "aspect_rules_lint", version = "0.20.0")
 bazel_dep(name = "rules_multitool", version = "0.7.1")
-{{- range .Scaffold.langs}}
-{{- if eq . "JavaScript"}}
-bazel_dep(name = "aspect_rules_js", version = "1.32.6")
-{{- end}}
-{{- if eq . "TypeScript"}}
+{{- if .Computed.javascript }}
+bazel_dep(name = "aspect_rules_js", version = "1.42.0")
 bazel_dep(name = "aspect_rules_ts", version = "2.3.0")
 {{- end}}
-{{- end}}
+{{- if .Computed.python }}
+bazel_dep(name = "rules_python", version = "0.31.0")
+bazel_dep(name = "aspect_rules_py", version = "0.7.3")
+{{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 
-{{- range .Scaffold.langs}}
-{{- if eq . "JavaScript"}}
+{{- if .Computed.javascript}}
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
-# Allows developers to get a local node_modules tree, using
-# bazel run -- @pnpm//:pnpm --dir $PWD install
+# Allows developers to run the same pnpm version that Bazel manages
 use_repo(pnpm, "pnpm")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
@@ -26,11 +24,10 @@ npm.npm_translate_lock(
     name = "npm",
     npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
 )
 use_repo(npm, "npm")
-{{- end}}
 
-{{- if eq . "TypeScript"}}
 rules_ts_ext = use_extension(
     "@aspect_rules_ts//ts:extensions.bzl",
     "ext",
@@ -39,4 +36,18 @@ rules_ts_ext = use_extension(
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 {{- end}}
+
+{{- if .Computed.python }}
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.9",
+)
+
+pip.parse(
+    hub_name = "pip",
+    requirements_lock = "//:requirements_lock.txt",
+    python_version = "3.9",
+)
+use_repo(pip, "pip")
 {{- end}}

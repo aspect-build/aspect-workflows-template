@@ -1,8 +1,26 @@
 "Targets in the workspace root"
+{{- if .Computed.javascript }}
+load("@npm//:defs.bzl", "npm_link_all_packages")
+{{- end }}
+{{- if .Computed.python }}
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+{{- end}}
 
-{{ if .Scaffold.fmt -}}
+{{- if .Scaffold.fmt }}
 alias(
     name = "format",
     actual = "//tools/format",
 )
-{{ end }}
+{{- end }}
+
+{{- if .Computed.javascript }}
+npm_link_all_packages(name = "node_modules")
+{{- end }}
+
+{{- if .Computed.python }}
+compile_pip_requirements(
+    name = "requirements",
+    requirements_in = "requirements.txt",
+    requirements_txt = "requirements_lock.txt",
+)
+{{- end }}

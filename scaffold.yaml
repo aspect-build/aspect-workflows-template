@@ -9,7 +9,14 @@ messages:
 
     ```sh
     cd {{ .ProjectSnake }}
+    {{- if .Scaffold.fmt }}
+    aspect run format
+    {{- end }}
     aspect test ...
+    
+    JavaScript support: {{ .Computed.javascript }}
+    Python support: {{ .Computed.python }}
+    TypeScript support: {{ .Computed.typescript }}
     ```
 questions:
   - name: fmt
@@ -20,13 +27,38 @@ questions:
       multi: true
       message: "Languages to be used in the project"
       options:
-        - JavaScript
-        - TypeScript
+        - JavaScript & TypeScript
+        - Python
+
 features:
   - value: "{{ .Scaffold.fmt }}"
     globs:
       - "**/tools/format/*"
+  - value: "{{ .Computed.javascript }}"
+    globs:
+      - "*/package.json"
+      - "*/pnpm-workspace.yaml"
+      - "*/.npmrc"
+      - "**/packages/**"
+  - value: "{{ .Computed.python }}"
+    globs:
+      - "*/requirements.txt"
+      - "*/requirements_lock.txt"
+
+computed:
+  javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
+  python: "{{ has \"Python\" .Scaffold.langs }}"
+
 presets:
   kitchen-sink:
     fmt: true
-    langs: ['JavaScript', 'TypeScript']
+    langs: ['JavaScript & TypeScript', 'Python']
+  js:
+    fmt: true
+    langs: ['JavaScript & TypeScript']
+  py:
+    fmt: true
+    langs: ['Python']
+  minimal:
+    fmt: false
+    langs: []
