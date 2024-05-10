@@ -1,0 +1,31 @@
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                go-version: '>=1.22'
+            - uses: bazel-contrib/setup-bazel@0.8.2
+              with:
+                bazelisk-cache: true
+                repository-cache: true 
+            - run: go install github.com/hay-kot/scaffold@v0.0.90
+            - name: Scaffold new kitchen-sink app
+              id: kitchen-sink
+              run: |
+                scaffold new --preset=kitchen-sink --no-prompt $GITHUB_WORKSPACE
+                cd scaffold_test*
+                git init
+                echo "::set-output name=dir::$PWD"
+            - name: Test kitchen-sink
+              working-directory: "${{ steps.kitchen-sink.outputs.dir }}"
+              run: |
+                bazel test ...
+                bazel run format

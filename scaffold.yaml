@@ -20,11 +20,13 @@ questions:
       multi: true
       message: "Languages to be used in the project"
       options:
-        - "javascript"
-        - "go"
-        - "python"
-        - "java"
+        - JavaScript
+        - TypeScript
 features:
   - value: "{{ .Scaffold.fmt }}"
     globs:
       - "**/tools/format/*"
+presets:
+  kitchen-sink:
+    fmt: true
+    langs: ['JavaScript', 'TypeScript']
