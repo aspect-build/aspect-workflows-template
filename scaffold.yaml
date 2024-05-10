@@ -13,10 +13,6 @@ messages:
     aspect run format
     {{- end }}
     aspect test ...
-    
-    JavaScript support: {{ .Computed.javascript }}
-    Python support: {{ .Computed.python }}
-    TypeScript support: {{ .Computed.typescript }}
     ```
 questions:
   - name: fmt
@@ -37,7 +33,7 @@ features:
   - value: "{{ .Computed.javascript }}"
     globs:
       - "*/package.json"
-      - "*/pnpm-workspace.yaml"
+      - "*/pnpm-*.yaml"
       - "*/.npmrc"
       - "**/packages/**"
   - value: "{{ .Computed.python }}"

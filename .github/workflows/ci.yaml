@@ -4,8 +4,15 @@ on:
     pull_request:
         branches: [main]
 
-jobs:
+jobs:        
     test:
+        strategy:
+            matrix:
+                preset:
+                    - kitchen-sink
+                    - js
+                    - py
+                    - minimal
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -17,15 +24,17 @@ jobs:
                 bazelisk-cache: true
                 repository-cache: true 
             - run: go install github.com/hay-kot/scaffold@v0.0.90
-            - name: Scaffold new kitchen-sink app
-              id: kitchen-sink
+            - name: Scaffold new app
+              id: scaffold
               run: |
-                scaffold new --preset=kitchen-sink --no-prompt $GITHUB_WORKSPACE
+                scaffold new --preset=${{ matrix.preset }} --no-prompt $GITHUB_WORKSPACE
                 cd scaffold_test*
                 git init
                 echo "::set-output name=dir::$PWD"
-            - name: Test kitchen-sink
-              working-directory: "${{ steps.kitchen-sink.outputs.dir }}"
-              run: |
-                bazel test ...
-                bazel run format
+            - name: Test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              run: bazel test ...
+            - name: Format
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset != 'minimal' }}"
+              run: bazel run format

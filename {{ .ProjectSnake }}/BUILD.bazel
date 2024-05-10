@@ -1,10 +1,10 @@
 "Targets in the workspace root"
-{{- if .Computed.javascript }}
+{{- if .Scaffold.Computed.javascript }}
 load("@npm//:defs.bzl", "npm_link_all_packages")
-{{- end }}
-{{- if .Computed.python }}
+{{ end }}
+{{- if .Scaffold.Computed.python }}
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
-{{- end}}
+{{ end}}
 
 {{- if .Scaffold.fmt }}
 alias(
@@ -13,11 +13,11 @@ alias(
 )
 {{- end }}
 
-{{- if .Computed.javascript }}
+{{- if .Scaffold.Computed.javascript }}
 npm_link_all_packages(name = "node_modules")
 {{- end }}
 
-{{- if .Computed.python }}
+{{- if .Scaffold.Computed.python }}
 compile_pip_requirements(
     name = "requirements",
     requirements_in = "requirements.txt",
