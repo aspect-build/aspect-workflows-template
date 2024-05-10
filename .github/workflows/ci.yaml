@@ -21,7 +21,7 @@ jobs:
               id: kitchen-sink
               run: |
                 scaffold new --preset=kitchen-sink --no-prompt $GITHUB_WORKSPACE
-                cd scaffold-*
+                cd scaffold_test*
                 git init
                 echo "::set-output name=dir::$PWD"
             - name: Test kitchen-sink
