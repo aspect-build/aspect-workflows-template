@@ -29,5 +29,6 @@ features:
   - value: "{{ }}"
 presets:
   kitchen-sink:
+    Project: scaffold-kitchen-sink
     fmt: true
     langs: ['JavaScript', 'TypeScript']

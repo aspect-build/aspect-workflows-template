@@ -16,12 +16,12 @@ jobs:
               with:
                 bazelisk-cache: true
                 repository-cache: true 
-            - run: go install github.com/hay-kot/scaffold@710f210eeacdd6b61b9cbaf40630db1d5809a419
+            - run: go install github.com/hay-kot/scaffold@v0.0.90
             - name: Scaffold new kitchen-sink app
               id: kitchen-sink
               run: |
                 scaffold new --preset=kitchen-sink --no-prompt $GITHUB_WORKSPACE
-                cd scaffold_test*
+                cd scaffold-*
                 git init
                 echo "::set-output name=dir::$PWD"
             - name: Test kitchen-sink
