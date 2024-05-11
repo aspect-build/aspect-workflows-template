@@ -1,5 +1,37 @@
 {
   "$schema": "https://raw.githubusercontent.com/theoremlp/rules_multitool/main/lockfile.schema.json",
+  "buildozer": {
+    "binaries": [
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/buildtools/releases/download/v7.1.1/buildozer-darwin-arm64",
+        "os": "macos",
+        "cpu": "arm64",
+        "sha256": "0a2f70aa7b864de9bf71d1aac39659017b7a84169506e350d9ec77c609265212"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/buildtools/releases/download/v7.1.1/buildozer-darwin-amd64",
+        "os": "macos",
+        "cpu": "x86_64",
+        "sha256": "6286bbbcb5314d675fcb4ede30edf397a68c611005412c937b2cc0c4bf4b714b"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/buildtools/releases/download/v7.1.1/buildozer-linux-amd64",
+        "os": "linux",
+        "cpu": "x86_64",
+        "sha256": "9a7424aca7ca911c85cfedeadf065f0d95c492e80f0e29bd07ea98f6eb087259"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/buildtools/releases/download/v7.1.1/buildozer-linux-arm64",
+        "os": "linux",
+        "cpu": "arm64",
+        "sha256": "07c8ed5ca3efea7e20756e9060660b7e658c781953c60650a1b99cd8bb857fcf"
+      }
+    ]
+  },
   "ibazel": {
     "binaries": [
       {
