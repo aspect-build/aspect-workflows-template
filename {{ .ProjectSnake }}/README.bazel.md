@@ -2,7 +2,7 @@
 
 This repository uses [Aspect Workflows](https://aspect.build) to provide an excellent Bazel developer experience.
 
-## Formatting
+## Formatting code
 
 - Run `aspect run format` to re-format all files locally.
 - Run `aspect run format path/to/file` to re-format a single file.
@@ -19,7 +19,7 @@ For developers to be able to run a CLI tool without needing manual installation:
 
 See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
-{{ if .Scaffold.Computed.javascript }}
+{{- if eq .Computed.javascript "true" }}
 ## Working with npm packages
 
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:

@@ -1,7 +1,14 @@
 configure:
-    languages:
-{{- range .Scaffold.langs}}
-{{- if eq . "JavaScript"}}
-        javascript: true
+  languages:
+{{- if eq .Computed.javascript "true" }}
+    javascript: true
 {{- end}}
-{{- end}}
+
+lint:
+  aspects:
+{{- if eq .Computed.javascript "true" }}
+    - //tools/lint:linters.bzl%eslint
+{{- end }}
+{{- if eq .Computed.python "true" }}
+    - //tools/lint:linters.bzl%ruff
+{{- end }}

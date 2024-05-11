@@ -1,20 +1,26 @@
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.3")
 bazel_dep(name = "aspect_rules_lint", version = "0.20.0")
 bazel_dep(name = "rules_multitool", version = "0.7.1")
-{{- if .Scaffold.Computed.javascript }}
+{{- if eq .Computed.javascript "true" }}
 bazel_dep(name = "aspect_rules_js", version = "1.42.0")
 bazel_dep(name = "aspect_rules_ts", version = "2.3.0")
 {{- end}}
-{{- if .Scaffold.Computed.python }}
+{{- if eq .Computed.python "true" }}
 bazel_dep(name = "rules_python", version = "0.31.0")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 {{- end }}
+
+git_override(
+    module_name = "aspect_rules_lint",
+    remote = "https://github.com/aspect-build/rules_lint.git",
+    commit = "53ab16800ac312c612f174bb8fc6bc335d9defd9",
+)
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 
-{{- if .Scaffold.Computed.javascript}}
+{{- if eq .Computed.javascript "true" }}
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
 # Allows developers to run the same pnpm version that Bazel manages
 use_repo(pnpm, "pnpm")
@@ -37,7 +43,7 @@ rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 {{- end}}
 
-{{- if .Scaffold.Computed.python }}
+{{- if eq .Computed.python "true" }}
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(

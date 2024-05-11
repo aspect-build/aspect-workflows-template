@@ -1,23 +1,45 @@
 "Targets in the workspace root"
-{{- if .Scaffold.Computed.javascript }}
+{{- if eq .Computed.javascript "true" }}
+load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 {{ end }}
-{{- if .Scaffold.Computed.python }}
+{{- if eq .Computed.python "true" }}
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 {{ end}}
 
-{{- if .Scaffold.fmt }}
+{{- if .Scaffold.lint }}
 alias(
     name = "format",
     actual = "//tools/format",
 )
+
+exports_files(
+    [
+{{- if eq .Computed.python "true" }}
+        "pyproject.toml",
+{{- end }}
+    ],
+    visibility = ["//visibility:public"],
+)
 {{- end }}
 
-{{- if .Scaffold.Computed.javascript }}
+{{- if eq .Computed.javascript "true" }}
 npm_link_all_packages(name = "node_modules")
+
+{{- if .Scaffold.lint }}
+js_library(
+    name = "eslintrc",
+    srcs = [".eslintrc.cjs"],
+    deps = [
+        ":node_modules/@typescript-eslint/eslint-plugin",
+        ":node_modules/@typescript-eslint/parser",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+{{- end }}
 {{- end }}
 
-{{- if .Scaffold.Computed.python }}
+{{- if eq .Computed.python "true" }}
 compile_pip_requirements(
     name = "requirements",
     requirements_in = "requirements.txt",
