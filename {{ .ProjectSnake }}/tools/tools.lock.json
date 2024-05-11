@@ -1,3 +1,28 @@
 {
-  "$schema": "https://raw.githubusercontent.com/theoremlp/rules_multitool/main/lockfile.schema.json"
+  "$schema": "https://raw.githubusercontent.com/theoremlp/rules_multitool/main/lockfile.schema.json",
+  "ibazel": {
+    "binaries": [
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/bazel-watcher/releases/download/v0.25.2/ibazel_darwin_arm64",
+        "os": "macos",
+        "cpu": "arm64",
+        "sha256": "e4d5e04a2a0e4dda21350ffe26623469a85ab8786570aea962b058a954dcd3f1"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/bazel-watcher/releases/download/v0.25.2/ibazel_linux_amd64",
+        "os": "linux",
+        "cpu": "x86_64",
+        "sha256": "1377caf887a7a239106ad6408fca1e14dfb239b3072b3abddbb660ff994b62aa"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/bazelbuild/bazel-watcher/releases/download/v0.25.2/ibazel_linux_arm64",
+        "os": "linux",
+        "cpu": "arm64",
+        "sha256": "3c15af15ffe77f7c4ed799a6a7c539541922a4811b8b9f4fbac044060ef89b64"
+      }
+    ]
+  }
 }

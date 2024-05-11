@@ -8,6 +8,14 @@ import %workspace%/.aspect/bazelrc/performance.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
+{{ if eq .Computed.javascript "true" }}
+# for speed, passes an argument `--skipLibCheck` to *every* spawn of tsc
+common --@aspect_rules_ts//ts:skipLibCheck=always
+# use `tsc` for transpiling, even though it's slow.
+# TODO(alex): change to SWC by default
+common --@aspect_rules_ts//ts:default_to_tsc_transpiler
+{{ end }}
+
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This
 # should be last statement in this config so the user configuration is able to overwrite flags from
