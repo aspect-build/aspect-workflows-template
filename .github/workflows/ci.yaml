@@ -31,14 +31,13 @@ jobs:
                 cd scaffold_test*
                 git init
                 echo "::set-output name=dir::$PWD"
-            - name: Test
+
+            - run: bazel test ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              run: bazel test ...
-            - name: Format
+              
+            - run: bazel run format
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
-              run: bazel run format
-            - name: Lint
+              
+            - run: bazel lint ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' || matrix.preset == 'js' }}"
-              run: bazel lint //...
