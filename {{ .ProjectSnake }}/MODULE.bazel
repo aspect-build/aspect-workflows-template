@@ -1,5 +1,5 @@
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.3")
-bazel_dep(name = "aspect_rules_lint", version = "0.20.0")
+bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
 bazel_dep(name = "rules_multitool", version = "0.7.1")
 {{- if .Computed.javascript }}
 bazel_dep(name = "aspect_rules_js", version = "1.42.0")
@@ -9,12 +9,6 @@ bazel_dep(name = "aspect_rules_ts", version = "2.3.0")
 bazel_dep(name = "rules_python", version = "0.31.0")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 {{- end }}
-
-git_override(
-    module_name = "aspect_rules_lint",
-    remote = "https://github.com/aspect-build/rules_lint.git",
-    commit = "53ab16800ac312c612f174bb8fc6bc335d9defd9",
-)
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
