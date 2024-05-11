@@ -6,6 +6,7 @@ configure:
 
 lint:
   aspects:
+    - //tools/lint:linters.bzl%shellcheck
 {{- if eq .Computed.javascript "true" }}
     - //tools/lint:linters.bzl%eslint
 {{- end }}

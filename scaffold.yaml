@@ -41,6 +41,7 @@ features:
     globs:
       - "*/tools/format/*"
       - "*/tools/lint/*"
+      - "*/.shellcheckrc"
   - value: "{{ .Scaffold.stamp }}"
     globs:
       - "*/tools/workspace_status.sh"

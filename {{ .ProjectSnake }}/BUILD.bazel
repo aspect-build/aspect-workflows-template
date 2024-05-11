@@ -15,6 +15,7 @@ alias(
 
 exports_files(
     [
+        ".shellcheckrc",
 {{- if eq .Computed.python "true" }}
         "pyproject.toml",
 {{- end }}
