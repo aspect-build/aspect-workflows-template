@@ -1,15 +1,15 @@
 "Define linter aspects"
 
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
 load("@aspect_rules_lint//lint:eslint.bzl", "lint_eslint_aspect")
 {{- end }}
 load("@aspect_rules_lint//lint:lint_test.bzl", "lint_test")
-{{- if eq .Computed.python "true" }}
+{{- if .Computed.python }}
 load("@aspect_rules_lint//lint:ruff.bzl", "lint_ruff_aspect")
 {{- end }}
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
 eslint = lint_eslint_aspect(
     binary = "@@//tools/lint:eslint",
     # We trust that eslint will locate the correct configuration file for a given source file.
@@ -23,7 +23,7 @@ eslint = lint_eslint_aspect(
 eslint_test = lint_test(aspect = eslint)
 {{- end }}
 
-{{- if eq .Computed.python "true" }}
+{{- if .Computed.python }}
 ruff = lint_ruff_aspect(
     binary = "@@//tools/lint:ruff",
     configs = [

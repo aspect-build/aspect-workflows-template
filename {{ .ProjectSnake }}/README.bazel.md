@@ -21,7 +21,7 @@ For developers to be able to run a CLI tool without needing manual installation:
 
 See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
-{{ if eq .Computed.javascript "true" }}
+{{ if .Computed.javascript }}
 ## Working with npm packages
 
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:

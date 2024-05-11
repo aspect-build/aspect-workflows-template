@@ -1,9 +1,9 @@
 "Targets in the workspace root"
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 {{ end }}
-{{- if eq .Computed.python "true" }}
+{{- if .Computed.python }}
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 {{ end}}
 
@@ -16,7 +16,7 @@ alias(
 exports_files(
     [
         ".shellcheckrc",
-{{- if eq .Computed.python "true" }}
+{{- if .Computed.python }}
         "pyproject.toml",
 {{- end }}
     ],
@@ -24,7 +24,7 @@ exports_files(
 )
 {{- end }}
 
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
 npm_link_all_packages(name = "node_modules")
 
 {{- if .Scaffold.lint }}
@@ -40,7 +40,7 @@ js_library(
 {{- end }}
 {{- end }}
 
-{{- if eq .Computed.python "true" }}
+{{ if .Computed.python }}
 compile_pip_requirements(
     name = "requirements",
     requirements_in = "requirements.txt",

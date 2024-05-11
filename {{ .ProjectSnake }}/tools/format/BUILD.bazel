@@ -5,13 +5,13 @@ we don't want to trigger eager fetches of these for builds that don't want to ru
 """
 
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
-{{ if eq .Computed.javascript "true" }}
+{{ if .Computed.javascript }}
 load("@npm//:prettier/package_json.bzl", prettier = "bin")
 {{ end }}
 
 package(default_visibility = ["//:__subpackages__"])
 
-{{ if eq .Computed.javascript "true" }}
+{{ if .Computed.javascript }}
 prettier.prettier_binary(
     name = "prettier",
     env = {"BAZEL_BINDIR": "."},
@@ -20,7 +20,7 @@ prettier.prettier_binary(
 
 format_multirun(
     name = "format",
-{{ if eq .Computed.javascript "true" }}
+{{ if .Computed.javascript }}
     javascript = ":prettier",
 {{ end }}
 )

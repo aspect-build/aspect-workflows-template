@@ -1,15 +1,15 @@
 configure:
   languages:
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
     javascript: true
 {{- end}}
 
 lint:
   aspects:
     - //tools/lint:linters.bzl%shellcheck
-{{- if eq .Computed.javascript "true" }}
+{{- if .Computed.javascript }}
     - //tools/lint:linters.bzl%eslint
 {{- end }}
-{{- if eq .Computed.python "true" }}
+{{- if .Computed.python }}
     - //tools/lint:linters.bzl%ruff
 {{- end }}
