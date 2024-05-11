@@ -4,6 +4,7 @@ configure:
     javascript: true
 {{- end}}
 
+{{- if .Scaffold.lint }}
 lint:
   aspects:
     - //tools/lint:linters.bzl%shellcheck
@@ -12,4 +13,5 @@ lint:
 {{- end }}
 {{- if .Computed.python }}
     - //tools/lint:linters.bzl%ruff
+{{- end }}
 {{- end }}
