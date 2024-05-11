@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://hay-kot.github.io/scaffold/schema.json
 messages:
   pre: |
     # Welcome to Aspect, the multi-language monorepo dev platform
@@ -24,19 +25,26 @@ questions:
   - name: langs
     prompt:
       multi: true
-      message: "Languages to be used in the project"
+      message: Languages to be used in the project
       options:
         - JavaScript & TypeScript
         - Python
   - name: lint
     prompt:
-      confirm: "Setup format and linting?"
+      confirm: Setup format and linting?
+  - name: stamp
+    prompt:
+      confirm: Setup version stamping?
 
 features:
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
       - "*/tools/lint/*"
+  - value: "{{ .Scaffold.stamp }}"
+    globs:
+      - "*/tools/workspace_status.sh"
+      - "**/weekly_tag.yaml"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "*/package.json"
@@ -57,6 +65,7 @@ presets:
   kitchen-sink:
     lint: true
     langs: ['JavaScript & TypeScript', 'Python']
+    stamp: true
   js:
     lint: true
     langs: ['JavaScript & TypeScript']
