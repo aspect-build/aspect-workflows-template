@@ -2,3 +2,9 @@
 #
 # This file is a marker indicating the root of a Bazel workspace.
 # See MODULE.bazel for dependency information.
+
+{{- if eq .Computed.python "true" }}
+load("@aspect_rules_lint//lint:ruff.bzl", "fetch_ruff")
+
+fetch_ruff()
+{{- end }}

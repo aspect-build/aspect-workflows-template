@@ -38,3 +38,7 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
               run: bazel run format
+            - name: Lint
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'py' || matrix.preset == 'js' }}"
+              run: bazel lint //...

@@ -1,4 +1,11 @@
 {
     "name": "{{ .Project }}",
-    "private": true
+    "private": true,
+    "devDependencies": {
+        "eslint": "^8",
+        "@typescript-eslint/parser": "*",
+        "@typescript-eslint/eslint-plugin": "*",
+        "typescript": "5.4.5",
+        "prettier": "*"
+    }
 }

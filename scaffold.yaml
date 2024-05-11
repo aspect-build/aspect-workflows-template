@@ -1,23 +1,27 @@
 messages:
   pre: |
-    # Aspect starter
+    # Welcome to Aspect
 
-    Generate boilerplate code for a new Bazel project using Aspect CLI
+    Generate boilerplate code for a new Bazel project using Aspect CLI and Aspect Workflows.
 
   post: |
     # Get Started
 
+    1. Read the developer guide in {{ .ProjectSnake }}/README.bazel.md
+    2. Try out some commands, such as:
+
     ```sh
     cd {{ .ProjectSnake }}
-    {{- if .Scaffold.fmt }}
+    {{- if .Scaffold.lint }}
     aspect run format
     {{- end }}
     aspect test ...
     ```
+
 questions:
-  - name: fmt
+  - name: lint
     prompt:
-      confirm: "Setup formatter?"
+      confirm: "Setup format and linting?"
   - name: langs
     prompt:
       multi: true
@@ -27,19 +31,21 @@ questions:
         - Python
 
 features:
-  - value: "{{ .Scaffold.fmt }}"
+  - value: "{{ .Scaffold.lint }}"
     globs:
-      - "**/tools/format/*"
+      - "*/tools/format/*"
+      - "*/tools/lint/*"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "*/package.json"
       - "*/pnpm-*.yaml"
+      - "*/.eslintrc*"
       - "*/.npmrc"
       - "**/packages/**"
   - value: "{{ .Computed.python }}"
     globs:
-      - "*/requirements.txt"
-      - "*/requirements_lock.txt"
+      - "*/requirements*.txt"
+      - "*/pyproject.toml"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
@@ -47,14 +53,14 @@ computed:
 
 presets:
   kitchen-sink:
-    fmt: true
+    lint: true
     langs: ['JavaScript & TypeScript', 'Python']
   js:
-    fmt: true
+    lint: true
     langs: ['JavaScript & TypeScript']
   py:
-    fmt: true
+    lint: true
     langs: ['Python']
   minimal:
-    fmt: false
+    lint: false
     langs: []
