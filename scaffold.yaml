@@ -31,10 +31,14 @@ questions:
         - Python
   - name: lint
     prompt:
-      confirm: Setup format and linting?
+      message: Setup format and linting?
+      description: "Installs https://github.com/aspect-build/rules_lint"
+      confirm: true
   - name: stamp
     prompt:
-      confirm: Setup version stamping?
+      message: Setup version stamping?
+      description: "Read more: https://blog.aspect.build/versioning-releases-from-a-monorepo"
+      confirm: true
 
 features:
   - value: "{{ .Scaffold.lint }}"

@@ -23,7 +23,7 @@ jobs:
               with:
                 bazelisk-cache: true
                 repository-cache: true 
-            - run: go install github.com/hay-kot/scaffold@v0.0.91
+            - run: go install github.com/hay-kot/scaffold@v0.0.99
             - name: Scaffold new app
               id: scaffold
               run: |
