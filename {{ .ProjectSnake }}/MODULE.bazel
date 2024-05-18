@@ -6,7 +6,7 @@ bazel_dep(name = "aspect_rules_js", version = "1.42.1")
 bazel_dep(name = "aspect_rules_ts", version = "2.3.0")
 {{- end}}
 {{- if .Computed.python }}
-bazel_dep(name = "rules_python", version = "0.31.0")
+bazel_dep(name = "rules_python", version = "0.32.2")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 {{- end }}
 
