@@ -2,7 +2,7 @@
     "name": "{{ .Project }}",
     "private": true,
     "devDependencies": {
-        "eslint": "^8",
+        "eslint": "^9.0.0",
         "@typescript-eslint/parser": "*",
         "@typescript-eslint/eslint-plugin": "*",
         "typescript": "5.4.5",
