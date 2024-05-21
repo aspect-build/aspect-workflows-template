@@ -4,7 +4,7 @@ load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 {{ end }}
 {{- if .Computed.python }}
-load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_uv//uv:pip.bzl", "pip_compile")
 {{ end}}
 
 {{- if .Scaffold.lint }}
@@ -41,9 +41,9 @@ js_library(
 {{- end }}
 
 {{ if .Computed.python }}
-compile_pip_requirements(
+pip_compile(
     name = "requirements",
-    requirements_in = "requirements.txt",
-    requirements_txt = "requirements_lock.txt",
+    requirements_in = "//:requirements.txt",
+    requirements_txt = "//:requirements_lock.txt",
 )
 {{- end }}
