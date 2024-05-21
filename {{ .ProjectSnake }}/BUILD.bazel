@@ -30,10 +30,10 @@ npm_link_all_packages(name = "node_modules")
 {{- if .Scaffold.lint }}
 js_library(
     name = "eslintrc",
-    srcs = [".eslintrc.cjs"],
+    srcs = ["eslint.config.mjs"],
     deps = [
-        ":node_modules/@typescript-eslint/eslint-plugin",
-        ":node_modules/@typescript-eslint/parser",
+        ":node_modules/@eslint/js",
+        ":node_modules/typescript-eslint",
     ],
     visibility = ["//:__subpackages__"],
 )
