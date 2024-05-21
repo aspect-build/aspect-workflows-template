@@ -3,7 +3,7 @@ bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
 bazel_dep(name = "rules_multitool", version = "0.7.1")
 {{- if .Computed.javascript }}
 bazel_dep(name = "aspect_rules_js", version = "1.42.3")
-bazel_dep(name = "aspect_rules_ts", version = "2.4.0")
+bazel_dep(name = "aspect_rules_ts", version = "2.4.1")
 {{- end}}
 {{- if .Computed.python }}
 bazel_dep(name = "rules_python", version = "0.32.2")
