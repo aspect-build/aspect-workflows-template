@@ -39,6 +39,11 @@ questions:
       message: Setup version stamping?
       description: "Read more: https://blog.aspect.build/versioning-releases-from-a-monorepo"
       confirm: true
+  - name: protobuf
+    prompt:
+      message: Setup Protocol Buffers?
+      description: "Install rules_proto; see https://github.com/bazelbuild/rules_proto/discussions/213"
+      confirm: true
 
 features:
   - value: "{{ .Scaffold.lint }}"
@@ -71,6 +76,7 @@ presets:
     lint: true
     langs: ['JavaScript & TypeScript', 'Python']
     stamp: true
+    protobuf: true
   js:
     lint: true
     langs: ['JavaScript & TypeScript']
@@ -78,5 +84,4 @@ presets:
     lint: true
     langs: ['Python']
   minimal:
-    lint: false
     langs: []

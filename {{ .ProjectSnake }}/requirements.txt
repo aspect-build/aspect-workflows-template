@@ -3,4 +3,4 @@
 # direct and indirect dependencies are pinned.
 # Therefore we only need to constrain versions in this file when some ranges 
 # of dependency versions are not compatible.
-requests
+protobuf
