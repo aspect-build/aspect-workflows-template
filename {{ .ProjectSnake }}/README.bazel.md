@@ -27,11 +27,22 @@ See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
 
 ```
-bazel run -- @pnpm --dir $PWD install
+aspect run -- @pnpm --dir $PWD install
 ```
 
 Similarly, you can run other `pnpm` commands to install or remove packages.
 This ensures you use the same pnpm version as other developers, and the lockfile format will stay constant.
+{{- end }}
+
+{{ if .Computed.go }}
+## Working with Go modules
+
+To update `go.sum` using the same Go version as Bazel:
+
+```
+aspect run @rules_go//go -- mod tidy -v
+```
+
 {{- end }}
 
 {{- if .Scaffold.stamp }}

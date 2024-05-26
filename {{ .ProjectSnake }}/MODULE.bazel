@@ -15,6 +15,9 @@ bazel_dep(name = "aspect_rules_ts", version = "3.0.0-rc0")
 bazel_dep(name = "rules_python", version = "0.32.2")
 bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 {{- end }}
+{{- if .Computed.go }}
+bazel_dep(name = "rules_go", version = "0.48.0")
+{{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")

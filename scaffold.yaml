@@ -29,6 +29,7 @@ questions:
       options:
         - JavaScript & TypeScript
         - Python
+        - Go
   - name: lint
     prompt:
       message: Setup format and linting?
@@ -70,13 +71,16 @@ features:
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
   python: "{{ has \"Python\" .Scaffold.langs }}"
+  go: "{{ has \"Go\" .Scaffold.langs }}"
 
 presets:
   kitchen-sink:
     lint: true
-    langs: ['JavaScript & TypeScript', 'Python']
+    langs: ['JavaScript & TypeScript', 'Python', 'Go']
     stamp: true
     protobuf: true
+  go:
+    langs: ['Go']
   js:
     lint: true
     langs: ['JavaScript & TypeScript']
