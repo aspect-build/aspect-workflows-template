@@ -20,6 +20,9 @@ prettier.prettier_binary(
 
 format_multirun(
     name = "format",
+{{ if .Computed.go }}
+    go = "@aspect_rules_lint//format:gofumpt",
+{{ end }}
 {{ if .Computed.javascript }}
     javascript = ":prettier",
 {{ end }}

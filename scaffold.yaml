@@ -81,6 +81,7 @@ presets:
     protobuf: true
   go:
     langs: ['Go']
+    lint: true
   js:
     lint: true
     langs: ['JavaScript & TypeScript']
