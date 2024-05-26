@@ -1,5 +1,8 @@
 configure:
   languages:
+{{- if .Computed.go }}
+    go: true
+{{- end }}
 {{- if .Computed.javascript }}
     javascript: true
 {{- end }}
