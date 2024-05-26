@@ -17,11 +17,21 @@ bazel_dep(name = "aspect_rules_py", version = "0.7.3")
 {{- end }}
 {{- if .Computed.go }}
 bazel_dep(name = "rules_go", version = "0.48.0")
+bazel_dep(name = "gazelle", version = "0.37.0")
 {{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
+
+{{- if .Computed.go }}
+go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+
+# All *direct* Go dependencies of the module have to be listed explicitly.
+# Run 'bazel mod tidy' to update this
+use_repo(go_deps)
+{{- end }}
 
 {{- if .Computed.javascript }}
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
