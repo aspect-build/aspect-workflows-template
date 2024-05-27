@@ -60,13 +60,16 @@ features:
     globs:
       - "*/package.json"
       - "*/pnpm-*.yaml"
-      - "*/.eslintrc*"
+      - "*/eslint.config.mjs*"
       - "*/.npmrc"
       - "**/packages/**"
   - value: "{{ .Computed.python }}"
     globs:
       - "*/requirements*.txt"
       - "*/pyproject.toml"
+  - value: "{{ .Computed.go }}"
+    globs:
+      - "*/go.mod"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
@@ -83,10 +86,10 @@ presets:
     langs: ['Go']
     lint: true
   js:
-    lint: true
     langs: ['JavaScript & TypeScript']
-  py:
     lint: true
+  py:
     langs: ['Python']
+    lint: true
   minimal:
     langs: []

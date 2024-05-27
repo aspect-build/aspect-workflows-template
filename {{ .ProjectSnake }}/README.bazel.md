@@ -37,15 +37,20 @@ This ensures you use the same pnpm version as other developers, and the lockfile
 {{ if .Computed.go }}
 ## Working with Go modules
 
-To update `go.sum` using the same Go version as Bazel:
+After adding a new `import` statement in Go code, run these commands:
 
-```
-aspect run @rules_go//go -- mod tidy -v
+```shell
+# Update go.mod and go.sum, using same Go SDK as Bazel
+% aspect run @rules_go//go -- mod tidy -v
+# Update MODULE.bazel to include the package in `use_repo`
+% aspect mod tidy
+# Update BUILD file to include package in `deps`
+% aspect configure
 ```
 
 {{- end }}
 
-{{- if .Scaffold.stamp }}
+{{ if .Scaffold.stamp }}
 ## Stamping release builds
 
 Stamping produces non-deterministic outputs by including information such as a version number or commit hash.
