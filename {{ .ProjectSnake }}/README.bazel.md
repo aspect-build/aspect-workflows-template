@@ -27,14 +27,30 @@ See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
 
 ```
-bazel run -- @pnpm --dir $PWD install
+aspect run -- @pnpm --dir $PWD install
 ```
 
 Similarly, you can run other `pnpm` commands to install or remove packages.
 This ensures you use the same pnpm version as other developers, and the lockfile format will stay constant.
 {{- end }}
 
-{{- if .Scaffold.stamp }}
+{{ if .Computed.go }}
+## Working with Go modules
+
+After adding a new `import` statement in Go code, run these commands:
+
+```shell
+# Update go.mod and go.sum, using same Go SDK as Bazel
+% aspect run @rules_go//go -- mod tidy -v
+# Update MODULE.bazel to include the package in `use_repo`
+% aspect mod tidy
+# Update BUILD file to include package in `deps`
+% aspect configure
+```
+
+{{- end }}
+
+{{ if .Scaffold.stamp }}
 ## Stamping release builds
 
 Stamping produces non-deterministic outputs by including information such as a version number or commit hash.
