@@ -8,7 +8,7 @@ bazel_dep(name = "toolchains_protoc", version = "0.3.0")
 {{- end}}
 bazel_dep(name = "rules_multitool", version = "0.7.1")
 {{- if .Computed.javascript }}
-bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc2")
+bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc3")
 bazel_dep(name = "aspect_rules_ts", version = "3.0.0-rc0")
 {{- end }}
 {{- if .Computed.python }}
