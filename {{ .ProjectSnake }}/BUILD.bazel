@@ -43,7 +43,7 @@ js_library(
 {{ if .Computed.python }}
 compile_pip_requirements(
     name = "requirements",
-    requirements_in = "requirements.txt",
+    requirements_in = "pyproject.toml",
     requirements_txt = "requirements_lock.txt",
 )
 {{- end }}
