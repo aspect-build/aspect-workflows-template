@@ -1,4 +1,4 @@
-"Targets in the workspace root"
+"""Targets in the workspace root"""
 {{- if .Computed.javascript }}
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@npm//:defs.bzl", "npm_link_all_packages")
@@ -41,6 +41,10 @@ js_library(
 {{- end }}
 
 {{ if .Computed.python }}
+# Set `aspect configure` to produce aspect_rules_py targets rather than rules_python
+# aspect:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
+# aspect:map_kind py_library py_library @aspect_rules_py//py:defs.bzl
+# aspect:map_kind py_test py_test @aspect_rules_py//py:defs.bzl
 compile_pip_requirements(
     name = "requirements",
     requirements_in = "requirements.txt",
