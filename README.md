@@ -7,7 +7,7 @@ Create a new project from scratch on macos:
 % aspect init
 ```
 
-Note, it's also possible to run this outside of `aspect init`:
+Note, it's also possible to run this outside of `aspect init` using [scaffold](https://hay-kot.github.io/scaffold/) like so:
 
 ```shell
 % brew install scaffold
