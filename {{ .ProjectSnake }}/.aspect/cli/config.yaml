@@ -9,6 +9,9 @@ configure:
 {{- if .Scaffold.protobuf }}
     protobuf: true
 {{- end }}
+{{- if .Scaffold.python }}
+    python: true
+{{- end }}
 
 {{- if .Scaffold.lint }}
 lint:
