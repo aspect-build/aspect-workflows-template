@@ -9,7 +9,7 @@ configure:
 {{- if .Scaffold.protobuf }}
     protobuf: true
 {{- end }}
-{{- if .Scaffold.python }}
+{{- if .Computed.python }}
     python: true
 {{- end }}
 
