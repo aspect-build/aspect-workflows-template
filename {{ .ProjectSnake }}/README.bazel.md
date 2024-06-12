@@ -52,6 +52,20 @@ If the package is not already a dependency of the project, you'll have to do som
 % aspect configure
 ```
 
+To create a runnable binary for a console script from a third-party package, run the following:
+
+```shell
+% cat<<'EOF' | ./tools/buildozer -f -
+new_load @rules_python//python/entry_points:py_console_script_binary.bzl py_console_script_binary|new py_console_script_binary scriptname|tools:__pkg__
+set pkg "@pip//package_name_snake_case"|tools:scriptname
+EOF
+```
+
+Then edit the new entry in `tools/BUILD` to replace `package_name_snake_case` with the name of the package that exports a console script, and `scriptname` with the name of the script.
+
+>[!NOTE]
+>See https://rules-python.readthedocs.io/en/stable/api/python/entry_points/py_console_script_binary.html for more details.
+
 {{- end }}
 
 {{ if .Computed.go }}
