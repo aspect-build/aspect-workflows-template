@@ -40,13 +40,20 @@ This ensures you use the same pnpm version as other developers, and the lockfile
 After adding a new `import` statement in Python code, run these commands:
 
 ```shell
+# Update BUILD files to include the dependency
+% aspect configure
+```
+
+If the package is not already a dependency of the project, you'll have to do some additional steps:
+
+```shell
 # Update dependencies table to include your new dependency
 % vim pypyroject.toml
 # Update requirements_lock.txt to pin this dependency
 % aspect run requirements.update
 # Update gazelle_python.yaml to list the imports provided by this package
 % aspect run gazelle_python_manifest.update
-# Update BUILD files to include the dependency
+# Repeat
 % aspect configure
 ```
 
@@ -58,12 +65,17 @@ After adding a new `import` statement in Python code, run these commands:
 After adding a new `import` statement in Go code, run these commands:
 
 ```shell
+# Update BUILD file to include the dependency
+% aspect configure
+```
+
+If the package is not already a dependency of the project, you'll have to do some additional steps:
+
+```shell
 # Update go.mod and go.sum, using same Go SDK as Bazel
 % aspect run @rules_go//go -- mod tidy -v
 # Update MODULE.bazel to include the package in `use_repo`
 % aspect mod tidy
-# Update BUILD file to include package in `deps`
-% aspect configure
 ```
 
 {{- end }}
