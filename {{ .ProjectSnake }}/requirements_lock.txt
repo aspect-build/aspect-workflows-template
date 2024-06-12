@@ -16,4 +16,4 @@ protobuf==5.26.0 \
     --hash=sha256:e184175276edc222e2d5e314a72521e10049938a9a4961fe4bea9b25d073c03f \
     --hash=sha256:efd4f5894c50bd76cbcfdd668cd941021333861ed0f441c78a83d8254a01cc9f \
     --hash=sha256:f9ecc8eb6f18037e0cbf43256db0325d4723f429bca7ef5cd358b7c29d65f628
-    # via {{ .Project }} (pyproject.toml)
+    # via {{ .ProjectSnake }} (pyproject.toml)
