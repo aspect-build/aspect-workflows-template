@@ -37,7 +37,7 @@ This ensures you use the same pnpm version as other developers, and the lockfile
 {{ if .Computed.python }}
 ## Working with Python packages
 
-After adding a new `import` statement in Python code, run these commands:
+After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
 
 ```shell
 # Update BUILD files to include the dependency
@@ -62,12 +62,7 @@ If the package is not already a dependency of the project, you'll have to do som
 {{ if .Computed.go }}
 ## Working with Go modules
 
-After adding a new `import` statement in Go code, run these commands:
-
-```shell
-# Update BUILD file to include the dependency
-% aspect configure
-```
+After adding a new `import` statement in Go code, run `aspect configure` to update the BUILD file.
 
 If the package is not already a dependency of the project, you'll have to do some additional steps:
 
@@ -76,6 +71,8 @@ If the package is not already a dependency of the project, you'll have to do som
 % aspect run @rules_go//go -- mod tidy -v
 # Update MODULE.bazel to include the package in `use_repo`
 % aspect mod tidy
+# Repeat
+% aspect configure
 ```
 
 {{- end }}
