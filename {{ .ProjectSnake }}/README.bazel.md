@@ -34,17 +34,39 @@ Similarly, you can run other `pnpm` commands to install or remove packages.
 This ensures you use the same pnpm version as other developers, and the lockfile format will stay constant.
 {{- end }}
 
+{{ if .Computed.python }}
+## Working with Python packages
+
+After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
+
+If the package is not already a dependency of the project, you'll have to do some additional steps:
+
+```shell
+# Update dependencies table to include your new dependency
+% vim pypyroject.toml
+# Update requirements_lock.txt to pin this dependency
+% aspect run requirements.update
+# Update gazelle_python.yaml to list the imports provided by this package
+% aspect run gazelle_python_manifest.update
+# Repeat
+% aspect configure
+```
+
+{{- end }}
+
 {{ if .Computed.go }}
 ## Working with Go modules
 
-After adding a new `import` statement in Go code, run these commands:
+After adding a new `import` statement in Go code, run `aspect configure` to update the BUILD file.
+
+If the package is not already a dependency of the project, you'll have to do some additional steps:
 
 ```shell
 # Update go.mod and go.sum, using same Go SDK as Bazel
 % aspect run @rules_go//go -- mod tidy -v
 # Update MODULE.bazel to include the package in `use_repo`
 % aspect mod tidy
-# Update BUILD file to include package in `deps`
+# Repeat
 % aspect configure
 ```
 

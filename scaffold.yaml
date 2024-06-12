@@ -67,6 +67,7 @@ features:
     globs:
       - "*/requirements*.txt"
       - "*/pyproject.toml"
+      - "*/gazelle_python.yaml"
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
