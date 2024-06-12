@@ -1,8 +1,13 @@
-"""Targets in the workspace root"""{{ if or .Computed.javascript .Computed.python }}
+"""Targets in the workspace root"""
+{{- if or .Computed.javascript .Computed.python }}
 {{ if .Computed.javascript }}
 load("@aspect_rules_js//js:defs.bzl", "js_library")
-load("@npm//:defs.bzl", "npm_link_all_packages"){{ end }}{{ if .Computed.python }}
-load("@rules_python//python:pip.bzl", "compile_pip_requirements"){{ end }}{{ end }}
+load("@npm//:defs.bzl", "npm_link_all_packages")
+{{- end }}
+{{- if .Computed.python }}
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+{{- end }}
+{{- end }}
 {{- if .Scaffold.lint }}
 
 alias(
