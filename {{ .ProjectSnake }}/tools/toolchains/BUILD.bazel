@@ -1,7 +1,7 @@
-{{- if .Scaffold.protobuf }}
+{{ if .Scaffold.protobuf -}}
 load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
 
-{{- if .Computed.python }}
+{{ if .Computed.python -}}
 # Configure protoc to have the right arguments for generating Python stubs.
 proto_lang_toolchain(
     name = "protoc_py_toolchain",

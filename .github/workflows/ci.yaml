@@ -31,6 +31,10 @@ jobs:
                 scaffold new --preset=${{ matrix.preset }} --no-prompt $GITHUB_WORKSPACE
                 cd scaffold_test*
                 git init
+                git add .
+                git config user.email "noreply@aspect.build"
+                git config user.name "No One"
+                git commit -a -m "initial commit"
                 echo "::set-output name=dir::$PWD"
 
             - run: bazel test ...
@@ -40,6 +44,10 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
 
+            - name: format made no changes
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              run: git diff --exit-code
+              
             - run: bazel run @rules_go//go mod tidy
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'go' }}"

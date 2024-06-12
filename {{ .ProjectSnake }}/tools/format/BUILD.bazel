@@ -5,25 +5,26 @@ we don't want to trigger eager fetches of these for builds that don't want to ru
 """
 
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
-{{ if .Computed.javascript }}
+{{- if .Computed.javascript }}
 load("@npm//:prettier/package_json.bzl", prettier = "bin")
-{{ end }}
+{{- end }}
 
 package(default_visibility = ["//:__subpackages__"])
 
-{{ if .Computed.javascript }}
+{{ if .Computed.javascript -}}
 prettier.prettier_binary(
     name = "prettier",
     env = {"BAZEL_BINDIR": "."},
 )
-{{ end }}
 
+{{ end -}}
 format_multirun(
     name = "format",
-{{ if .Computed.go }}
+{{- if .Computed.go }}
     go = "@aspect_rules_lint//format:gofumpt",
-{{ end }}
-{{ if .Computed.javascript }}
+{{- end }}
+{{- if .Computed.javascript }}
     javascript = ":prettier",
-{{ end }}
+{{- end }}
+    starlark = "@buildifier_prebuilt//:buildifier",
 )

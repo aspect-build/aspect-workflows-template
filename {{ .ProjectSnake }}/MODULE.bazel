@@ -1,6 +1,7 @@
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
+bazel_dep(name = "buildifier_prebuilt", version = "6.3.3")
 {{- end }}
 {{- if .Scaffold.protobuf }}
 bazel_dep(name = "rules_proto", version = "6.0.0.bcr.1")
@@ -23,8 +24,8 @@ bazel_dep(name = "gazelle", version = "0.37.0")
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
-
 {{- if .Computed.go }}
+
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
@@ -32,9 +33,10 @@ go_deps.from_file(go_mod = "//:go.mod")
 # Run 'bazel mod tidy' to update this
 use_repo(go_deps)
 {{- end }}
-
 {{- if .Computed.javascript }}
+
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+
 # Allows developers to run the same pnpm version that Bazel manages
 use_repo(pnpm, "pnpm")
 
@@ -55,9 +57,10 @@ rules_ts_ext = use_extension(
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
 {{- end}}
-
 {{- if .Computed.python }}
+
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
     python_version = "3.9",
@@ -65,12 +68,15 @@ python.toolchain(
 
 pip.parse(
     hub_name = "pip",
-    requirements_lock = "//:requirements_lock.txt",
     python_version = "3.9",
+    requirements_lock = "//:requirements_lock.txt",
 )
 use_repo(pip, "pip")
 {{- end }}
-
 {{- if .Scaffold.protobuf }}
-register_toolchains("//tools/toolchains:all", dev_dependency = True)
+
+register_toolchains(
+    "//tools/toolchains:all",
+    dev_dependency = True,
+)
 {{- end }}
