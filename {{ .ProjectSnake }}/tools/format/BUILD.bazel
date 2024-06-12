@@ -26,4 +26,5 @@ format_multirun(
 {{ if .Computed.javascript }}
     javascript = ":prettier",
 {{ end }}
+    starlark = "@buildifier_prebuilt//:buildifier",
 )

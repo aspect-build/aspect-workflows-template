@@ -36,7 +36,7 @@ jobs:
             - run: bazel test ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               
-            - run: bazel run format
+            - run: bazel run //tools/format:format.check
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
 
