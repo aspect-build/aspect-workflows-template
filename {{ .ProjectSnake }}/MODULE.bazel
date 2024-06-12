@@ -4,7 +4,7 @@ bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc3")
 {{- end }}
 {{- if .Scaffold.protobuf }}
 bazel_dep(name = "rules_proto", version = "6.0.0.bcr.1")
-bazel_dep(name = "toolchains_protoc", version = "0.3.0")
+bazel_dep(name = "toolchains_protoc", version = "0.3.1")
 {{- end}}
 bazel_dep(name = "rules_multitool", version = "0.7.1")
 {{- if .Computed.javascript }}
