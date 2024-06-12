@@ -39,11 +39,6 @@ This ensures you use the same pnpm version as other developers, and the lockfile
 
 After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
 
-```shell
-# Update BUILD files to include the dependency
-% aspect configure
-```
-
 If the package is not already a dependency of the project, you'll have to do some additional steps:
 
 ```shell
