@@ -15,3 +15,6 @@ MODULE.bazel.lock
 {{ if .Computed.javascript }}
 node_modules/
 {{ end }}
+{{ if .Computed.python }}
+*.venv/
+{{ end }}
