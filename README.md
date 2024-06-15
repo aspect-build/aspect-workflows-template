@@ -10,6 +10,7 @@ Create a new project from scratch on macos:
 Note, it's also possible to run this outside of `aspect init` using [scaffold](https://hay-kot.github.io/scaffold/) like so:
 
 ```shell
+% brew tap hay-kot/scaffold-tap
 % brew install scaffold
 % scaffold new https://github.com/aspect-build/aspect-workflows-template.git
 ```
