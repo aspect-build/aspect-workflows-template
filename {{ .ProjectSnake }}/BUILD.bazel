@@ -50,12 +50,6 @@ js_library(
 # aspect:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
 # aspect:map_kind py_library py_library @aspect_rules_py//py:defs.bzl
 # aspect:map_kind py_test py_test @aspect_rules_py//py:defs.bzl
-compile_pip_requirements(
-    name = "requirements",
-    requirements_in = "pyproject.toml",
-    requirements_txt = "requirements_lock.txt",
-)
-
 # Fetches metadata for python packages we depend on.
 modules_mapping(
     name = "modules_map",

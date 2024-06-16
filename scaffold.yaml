@@ -65,7 +65,7 @@ features:
       - "**/packages/**"
   - value: "{{ .Computed.python }}"
     globs:
-      - "*/requirements*.txt"
+      - "*/requirements/**"
       - "*/pyproject.toml"
       - "*/gazelle_python.yaml"
   - value: "{{ .Computed.go }}"

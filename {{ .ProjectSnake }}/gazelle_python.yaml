@@ -53,5 +53,18 @@ manifest:
     google.protobuf.unknown_fields: protobuf
     google.protobuf.util: protobuf
     google.protobuf.wrappers_pb2: protobuf
+    iniconfig: iniconfig
+    iniconfig.exceptions: iniconfig
+    packaging: packaging
+    packaging.markers: packaging
+    packaging.metadata: packaging
+    packaging.requirements: packaging
+    packaging.specifiers: packaging
+    packaging.tags: packaging
+    packaging.utils: packaging
+    packaging.version: packaging
+    pluggy: pluggy
+    py: pytest
+    pytest: pytest
   pip_repository:
     name: pip

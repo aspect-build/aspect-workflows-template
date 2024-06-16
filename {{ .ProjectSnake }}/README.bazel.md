@@ -44,12 +44,8 @@ If the package is not already a dependency of the project, you'll have to do som
 ```shell
 # Update dependencies table to include your new dependency
 % vim pypyroject.toml
-# Update requirements_lock.txt to pin this dependency
-% aspect run requirements.update
-# Update gazelle_python.yaml to list the imports provided by this package
-% aspect run gazelle_python_manifest.update
-# Repeat
-% aspect configure
+# Update lock files to pin this dependency
+% ./repin.sh
 ```
 
 To create a runnable binary for a console script from a third-party package, run the following:
