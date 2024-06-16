@@ -65,7 +65,7 @@ modules_mapping(
 # Provide a mapping from an import to the installed package that provides it.
 # Needed to generate BUILD files for .py files.
 # This macro produces two targets:
-# - //:gazelle_python_manifest.update can be used with `bazel run`
+# - //:gazelle_python_manifest.update can be used with `aspect run`
 #   to recalculate the manifest
 # - //:gazelle_python_manifest.test is a test target ensuring that
 #   the manifest doesn't need to be updated

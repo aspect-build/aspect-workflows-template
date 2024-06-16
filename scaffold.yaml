@@ -3,13 +3,13 @@ messages:
   pre: |
     # Welcome to Aspect, the multi-language monorepo dev platform
 
-    Generate boilerplate code for a new Bazel project using Aspect CLI and Aspect Workflows.
+    Generate boilerplate code for a new project using Aspect CLI and Aspect Workflows.
 
   post: |
     # Next Steps
 
     1. `cd {{ .ProjectSnake }}`, or open that folder in your editor.
-    2. Read the developer guide in `/README.bazel.md`.
+    2. Read the developer guide in `/DEVELOPER.md`.
     3. Try out some commands, such as:
     {{- if .Scaffold.lint }}
       - Format:        `aspect run format`
@@ -19,7 +19,7 @@ messages:
       - Watch mode:    `./tools/ibazel run //my:devserver`
 
     4. Add source code and run `aspect configure` to create 
-       additional `BUILD.bazel` files.
+       additional `BUILD` files.
 
 questions:
   - name: langs

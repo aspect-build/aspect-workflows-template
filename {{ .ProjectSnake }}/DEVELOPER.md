@@ -1,6 +1,6 @@
-# Bazel workflows
+# Developer workflows
 
-This repository uses [Aspect Workflows](https://aspect.build) to provide an excellent Bazel developer experience.
+This repository uses [Aspect Workflows](https://aspect.build) to provide an excellent monorepo developer experience.
 
 {{- if .Scaffold.lint }}
 ## Formatting code
