@@ -52,6 +52,7 @@ features:
       - "*/tools/format/*"
       - "*/tools/lint/*"
       - "*/.shellcheckrc"
+      - "*/.pre-commit-config.yaml"
   - value: "{{ .Scaffold.stamp }}"
     globs:
       - "*/tools/workspace_status.sh"
