@@ -1,4 +1,4 @@
 # Collect all dependencies, to pass to pip.parse and create the @pip repository.
-# See README.md
+# See ./README.md
 -r test.in
 -r runtime.txt
