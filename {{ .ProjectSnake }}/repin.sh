@@ -3,7 +3,7 @@
 set -o errexit -o nounset -o pipefail
 
 {{ if .Computed.python -}}
-aspect run //requirements:requirements.update
+aspect run //requirements:runtime.update
 aspect run //requirements:requirements.all.update
 aspect run //:gazelle_python_manifest.update
 {{- end }}
