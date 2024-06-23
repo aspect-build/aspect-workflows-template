@@ -70,7 +70,7 @@ python.toolchain(
 pip.parse(
     hub_name = "pip",
     python_version = "3.12",
-    requirements_lock = "//:requirements_lock.txt",
+    requirements_lock = "//requirements:all.txt",
 )
 use_repo(pip, "pip")
 {{- end }}
