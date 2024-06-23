@@ -43,7 +43,7 @@ If the package is not already a dependency of the project, you'll have to do som
 
 ```shell
 # Update dependencies table to include your new dependency
-% vim pypyroject.toml
+% vim pyproject.toml
 # Update lock files to pin this dependency
 % ./repin.sh
 ```
