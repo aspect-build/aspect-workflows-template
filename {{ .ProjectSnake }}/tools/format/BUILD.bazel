@@ -26,5 +26,8 @@ format_multirun(
 {{- if .Computed.javascript }}
     javascript = ":prettier",
 {{- end }}
+{{- if .Computed.python }}
+    python = "//tools/lint:ruff",
+{{- end }}
     starlark = "@buildifier_prebuilt//:buildifier",
 )
