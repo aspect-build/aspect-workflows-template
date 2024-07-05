@@ -27,7 +27,7 @@ format_multirun(
     javascript = ":prettier",
 {{- end }}
 {{- if .Computed.python }}
-    python = "//tools/lint:ruff",
+    python = "@aspect_rules_lint//format:ruff",
 {{- end }}
     starlark = "@buildifier_prebuilt//:buildifier",
 )
