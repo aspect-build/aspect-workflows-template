@@ -24,7 +24,7 @@ eslint_test = lint_test(aspect = eslint)
 {{ end -}}
 {{ if .Computed.python -}}
 ruff = lint_ruff_aspect(
-    binary = "@@//tools/lint:ruff",
+    binary = "@multitool//tools/ruff",
     configs = [
         "@@//:pyproject.toml",
         # if the repository has nested ruff.toml files, they must be added here as well
