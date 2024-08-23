@@ -5,7 +5,7 @@ bazel_dep(name = "buildifier_prebuilt", version = "6.4.0")
 {{- end }}
 {{- if .Scaffold.protobuf }}
 bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "toolchains_protoc", version = "0.3.1")
+bazel_dep(name = "toolchains_protoc", version = "0.3.2")
 {{- end}}
 bazel_dep(name = "rules_multitool", version = "0.12.0")
 {{- if .Computed.javascript }}
