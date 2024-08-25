@@ -13,7 +13,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.0.1")
 bazel_dep(name = "aspect_rules_ts", version = "3.0.0")
 {{- end }}
 {{- if .Computed.java }}
-bazel_dep(name = "rules_java", version = "7.4.0")
+bazel_dep(name = "rules_java", version = "7.6.5")
 bazel_dep(name = "rules_jvm_external", version = "4.5")
 {{- end }}
 {{- if .Computed.python }}
@@ -103,14 +103,12 @@ use_repo(
     maven,
     "maven",
     "unpinned_maven",
-)
-{{- if .Scaffold.protobuf }}
+){{if .Scaffold.protobuf }}
+
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 
 http_jar(
     name = "protobuf-java",
     integrity = "sha256-eYx59sn8aFnMdqpUdCKKrSUIIUOOEATa00iA1TqnRfk=",
     urls = ["https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.27.1/protobuf-java-4.27.1.jar"],
-)
-{{- end }}
-{{- end }}
+){{ end }}{{ end }}
