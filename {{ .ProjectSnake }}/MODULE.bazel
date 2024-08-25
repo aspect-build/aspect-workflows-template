@@ -104,7 +104,7 @@ use_repo(
     "maven",
     "unpinned_maven",
 )
-{{- if and .Scaffold.protobuf }}
+{{- if .Scaffold.protobuf }}
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 
 http_jar(

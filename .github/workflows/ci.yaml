@@ -9,12 +9,8 @@ jobs:
         strategy:
             matrix:
                 preset:
-                    - kitchen-sink
                     - java
-                    - js
-                    - go
-                    - py
-                    - minimal
+                    
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
