@@ -10,6 +10,7 @@ jobs:
             matrix:
                 preset:
                     - kitchen-sink
+                    - java
                     - js
                     - go
                     - py

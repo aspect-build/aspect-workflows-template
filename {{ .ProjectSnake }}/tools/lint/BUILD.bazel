@@ -7,9 +7,19 @@ we don't want to trigger eager fetches of these for builds that don't want to ru
 
 load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
 {{- end }}
+{{- if .Computed.java }}
+load("@rules_java//java:defs.bzl", "java_binary")
+{{- end }}
 
 package(default_visibility = ["//:__subpackages__"])
 {{- if .Computed.javascript }}
 
 eslint_bin.eslint_binary(name = "eslint")
+{{- end }}
+{{- if .Computed.java }}
+java_binary(
+    name = "pmd",
+    main_class = "net.sourceforge.pmd.PMD",
+    runtime_deps = ["@net_sourceforge_pmd"],
+)
 {{- end }}
