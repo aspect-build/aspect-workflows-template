@@ -13,7 +13,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.0.1")
 bazel_dep(name = "aspect_rules_ts", version = "3.0.0")
 {{- end }}
 {{- if .Computed.java }}
-bazel_dep(name = "rules_java", version = "7.6.5")
+bazel_dep(name = "rules_java", version = "7.9.0")
 bazel_dep(name = "rules_jvm_external", version = "5.1")
 {{- end }}
 {{- if .Computed.python }}
