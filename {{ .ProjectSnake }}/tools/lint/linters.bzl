@@ -1,5 +1,8 @@
 "Define linter aspects"
 
+{{ if .Computed.cpp -}}
+load("@aspect_rules_lint//lint:clang_tidy.bzl", "lint_clang_tidy_aspect")
+{{ end -}}
 {{ if .Computed.javascript -}}
 load("@aspect_rules_lint//lint:eslint.bzl", "lint_eslint_aspect")
 {{ end -}}
@@ -12,6 +15,15 @@ load("@aspect_rules_lint//lint:ruff.bzl", "lint_ruff_aspect")
 {{ end -}}
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 
+{{ if .Computed.cpp -}}
+clang_tidy = lint_clang_tidy_aspect(
+    binary = "@@//tools/lint:clang_tidy",
+    configs = ["@@//:.clang-tidy"],
+    lint_target_headers = True,
+    angle_includes_are_system = False,
+    verbose = False,
+)
+{{ end -}}
 {{ if .Computed.java -}}
 pmd = lint_pmd_aspect(
     binary = "@@//tools/lint:pmd",

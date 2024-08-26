@@ -20,6 +20,9 @@ prettier.prettier_binary(
 {{ end -}}
 format_multirun(
     name = "format",
+{{- if .Computed.cpp}}
+    cc = "@llvm_toolchain_llvm//:bin/clang-format",
+{{- end }}
 {{- if .Computed.go }}
     go = "@aspect_rules_lint//format:gofumpt",
 {{- end }}

@@ -31,6 +31,7 @@ questions:
         - Python
         - Go
         - Java
+        - C & C++
   - name: lint
     prompt:
       message: Setup format and linting?
@@ -77,17 +78,21 @@ features:
     globs:
       - "*/maven_install.json"
       - "*/pmd.xml"
+  - value: "{{ .Computed.cpp }}"
+    globs:
+      - "*/.clang-tidy"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
   python: "{{ has \"Python\" .Scaffold.langs }}"
   go: "{{ has \"Go\" .Scaffold.langs }}"
   java: "{{ has \"Java\" .Scaffold.langs }}"
+  cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
 
 presets:
   kitchen-sink:
     lint: true
-    langs: ['JavaScript & TypeScript', 'Python', 'Go', 'Java']
+    langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java']
     stamp: true
     protobuf: true
   go:
@@ -101,6 +106,9 @@ presets:
     lint: true
   java:
     langs: ['Java']
+    lint: true
+  cpp:
+    langs: ['C & C++']
     lint: true
   minimal:
     langs: []
