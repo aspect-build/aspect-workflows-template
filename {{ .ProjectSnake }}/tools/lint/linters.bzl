@@ -4,11 +4,20 @@
 load("@aspect_rules_lint//lint:eslint.bzl", "lint_eslint_aspect")
 {{ end -}}
 load("@aspect_rules_lint//lint:lint_test.bzl", "lint_test")
+{{ if .Computed.java -}}
+load("@aspect_rules_lint//lint:pmd.bzl", "lint_pmd_aspect")
+{{ end -}}
 {{ if .Computed.python -}}
 load("@aspect_rules_lint//lint:ruff.bzl", "lint_ruff_aspect")
 {{ end -}}
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 
+{{ if .Computed.java -}}
+pmd = lint_pmd_aspect(
+    binary = "@@//tools/lint:pmd",
+    rulesets = ["@@//:pmd.xml"],
+)
+{{ end -}}
 {{ if .Computed.javascript -}}
 eslint = lint_eslint_aspect(
     binary = "@@//tools/lint:eslint",

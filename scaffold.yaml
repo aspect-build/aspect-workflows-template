@@ -30,6 +30,7 @@ questions:
         - JavaScript & TypeScript
         - Python
         - Go
+        - Java
   - name: lint
     prompt:
       message: Setup format and linting?
@@ -72,16 +73,21 @@ features:
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
+  - value: "{{ .Computed.java }}"
+    globs:
+      - "*/maven_install.json"
+      - "*/pmd.xml"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
   python: "{{ has \"Python\" .Scaffold.langs }}"
   go: "{{ has \"Go\" .Scaffold.langs }}"
+  java: "{{ has \"Java\" .Scaffold.langs }}"
 
 presets:
   kitchen-sink:
     lint: true
-    langs: ['JavaScript & TypeScript', 'Python', 'Go']
+    langs: ['JavaScript & TypeScript', 'Python', 'Go', 'Java']
     stamp: true
     protobuf: true
   go:
@@ -92,6 +98,9 @@ presets:
     lint: true
   py:
     langs: ['Python']
+    lint: true
+  java:
+    langs: ['Java']
     lint: true
   minimal:
     langs: []
