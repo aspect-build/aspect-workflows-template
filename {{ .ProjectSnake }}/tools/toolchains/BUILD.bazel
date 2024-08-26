@@ -1,5 +1,6 @@
 {{ if .Scaffold.protobuf -}}
-load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain"){{ if .Computed.python }}
+load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
+{{- if .Computed.python }}
 
 # Configure protoc to have the right arguments for generating Python stubs.
 proto_lang_toolchain(
@@ -8,7 +9,9 @@ proto_lang_toolchain(
     progress_message = "Generating Python proto_library %{label}",
     runtime = "@pip//protobuf",
     toolchain_type = "@rules_python//python/proto:toolchain_type",
-){{ end }}{{ if .Computed.java }}
+)
+{{- end }}
+{{- if .Computed.java }}
 
 # Configure protoc to have the right arguments for generating Java stubs.
 proto_lang_toolchain(
