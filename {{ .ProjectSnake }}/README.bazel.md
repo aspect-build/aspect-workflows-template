@@ -37,11 +37,16 @@ See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
 
-```
-aspect run -- @pnpm --dir $PWD install
+```shell
+% ./tools/pnpm install
 ```
 
-Similarly, you can run other `pnpm` commands to install or remove packages.
+Similarly, you can run other `pnpm` commands to add or remove packages. Use `bazel info workspace` to avoid having a bunch of `../` segments when running tools from a subdirectory:
+
+```shell
+path/to/package% $(bazel info workspace)/tools/pnpm add http-server
+```
+
 This ensures you use the same pnpm version as other developers, and the lockfile format will stay constant.
 {{- end }}
 
