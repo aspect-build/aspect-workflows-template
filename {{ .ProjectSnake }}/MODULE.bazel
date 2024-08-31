@@ -1,4 +1,4 @@
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.9")
+bazel_dep(name = "aspect_bazel_lib", version = "2.8.1")
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.0.0-rc9")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
