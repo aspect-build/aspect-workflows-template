@@ -2,7 +2,7 @@
   "name": "{{ .ProjectKebab }}",
   "private": true,
   "dependencies": {
-    "@bufbuild/protobuf": "^1"
+    "@bufbuild/protobuf": "^2.0.0"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1",
