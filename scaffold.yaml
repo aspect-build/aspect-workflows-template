@@ -34,19 +34,19 @@ questions:
         - C & C++
   - name: lint
     prompt:
+      confirm: Setup format and linting?
       message: Setup format and linting?
       description: "Installs https://github.com/aspect-build/rules_lint"
-      confirm: true
   - name: stamp
     prompt:
+      confirm: Setup version stamping?
       message: Setup version stamping?
       description: "Read more: https://blog.aspect.build/versioning-releases-from-a-monorepo"
-      confirm: true
   - name: protobuf
     prompt:
+      confirm: Setup Protocol Buffers?
       message: Setup Protocol Buffers?
       description: "Install rules_proto; see https://github.com/bazelbuild/rules_proto/discussions/213"
-      confirm: true
 
 features:
   - value: "{{ .Scaffold.lint }}"
