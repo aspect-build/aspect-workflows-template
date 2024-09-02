@@ -32,5 +32,8 @@ format_multirun(
 {{- if .Computed.python }}
     python = "@aspect_rules_lint//format:ruff",
 {{- end }}
+{{- if .Computed.rust }}
+    rust = "@rules_rust//tools/rustfmt:upstream_rustfmt",
+{{- end }}
     starlark = "@buildifier_prebuilt//:buildifier",
 )
