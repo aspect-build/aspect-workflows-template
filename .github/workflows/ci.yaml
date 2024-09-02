@@ -8,6 +8,11 @@ jobs:
     test:
         strategy:
             matrix:
+                scaffold-version:
+                    # Aspect CLI prior to Sept 2024 used this version.
+                    # Preserve compat until we think everyone has upgraded.
+                    - v0.0.99
+                    - v0.3.0
                 preset:
                     - kitchen-sink
                     - java
@@ -26,7 +31,7 @@ jobs:
               with:
                 bazelisk-cache: true
                 repository-cache: true 
-            - run: go install github.com/hay-kot/scaffold@v0.3.0
+            - run: go install github.com/hay-kot/scaffold@${{ matrix.scaffold-version }}
             - name: Scaffold new app
               id: scaffold
               run: |
