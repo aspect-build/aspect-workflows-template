@@ -12,6 +12,10 @@ configure:
 {{- if .Computed.python }}
     python: true
 {{- end }}
+  plugins:
+{{- if .Computed.javascript }}
+    - .aspect/cli/package-json-scripts.star
+{{- end }}
 
 {{- if .Scaffold.lint }}
 lint:

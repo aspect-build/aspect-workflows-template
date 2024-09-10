@@ -70,6 +70,7 @@ features:
       - "*/.npmrc"
       - "**/packages/**"
       - "*/tools/pnpm"
+      - "*/.aspect/cli/package-json*.star"
   - value: "{{ .Computed.python }}"
     globs:
       - "*/requirements/**"
