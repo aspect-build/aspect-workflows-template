@@ -17,7 +17,8 @@ def declare_targets(ctx):
                     kind = "js_binary",
                     attrs = {
                         "entry_point": cmd_parts[-1],
-                    }
+                        "deps": [aspect.Label(name = ":node_modules")],
+                    },
                 )
             else:
                 print("package-json-scripts.star: unable to generate target for {} because command is not a recognized form: {}".format(script, cmd))
