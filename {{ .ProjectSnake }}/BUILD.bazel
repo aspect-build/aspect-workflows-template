@@ -20,10 +20,14 @@ alias(
 exports_files(
     [
         ".shellcheckrc",
-{{- if .Computed.python }}
-        "pyproject.toml",
-{{- end }}
     ],
+    visibility = ["//:__subpackages__"],
+)
+{{- end }}
+{{- if .Computed.python }}
+
+exports_files(
+    ["pyproject.toml"],
     visibility = ["//:__subpackages__"],
 )
 {{- end }}
