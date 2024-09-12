@@ -26,7 +26,10 @@ exports_files(
 {{- end }}
 {{- if .Computed.python }}
 
-exports_files(["pyproject.toml"], visibility = ["//:__subpackages__"])
+exports_files(
+    ["pyproject.toml"],
+    visibility = ["//:__subpackages__"],
+)
 {{- end }}
 {{- if .Computed.javascript }}
 
