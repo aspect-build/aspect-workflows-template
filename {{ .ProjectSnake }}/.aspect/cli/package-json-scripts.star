@@ -17,7 +17,7 @@ def declare_targets(ctx):
                     kind = "js_binary",
                     attrs = {
                         "entry_point": cmd_parts[-1],
-                        "deps": [":node_modules"],
+                        "data": [":node_modules"],
                     },
                 )
             else:
