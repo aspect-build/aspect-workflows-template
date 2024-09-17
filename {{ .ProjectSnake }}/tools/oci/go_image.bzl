@@ -9,7 +9,7 @@ def go_image(name, binary, base = "@distroless_base"):
         name = name + "_app_layer",
         srcs = [binary],
         mtree = [
-            "./opt/app type=file content=$(execpath {})".format(binary)
+            "./opt/app type=file content=$(execpath {})".format(binary),
         ],
     )
     oci_image(
@@ -19,7 +19,7 @@ def go_image(name, binary, base = "@distroless_base"):
             name + "_app_layer",
         ],
         entrypoint = [
-            "/opt/app"
+            "/opt/app",
         ],
     )
     platform_transition_filegroup(
@@ -34,7 +34,6 @@ def go_image(name, binary, base = "@distroless_base"):
         name = name + ".load",
         image = name + "_platform",
         repo_tags = [
-            native.package_name() + ":latest"
-        ]
+            native.package_name() + ":latest",
+        ],
     )
-
