@@ -47,6 +47,11 @@ questions:
       confirm: Setup Protocol Buffers?
       message: Setup Protocol Buffers?
       description: "Install rules_proto; see https://github.com/bazelbuild/rules_proto/discussions/213"
+  - name: oci
+    prompt:
+      confirm: Setup OCI Containers?
+      message: Setup OCI Containers?
+      description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
   - value: "{{ .Scaffold.lint }}"
@@ -87,6 +92,14 @@ features:
   - value: "{{ .Computed.cpp }}"
     globs:
       - "*/.clang-tidy"
+  - value: "{{ .Scaffold.oci }}"
+    globs:
+      - "*/tools/oci/BUILD.bazel"
+  - value: "{{ and .Scaffold.oci .Computed.go }}"
+    globs:
+      - "*/.aspect/cli/go_image.star"
+      - "*/tools/oci/go_image.bzl"
+
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
@@ -101,9 +114,11 @@ presets:
     langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java']
     stamp: true
     protobuf: true
+    oci: true
   go:
     langs: ['Go']
     lint: true
+    oci: true
   js:
     langs: ['JavaScript & TypeScript']
     lint: true
