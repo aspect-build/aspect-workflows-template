@@ -27,4 +27,4 @@ case "$(basename "$0")" in
 esac
 
 # NB: we don't use 'bazel run' because it may leave behind zombie processes under ibazel
-bazel 2>/dev/null build --build_runfile_links "$target" && BAZEL_BINDIR=. exec $(bazel info execution_root)/$(bazel 2>/dev/null cquery --output=files "$target") "$@"
+bazel 2>/dev/null build --build_runfile_links "$target" && BAZEL_BINDIR=. exec $(bazel 2>/dev/null info execution_root)/$(bazel 2>/dev/null cquery --output=files "$target") "$@"
