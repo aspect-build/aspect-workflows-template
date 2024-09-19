@@ -114,7 +114,7 @@ computed:
   go: "{{ has \"Go\" .Scaffold.langs }}"
   java: "{{ has \"Java\" .Scaffold.langs }}"
   cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
-  rust: "{{ has "Rust" .Scaffold.langs }}"
+  rust: "{{ has \"Rust\" .Scaffold.langs }}"
 
 presets:
   kitchen-sink:
