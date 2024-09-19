@@ -107,6 +107,7 @@ features:
   - value: "{{ .Computed.rust }}"
     globs:
       - "*/Cargo.toml"
+      - "*/src/main.rs"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
