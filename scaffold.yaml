@@ -107,6 +107,7 @@ features:
   - value: "{{ .Computed.rust }}"
     globs:
       - "*/Cargo.toml"
+      - "*/tools/cargo"
       - "*/src/main.rs"
 
 computed:

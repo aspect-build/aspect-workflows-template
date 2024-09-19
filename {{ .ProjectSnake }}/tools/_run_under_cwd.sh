@@ -9,6 +9,10 @@ case "$(basename "$0")" in
     target="//tools:copier"
     ;;
 {{- end }}
+  cargo)
+    # Being documented in https://github.com/bazelbuild/rules_rust/pull/2890
+    target="@rules_rust//tools/upstream_wrapper:cargo"
+    ;;
   go)
     # https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/bzlmod.md#using-a-go-sdk
     target="@rules_go//go"
