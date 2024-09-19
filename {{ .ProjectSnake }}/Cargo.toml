@@ -1,5 +1,5 @@
 [package]
-name = "{{ .ProjectPascal }}"
+name = "{{ .ProjectSnake }}"
 version = "0.1.0"
 edition = "2021"
 
