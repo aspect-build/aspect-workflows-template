@@ -54,6 +54,10 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'go' }}"
               
+            - run: ./tools/pnpm list
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'js' }}"
+
             - run: bazel lint ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 
