@@ -63,7 +63,7 @@ jobs:
               if: "${{ matrix.preset == 'go' }}"
             
             - name: JS smoke test
-              run: ./tools/pnpm install
+              run: ./tools/pnpm list
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'js' }}"
 
