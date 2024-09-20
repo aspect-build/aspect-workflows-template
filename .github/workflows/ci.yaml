@@ -54,7 +54,9 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'go' }}"
               
-            - run: ./tools/pnpm list
+            - run: |
+                bazel build --build_runfile_links @pnpm
+                ./tools/pnpm list
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'js' }}"
 
