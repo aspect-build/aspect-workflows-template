@@ -9,9 +9,6 @@ jobs:
         strategy:
             matrix:
                 scaffold-version:
-                    # Aspect CLI prior to Sept 2024 used this version.
-                    # Preserve compat until we think everyone has upgraded.
-                    - v0.0.99
                     - v0.3.0
                 preset:
                     - kitchen-sink
@@ -21,6 +18,11 @@ jobs:
                     - py
                     - cpp
                     - minimal
+                include:
+                  # Aspect CLI prior to Sept 2024 used this version.
+                  # Preserve compat until we think everyone has upgraded.
+                  - scaffold-version: v0.0.99
+                    preset: kitchen-sink
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -55,10 +57,16 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: git diff --exit-code
               
-            - run: bazel run @rules_go//go mod tidy
+            - name: Go smoke test
+              run: ./tools/go mod tidy
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'go' }}"
-              
+            
+            - name: JS smoke test
+              run: ./tools/pnpm list
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'js' }}"
+
             - run: bazel lint ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 

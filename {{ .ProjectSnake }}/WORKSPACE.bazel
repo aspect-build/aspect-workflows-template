@@ -2,6 +2,7 @@
 #
 # This file is a marker indicating the root of a Bazel workspace.
 # See MODULE.bazel for dependency information.
+# NB: after ibazel supports MODULE.bazel as the marker, this file may no longer be needed.
 {{if and .Scaffold.lint .Computed.java -}}
 load("@aspect_rules_lint//lint:pmd.bzl", "fetch_pmd")
 
