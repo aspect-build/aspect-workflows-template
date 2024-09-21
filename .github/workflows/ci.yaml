@@ -67,7 +67,7 @@ jobs:
             - name: Python smoke test
               run: |
                 >__main__.py echo 'import requests; print(requests.get("https://api.github.com"))'
-                ./tools/yq -i '.dependencies = 1' pyproject.toml
+                sed -i 's/"protobuf"/"protobuf","requests"/' pyproject.toml
                 ./repin.sh
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
