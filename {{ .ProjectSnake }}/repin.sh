@@ -7,4 +7,5 @@ bazel run //requirements:runtime.update
 bazel run //requirements:requirements.all.update
 bazel run //:gazelle_python_manifest.update
 {{- end }}
-bazel configure
+# Exits 110 on success
+bazel configure || true
