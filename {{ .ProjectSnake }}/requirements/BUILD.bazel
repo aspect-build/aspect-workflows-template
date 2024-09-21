@@ -1,12 +1,12 @@
-load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_uv//uv:pip.bzl", "pip_compile")
 
-compile_pip_requirements(
+pip_compile(
     name = "runtime",
     requirements_in = "//:pyproject.toml",
     requirements_txt = "runtime.txt",
 )
 
-compile_pip_requirements(
+pip_compile(
     name = "requirements.all",
     data = [
         "runtime.txt",
