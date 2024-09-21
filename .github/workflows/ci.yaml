@@ -66,10 +66,11 @@ jobs:
               
             - name: Python smoke test
               run: |
-                >__main__.py echo 'import requests; print(requests.get("https://api.github.com").text)'
+                mkdir app
+                >app/__main__.py echo 'import requests; print(requests.get("https://api.github.com").text)'
                 sed -i 's/"protobuf"/"protobuf","requests"/' pyproject.toml
                 ./repin.sh
-                bazel run $(bazel query 'kind(py_binary, :all)')
+                bazel run //app:app_bin
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
             
