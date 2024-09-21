@@ -4,7 +4,7 @@ set -o errexit -o pipefail -o nounset
 
 tmp="$(mktemp -d)" 
 
-if ! scaffold --output-dir="$tmp" new --preset="go" --no-prompt $(pwd); then 
+if ! scaffold --output-dir="$tmp" new --preset="minimal" --no-prompt $(pwd); then 
     rm -rf "$tmp"
     echo "Cleaned up ${tmp}"
     exit 1

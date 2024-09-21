@@ -34,8 +34,13 @@ jobs:
               with:
                 repo: hay-kot/scaffold
                 tag: ${{ matrix.scaffold-version }}
+
+            - name: setting to always run hooks
+              if: "${{ matrix.preset != 'minimal' }}"
+              run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
+            
             - name: Scaffold new app
-              id: scaffold
+              id: scaffold    
               run: |
                 scaffold new --preset=${{ matrix.preset }} --no-prompt $GITHUB_WORKSPACE
                 cd scaffold_test*
@@ -61,6 +66,12 @@ jobs:
               run: ./tools/yq --help
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'kitchen-sink' }}"
+
+            - name: Python smoke test
+              run: |
+                ./tools/copier --help
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'py' }}"
 
             - name: Go smoke test
               run: ./tools/go mod tidy

@@ -2,4 +2,5 @@
 # Workaround for https://github.com/bazelbuild/rules_python/issues/1971
 # See ./README.md
 -r test.in
+-r tools.in
 -r runtime.txt

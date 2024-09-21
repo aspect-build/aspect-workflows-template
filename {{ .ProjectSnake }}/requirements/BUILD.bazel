@@ -8,10 +8,10 @@ pip_compile(
 
 pip_compile(
     name = "requirements.all",
-    data = [
-        "runtime.txt",
-        "test.in",
-    ],
+    data = glob([
+        "*.in",
+        "*.txt",
+    ]),
     requirements_in = "all.in",
     requirements_txt = "all.txt",
 )

@@ -81,6 +81,7 @@ features:
       - "*/requirements/**"
       - "*/pyproject.toml"
       - "*/gazelle_python.yaml"
+      - "*/tools/copier"
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
