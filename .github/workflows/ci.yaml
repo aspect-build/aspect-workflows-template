@@ -56,7 +56,12 @@ jobs:
             - name: format made no changes
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: git diff --exit-code
-              
+
+            - name: Tools smoke test
+              run: ./tools/yq --help
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'kitchen-sink' }}"
+
             - name: Go smoke test
               run: ./tools/go mod tidy
               working-directory: "${{ steps.scaffold.outputs.dir }}"
