@@ -67,7 +67,7 @@ jobs:
             - name: Python smoke test
               run: |
                 mkdir app
-                >app/__main__.py echo 'import requests; print(requests.get("https://api.github.com").text)'
+                >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
                 sed -i 's/"protobuf"/"protobuf","requests"/' pyproject.toml
                 ./repin.sh
                 bazel run //app:app_bin
