@@ -44,7 +44,7 @@ jobs:
                 git config user.email "noreply@aspect.build"
                 git config user.name "No One"
                 git commit -a -m "initial commit"
-                echo "::set-output name=dir::$PWD"
+                echo "dir=$PWD" >> $GITHUB_OUTPUT
 
             - run: bazel test ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
