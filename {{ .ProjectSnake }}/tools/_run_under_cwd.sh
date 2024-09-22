@@ -4,7 +4,7 @@ case "$(basename "$0")" in
   buildifier)
     target="@buildifier_prebuilt//:buildifier"
     ;;
-{{- if .Computed.python }}
+{{- if .Computed.copier }}
   copier)
     target="//tools:copier"
     ;;
