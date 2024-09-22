@@ -130,7 +130,6 @@ presets:
   py:
     langs: ['Python']
     lint: true
-    copier: true
   java:
     langs: ['Java']
     lint: true

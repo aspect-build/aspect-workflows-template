@@ -58,15 +58,11 @@ jobs:
               run: git diff --exit-code
 
             - name: Tools smoke test
-              run: ./tools/yq --help
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'kitchen-sink' }}"
-
-            - name: Python smoke test
               run: |
                 ./tools/copier --help
+                ./tools/yq --help
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' }}"
+              if: "${{ matrix.preset == 'kitchen-sink' }}"
 
             - name: Go smoke test
               run: ./tools/go mod tidy
