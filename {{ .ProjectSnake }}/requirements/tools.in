@@ -1,1 +1,3 @@
+{{- if .Scaffold.codegen }}
 copier
+{{- end }}

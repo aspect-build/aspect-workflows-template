@@ -32,6 +32,12 @@ questions:
         - Go
         - Java
         - C & C++
+  - name: codegen
+    prompt:
+      config: Setup code generation?
+      message: Setup code generation?
+      description: "Installs https://copier.readthedocs.io/"
+      when: "{{ has \"Python\" .langs }}"
   - name: lint
     prompt:
       confirm: Setup format and linting?
@@ -54,6 +60,9 @@ questions:
       description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
+  - value: "{{ .Scaffold.codegen }}"
+    globs:
+      - "*/tools/copier"
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
@@ -113,6 +122,7 @@ presets:
   kitchen-sink:
     lint: true
     langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java']
+    codegen: true
     stamp: true
     protobuf: true
     oci: true
@@ -126,6 +136,7 @@ presets:
   py:
     langs: ['Python']
     lint: true
+    codegen: true
   java:
     langs: ['Java']
     lint: true
