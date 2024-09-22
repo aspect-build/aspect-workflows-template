@@ -4,7 +4,7 @@ set -o errexit -o pipefail -o nounset
 
 tmp="$(mktemp -d)" 
 
-if ! scaffold --output-dir="$tmp" new --preset="minimal" --no-prompt $(pwd); then 
+if ! SCAFFOLD_SETTINGS_RUN_HOOKS=always scaffold --output-dir="$tmp" new --preset="${1:-kitchen-sink}" --no-prompt $(pwd); then 
     rm -rf "$tmp"
     echo "Cleaned up ${tmp}"
     exit 1
