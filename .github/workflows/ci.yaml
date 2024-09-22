@@ -17,6 +17,7 @@ jobs:
                     - go
                     - py
                     - cpp
+                    - rust
                     - minimal
                 include:
                   # Aspect CLI prior to Sept 2024 used this version.
