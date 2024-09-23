@@ -32,28 +32,32 @@ questions:
         - Go
         - Java
         - C & C++
+  - name: copier
+    prompt:
+      confirm: Setup code generation?
+      description: "Installs https://copier.readthedocs.io/"
+      when: "{{ has \"Python\" .langs }}"
   - name: lint
     prompt:
       confirm: Setup format and linting?
-      message: Setup format and linting?
       description: "Installs https://github.com/aspect-build/rules_lint"
   - name: stamp
     prompt:
       confirm: Setup version stamping?
-      message: Setup version stamping?
       description: "Read more: https://blog.aspect.build/versioning-releases-from-a-monorepo"
   - name: protobuf
     prompt:
       confirm: Setup Protocol Buffers?
-      message: Setup Protocol Buffers?
       description: "Install rules_proto; see https://github.com/bazelbuild/rules_proto/discussions/213"
   - name: oci
     prompt:
       confirm: Setup OCI Containers?
-      message: Setup OCI Containers?
       description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
+  - value: "{{ .Scaffold.copier }}"
+    globs:
+      - "*/tools/copier"
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
@@ -112,6 +116,7 @@ presets:
   kitchen-sink:
     lint: true
     langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java']
+    copier: true
     stamp: true
     protobuf: true
     oci: true

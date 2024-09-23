@@ -18,11 +18,6 @@ jobs:
                     - py
                     - cpp
                     - minimal
-                include:
-                  # Aspect CLI prior to Sept 2024 used this version.
-                  # Preserve compat until we think everyone has upgraded.
-                  - scaffold-version: v0.0.99
-                    preset: kitchen-sink
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -34,6 +29,11 @@ jobs:
               with:
                 repo: hay-kot/scaffold
                 tag: ${{ matrix.scaffold-version }}
+
+            - name: setting to always run hooks
+              if: "${{ matrix.preset != 'minimal' }}"
+              run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
+            
             - name: Scaffold new app
               id: scaffold
               run: |
@@ -58,7 +58,9 @@ jobs:
               run: git diff --exit-code
 
             - name: Tools smoke test
-              run: ./tools/yq --help
+              run: |
+                ./tools/copier --help
+                ./tools/yq --help
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'kitchen-sink' }}"
 

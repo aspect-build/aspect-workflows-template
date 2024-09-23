@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd {{ .ProjectSnake }}
+# Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
+./tools/buildifier -r .
+{{- if .Computed.python }}
+# Re-run uv pip compile since the requirements depend on answers to prompts
+bazel run //requirements:runtime.update
+bazel run //requirements:requirements.all.update
+bazel run //:gazelle_python_manifest.update
+{{- end }}
