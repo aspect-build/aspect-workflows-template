@@ -82,9 +82,9 @@ jobs:
 
             - name: Rust smoke test
               run: |
-                mkdir -p src
+                mkdir -p hello_world/src
 
-                cat >BUILD.bazel <<EOF
+                cat >hello_world/BUILD.bazel <<EOF
                 load("@rules_rust//rust:defs.bzl", "rust_binary")
 
                 rust_binary(
@@ -93,11 +93,11 @@ jobs:
                 )
                 EOF
 
-                cat >src/main.rs <<EOF
+                cat >hello_world/src/main.rs <<EOF
                 fn main() { println!("Hello from Rust"); }
                 EOF
 
-                output="$(bazel run //:hello_world)"
+                output="$(bazel run //hello_world)"
                 [[ "${output}" == "Hello from Rust" ]] || { echo >&2 "Wanted output 'Hello from Rust' but got '${output}'" ; exit 1 ; }
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'rust' }}"
