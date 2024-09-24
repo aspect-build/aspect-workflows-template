@@ -17,7 +17,7 @@ bazel_dep(name = "rules_java", version = "7.11.1")
 bazel_dep(name = "rules_jvm_external", version = "6.4")
 {{- end }}
 {{- if .Computed.python }}
-bazel_dep(name = "rules_python", version = "0.35.0")
+bazel_dep(name = "rules_python", version = "0.36.0")
 bazel_dep(name = "rules_python_gazelle_plugin", version = "0.35.0")
 bazel_dep(name = "aspect_rules_py", version = "0.8.0")
 bazel_dep(name = "rules_uv", version = "0.30.0")
