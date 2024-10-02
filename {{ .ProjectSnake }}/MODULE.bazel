@@ -22,6 +22,9 @@ bazel_dep(name = "rules_python_gazelle_plugin", version = "0.36.0")
 bazel_dep(name = "aspect_rules_py", version = "0.8.1")
 bazel_dep(name = "rules_uv", version = "0.31.0")
 {{- end }}
+{{- if .Computed.rust }}
+bazel_dep(name = "rules_rust", version = "0.50.1")
+{{- end }}
 {{- if .Computed.go }}
 bazel_dep(name = "rules_go", version = "0.50.1")
 bazel_dep(name = "gazelle", version = "0.39.1")
@@ -38,6 +41,8 @@ multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 {{- if .Computed.go }}
 
+#########################
+# Go
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
@@ -47,6 +52,8 @@ use_repo(go_deps)
 {{- end }}
 {{- if .Computed.javascript }}
 
+#########################
+# JavaScript and pnpm package manager
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
 
 # Allows developers to run the same pnpm version that Bazel manages
@@ -71,6 +78,8 @@ use_repo(rules_ts_ext, "npm_typescript")
 {{- end}}
 {{- if .Computed.python }}
 
+#########################
+# Hermetic Python interpreter and pip dependencies
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -93,9 +102,9 @@ register_toolchains(
 )
 {{- end }}
 {{- if .Computed.cpp }}
+
 #########################
 # Hermetic C++ toolchain, to relieve the dependency on a locally installed CC etc.
-
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
     # NB: llvm doesn't release for all platforms on every patch release
@@ -109,7 +118,18 @@ use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 
 register_toolchains("@llvm_toolchain//:all")
 {{- end }}
+{{- if .Computed.rust }}
+
+#########################
+# Support for Rust, see https://github.com/bazelbuild/rules_rust
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2021",
+    versions = ["1.75.0"],
+)
+{{- end }}
 {{- if .Computed.java }}
+
 #########################
 # Java and other JVM languages:
 # https://github.com/bazelbuild/rules_jvm_external/blob/master/examples/bzlmod/MODULE.bazel
@@ -117,7 +137,6 @@ register_toolchains("@llvm_toolchain//:all")
 
 # In the Maven support variation, the dependencies are conveniently listed here
 # in the MODULE.bazel file.
-
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = ["io.grpc:grpc-all:1.51.1"],

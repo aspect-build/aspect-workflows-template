@@ -115,3 +115,25 @@ Available keys are listed in `/tools/workspace_status.sh` and may include:
 
 To request stamped build outputs, add the flag `--config=release`.
 {{ end }}
+
+{{ if .Computed.rust }}
+## Working with Cargo
+
+If you need to run `cargo` outside of Bazel, you can do so by running `./tools/cargo`, e.g.
+
+```console
+% ./tools/cargo add reqwest
+    Updating crates.io index
+      Adding reqwest v0.12.7 to dependencies.
+             Features:
+             + __tls
+             + charset
+             + default-tls
+             + h2
+             + http2
+             + macos-system-configuration
+             25 deactivated features
+    Updating crates.io index
+```
+
+{{ end }}
