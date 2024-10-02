@@ -19,11 +19,6 @@ jobs:
                     - cpp
                     - rust
                     - minimal
-                include:
-                  # Aspect CLI prior to Sept 2024 used this version.
-                  # Preserve compat until we think everyone has upgraded.
-                  - scaffold-version: v0.0.99
-                    preset: kitchen-sink
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
