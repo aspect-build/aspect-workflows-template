@@ -1,6 +1,8 @@
 # Apply a tag to HEAD at the beginning of each week.
 # We can use this to create semver-looking tags for releases like
 # 2020.44.123+abc1234
+name: Weekly Tag
+
 on:
     schedule:
       # Mondays at 5am UTC / midnight EST
