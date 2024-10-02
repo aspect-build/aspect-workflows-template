@@ -63,7 +63,17 @@ jobs:
                 ./tools/yq --help
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'kitchen-sink' }}"
-
+              
+            - name: Python smoke test
+              run: |
+                mkdir app
+                >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
+                sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
+                ./repin.sh
+                bazel run //app:app_bin
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'py' }}"
+            
             - name: Go smoke test
               run: ./tools/go mod tidy
               working-directory: "${{ steps.scaffold.outputs.dir }}"
