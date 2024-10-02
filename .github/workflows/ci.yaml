@@ -68,7 +68,7 @@ jobs:
               run: |
                 mkdir app
                 >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
-                sed -i 's/"protobuf"/"protobuf","requests"/' pyproject.toml
+                sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
                 ./repin.sh
                 bazel run //app:app_bin
               working-directory: "${{ steps.scaffold.outputs.dir }}"
