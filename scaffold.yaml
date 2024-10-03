@@ -86,6 +86,7 @@ features:
       - "*/requirements/**"
       - "*/pyproject.toml"
       - "*/gazelle_python.yaml"
+      - "*/.aspect/cli/py*.star"
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"

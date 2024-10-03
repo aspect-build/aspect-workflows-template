@@ -16,7 +16,9 @@ configure:
 {{- if .Computed.javascript }}
     - .aspect/cli/package-json-scripts.star
 {{- end }}
-
+{{- if .Computed.python }}
+    - .aspect/cli/pytest_main.star
+{{- end }}
 {{- if and .Computed.go .Scaffold.oci }}
     - .aspect/cli/go_image.star
 {{- end }}
