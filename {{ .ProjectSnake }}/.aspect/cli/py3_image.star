@@ -1,7 +1,7 @@
 "Generate py_pytest_main targets"
 aspect.register_rule_kind("py3_image", {
     "From": "//tools/oci:py3_image.bzl",
-    "ResolveAttrs": ["deps"],
+    "ResolveAttrs": ["binary"],
 })
 
 def declare_targets(ctx):
@@ -9,15 +9,16 @@ def declare_targets(ctx):
     for file in ctx.sources:
         has_pragma = len(file.query_results["pragma"]) > 0
         if has_pragma:
+            py_binary_target_name = path.base(ctx.rel) + "_bin"
             ctx.targets.add(
                 kind = "py3_image",
                 name = "image",
                 attrs = {
-                    # TODO: don't hard-code the name
-                    "binary": "app_bin",
+                    "binary": py_binary_target_name
                 },
             )
             break
+
 aspect.register_configure_extension(
     id = "py3_image",
     prepare = lambda cfg: aspect.PrepareResult(
