@@ -22,8 +22,8 @@ def py3_image(name, binary, root = None, layer_groups = {}, base = "@distroless_
         name = name,
         srcs = [name + "_image"],
         target_platform = select({
-            "@platforms//cpu:arm64": "@rules_go//go/toolchain:linux_arm64",
-            "@platforms//cpu:x86_64": "@rules_go//go/toolchain:linux_amd64",
+            "@platforms//cpu:arm64": "//tools/oci:linux_arm64",
+            "@platforms//cpu:x86_64": "//tools/oci:linux_amd64",
         }),
     )
     oci_load(
