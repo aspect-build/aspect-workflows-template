@@ -12,7 +12,7 @@ def py3_image(name, binary, root = None, layer_groups = {}, base = "@distroless_
         base = base,
         tars = py_image_layer(
             name = name + "_layers",
-            binary = binary,
+            py_binary = binary,
             root = root,
             layer_groups = layer_groups,
         ),
