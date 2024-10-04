@@ -13,6 +13,8 @@ def declare_targets(ctx):
                 kind = "py3_image",
                 name = "image",
                 attrs = {
+                    # TODO: don't hard-code the name
+                    "binary": "app_bin",
                 },
             )
             break
