@@ -101,6 +101,10 @@ features:
   - value: "{{ .Scaffold.oci }}"
     globs:
       - "*/tools/oci/BUILD.bazel"
+  - value: "{{ and .Scaffold.oci .Computed.python }}"
+    globs:
+      - "*/.aspect/cli/py3_image.star"
+      - "*/tools/oci/py3_image.bzl"
   - value: "{{ and .Scaffold.oci .Computed.go }}"
     globs:
       - "*/.aspect/cli/go_image.star"
