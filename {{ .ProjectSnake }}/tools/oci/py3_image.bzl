@@ -25,7 +25,6 @@ def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = N
         "RUNFILES_DIR": runfiles_dir,
     }, **env)
     
-    workdir = "{}/{}".format(runfiles_dir, repo_name)
     oci_image(
         name = name + "_image",
         base = base,
@@ -36,7 +35,7 @@ def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = N
             layer_groups = layer_groups,
         ),
         entrypoint = [binary_path],
-        workdir = workdir,
+        workdir = workdir or "{}/{}".format(runfiles_dir, repo_name),
     )
     platform_transition_filegroup(
         name = name,
