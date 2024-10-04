@@ -22,7 +22,9 @@ configure:
 {{- if and .Computed.go .Scaffold.oci }}
     - .aspect/cli/go_image.star
 {{- end }}
-
+{{- if and .Computed.go .Scaffold.oci }}
+    - .aspect/cli/py3_image.star
+{{- end }}
 
 {{- if .Scaffold.lint }}
 lint:
