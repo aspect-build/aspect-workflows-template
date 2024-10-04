@@ -49,6 +49,7 @@ js_library(
 {{- end }}
 {{- if .Computed.python }}
 
+# aspect:exclude **/*.venv
 # Set `aspect configure` to produce aspect_rules_py targets rather than rules_python
 # aspect:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
 # aspect:map_kind py_library py_library @aspect_rules_py//py:defs.bzl
