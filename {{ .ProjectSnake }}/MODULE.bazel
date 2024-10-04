@@ -178,4 +178,20 @@ oci.pull(
 )
 use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64")
 {{- end}}
+
+{{- if .Computed.python }}
+oci.pull(
+    name = "python_base",
+    image = "ubuntu",
+    tag = "latest",
+    platforms = [
+        "linux/arm64/v8",
+        "linux/amd64",
+    ],
+)
+use_repo(oci, "python_base")
+{{- end }}
 {{- end}}
+
+
+

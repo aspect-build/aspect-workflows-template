@@ -4,7 +4,7 @@ load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@aspect_rules_py//py:defs.bzl", "py_image_layer")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
 
-def py3_image(name, binary, root = None, layer_groups = {}, base = "@distroless_base"):
+def py3_image(name, binary, root = "/", layer_groups = {}, base = "@python_base"):
     binary = native.package_relative_label(binary)
     binary_path = "{}{}/{}".format(root, binary.package, binary.name)
     oci_image(
