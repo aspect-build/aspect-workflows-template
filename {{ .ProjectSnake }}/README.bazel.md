@@ -61,7 +61,7 @@ If the package is not already a dependency of the project, you'll have to do som
 # Update dependencies table to include your new dependency
 % vim pyproject.toml
 # Update lock files to pin this dependency
-% ./repin.sh
+% ./tools/repin
 ```
 
 To create a runnable binary for a console script from a third-party package, run the following:

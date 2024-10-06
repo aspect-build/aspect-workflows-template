@@ -71,7 +71,7 @@ jobs:
                 >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
                 >app/app_test.py echo -e 'def test_bad():\n  assert 1 == 2'
                 sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
-                ./repin.sh
+                ./tools/repin
                 bazel run //app:app_bin
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
