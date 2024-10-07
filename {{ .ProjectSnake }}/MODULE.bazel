@@ -189,7 +189,7 @@ oci.pull(
         "linux/amd64",
     ],
 )
-use_repo(oci, "python_base")
+use_repo(oci, "python_base", "python_base_linux_amd64", "python_base_linux_arm64_v8")
 {{- end }}
 {{- end}}
 
