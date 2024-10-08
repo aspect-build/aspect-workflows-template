@@ -32,7 +32,7 @@ jobs:
                 tag: ${{ matrix.scaffold-version }}
 
             - name: setting to always run hooks
-              if: "${{ matrix.preset != 'minimal' }}"
+              if: "${{ matrix.preset == 'minimal' }}"
               run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
             
             - name: Scaffold new app
@@ -65,6 +65,13 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'kitchen-sink' }}"
               
+            - name: Java smoke test
+              run: |
+                mkdir src
+                >src/Demo.java echo -e 'class Demo { public static void main(String[] args) { System.out.println("Hello from Aspect");}}'
+                >src/BUILD.bazel echo -e 'java_binary(name="Demo", srcs=["Demo.java"])'
+                bazel run src:Demo
+
             - name: Python smoke test
               run: |
                 mkdir app
