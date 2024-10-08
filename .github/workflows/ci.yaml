@@ -32,7 +32,7 @@ jobs:
                 tag: ${{ matrix.scaffold-version }}
 
             - name: setting to always run hooks
-              if: "${{ matrix.preset == 'minimal' }}"
+              if: "${{ matrix.preset != 'minimal' }}"
               run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
             
             - name: Scaffold new app
