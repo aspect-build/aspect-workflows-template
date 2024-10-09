@@ -34,7 +34,7 @@ jobs:
             - name: setting to always run hooks
               if: "${{ matrix.preset != 'minimal' }}"
               run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
-            
+
             - name: Scaffold new app
               id: scaffold
               run: |
@@ -59,13 +59,25 @@ jobs:
               run: git diff --exit-code
 
             - name: Tools smoke test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'kitchen-sink' }}"
               run: |
                 ./tools/copier --help
                 ./tools/yq --help
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'kitchen-sink' }}"
               
+            - name: Java smoke test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'java' }}"
+              run: |
+                mkdir src
+                >src/Demo.java echo -e 'class Demo { public static void main(String[] args) { System.out.println("Hello from Java");}}'
+                >src/BUILD.bazel echo -e 'java_binary(name="Demo", srcs=["Demo.java"])'
+                output="$(bazel run src:Demo)"
+                [[ "${output}" == "Hello from Java" ]] || { echo >&2 "Wanted output 'Hello from Java' but got '${output}'" ; exit 1 ; }
+
             - name: Python smoke test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'py' }}"
               run: |
                 mkdir app
                 >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
@@ -73,29 +85,31 @@ jobs:
                 sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
                 ./tools/repin
                 bazel run //app:app_bin
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' }}"
+
             - name: Python test that fails
               continue-on-error: true # for some reason `bazel test || true` still failing.
               run: bazel test //app:app_test
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
+
             - name: Check failure is expected
-              run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
+              run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
 
             - name: Go smoke test
-              run: ./tools/go mod tidy
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'go' }}"
+              run: ./tools/go mod tidy
             
             - name: JS smoke test
-              run: ./tools/pnpm list
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'js' }}"
+              run: ./tools/pnpm list
 
             - name: Rust smoke test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'rust' }}"
               run: |
                 mkdir -p hello_world/src
 
@@ -114,8 +128,6 @@ jobs:
 
                 output="$(bazel run //hello_world)"
                 [[ "${output}" == "Hello from Rust" ]] || { echo >&2 "Wanted output 'Hello from Rust' but got '${output}'" ; exit 1 ; }
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'rust' }}"
 
             - run: bazel lint ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
