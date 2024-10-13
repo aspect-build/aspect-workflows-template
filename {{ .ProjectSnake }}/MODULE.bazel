@@ -33,7 +33,7 @@ bazel_dep(name = "gazelle", version = "0.39.1")
 bazel_dep(name = "toolchains_llvm", version = "1.2.0")
 {{- end }}
 {{- if .Scaffold.oci }}
-bazel_dep(name = "rules_oci", version = "2.0.0")
+bazel_dep(name = "rules_oci", version = "2.0.1")
 {{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
