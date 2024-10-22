@@ -45,6 +45,12 @@ js_library(
         ":node_modules/typescript-eslint",
     ],
 )
+
+js_library(
+    name = "prettierrc",
+    srcs = ["prettier.config.cjs"],
+    deps = [],
+)
 {{- end }}
 {{- end }}
 {{- if .Computed.python }}
