@@ -8,6 +8,6 @@ const config = {
     // This is required to ensure the node module resolution algorithm starts walking
     // up the filesystem from this file, rather than from the location where prettier interprets it.
   ],
-}
+};
 
-module.exports = config
+module.exports = config;
