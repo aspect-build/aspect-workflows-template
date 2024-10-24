@@ -7,7 +7,13 @@ on:
     schedule:
       # Mondays at 5am UTC / midnight EST
       - cron: '0 5 * * 1'
-  
+
+# We need contents write permission to create a tag.
+# See https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-actions
+permissions:
+  contents:
+    write
+
 jobs:
   tagger:
     runs-on: ubuntu-latest
