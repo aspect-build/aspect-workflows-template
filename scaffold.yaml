@@ -76,7 +76,8 @@ features:
     globs:
       - "*/package.json"
       - "*/pnpm-*.yaml"
-      - "*/eslint.config.mjs*"
+      - "*/*.config.cjs*"
+      - "*/*.config.mjs*"
       - "*/.npmrc"
       - "**/packages/**"
       - "*/tools/pnpm"
