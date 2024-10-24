@@ -50,6 +50,7 @@ js_library(
     name = "prettierrc",
     srcs = ["prettier.config.cjs"],
     deps = [],
+    visibility = ["//tools/format:__pkg__"],
 )
 {{- end }}
 {{- end }}
