@@ -8,6 +8,12 @@ import %workspace%/.aspect/bazelrc/performance.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
+{{- if .Computed.java }}
+# Required for rules_java prior to Bazel 8
+# See https://github.com/bazelbuild/rules_java/issues/233#issuecomment-2418834258
+common --experimental_rule_extension_api
+{{ end }
+
 {{- if .Computed.javascript }}
 # for speed, passes an argument `--skipLibCheck` to *every* spawn of tsc
 common --@aspect_rules_ts//ts:skipLibCheck=always
