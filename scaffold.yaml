@@ -13,9 +13,9 @@ messages:
     3. Try out some commands, such as:
     {{- if .Scaffold.lint }}
       - Format:        `aspect run format`
-      - Lint:          `aspect lint ...`
+      - Lint:          `aspect lint //...`
     {{- end }}
-      - Run all tests: `aspect test ...`
+      - Run all tests: `aspect test //...`
       - Watch mode:    `./tools/ibazel run //my:devserver`
 
     4. Add source code and run `aspect configure` to create 
