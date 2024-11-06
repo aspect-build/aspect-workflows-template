@@ -3,10 +3,6 @@ bazel_dep(name = "aspect_bazel_lib", version = "2.9.3")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
 {{- end }}
-{{- if .Scaffold.protobuf }}
-bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "toolchains_protoc", version = "0.3.3")
-{{- end}}
 bazel_dep(name = "rules_multitool", version = "0.15.0")
 {{- if .Computed.javascript }}
 bazel_dep(name = "aspect_rules_js", version = "2.1.0")
@@ -93,13 +89,6 @@ pip.parse(
     requirements_lock = "//requirements:all.txt",
 )
 use_repo(pip, "pip")
-{{- end }}
-{{- if .Scaffold.protobuf }}
-
-register_toolchains(
-    "//tools/toolchains:all",
-    dev_dependency = True,
-)
 {{- end }}
 {{- if .Computed.cpp }}
 

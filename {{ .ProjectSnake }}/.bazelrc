@@ -21,9 +21,6 @@ common --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # --config=release
 common:release --stamp --workspace_status_command=./tools/workspace_status.sh
 {{ end }}
-{{- if .Scaffold.protobuf }}
-common --incompatible_enable_proto_toolchain_resolution
-{{ end }}
 
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This

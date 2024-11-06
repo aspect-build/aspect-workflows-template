@@ -6,9 +6,6 @@ configure:
 {{- if .Computed.javascript }}
     javascript: true
 {{- end }}
-{{- if .Scaffold.protobuf }}
-    protobuf: true
-{{- end }}
 {{- if .Computed.python }}
     python: true
 {{- end }}

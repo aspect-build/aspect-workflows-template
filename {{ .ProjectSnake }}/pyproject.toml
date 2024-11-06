@@ -10,9 +10,6 @@ version = "0"
 # Therefore we only need to constrain versions when some ranges 
 # of dependency versions are not compatible.
 dependencies = [
-{{- if .Scaffold.protobuf }}
-    "protobuf~=5.26",
-{{- end }}
 ]
 
 # See https://docs.astral.sh/ruff/configuration/

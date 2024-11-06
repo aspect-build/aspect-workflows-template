@@ -46,10 +46,6 @@ questions:
     prompt:
       confirm: Setup version stamping?
       description: "Read more: https://blog.aspect.build/versioning-releases-from-a-monorepo"
-  - name: protobuf
-    prompt:
-      confirm: Setup Protocol Buffers?
-      description: "Install rules_proto; see https://github.com/bazelbuild/rules_proto/discussions/213"
   - name: oci
     prompt:
       confirm: Setup OCI Containers?
@@ -69,9 +65,6 @@ features:
     globs:
       - "*/tools/workspace_status.sh"
       - "**/weekly_tag.yaml"
-  - value: "{{ .Scaffold.protobuf }}"
-    globs:
-      - "*/tools/buf"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "*/package.json"
@@ -130,7 +123,6 @@ presets:
     langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java', 'Rust']
     copier: true
     stamp: true
-    protobuf: true
     oci: true
   go:
     langs: ['Go']
