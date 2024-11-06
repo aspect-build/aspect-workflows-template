@@ -5,7 +5,6 @@
 
 manifest:
   modules_mapping:
-    google.protobuf: protobuf
     iniconfig: iniconfig
     packaging: packaging
     pluggy: pluggy
