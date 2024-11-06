@@ -1,8 +1,6 @@
 {
   "name": "{{ .ProjectKebab }}",
   "private": true,
-  "dependencies": {
-  },
   "devDependencies": {
     "@eslint/js": "^9",
     "eslint": "^9",
