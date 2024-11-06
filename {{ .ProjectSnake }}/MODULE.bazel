@@ -136,16 +136,6 @@ use_repo(
     "maven",
     "unpinned_maven",
 )
-{{- if .Scaffold.protobuf }}
-
-http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
-
-http_jar(
-    name = "protobuf-java",
-    integrity = "sha256-eYx59sn8aFnMdqpUdCKKrSUIIUOOEATa00iA1TqnRfk=",
-    urls = ["https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/4.27.1/protobuf-java-4.27.1.jar"],
-)
-{{- end }}
 {{- end }}
 
 
