@@ -2,29 +2,31 @@
 
 This repository uses [Aspect Workflows](https://aspect.build) to provide an excellent Bazel developer experience.
 
-{{- if .Scaffold.lint }}
+{{ if .Scaffold.lint -}}
+
 ## Formatting code
 
 - Run `aspect run format` to re-format all files locally.
 - Run `aspect run format path/to/file` to re-format a single file.
 - Run `pre-commit install` to auto-format changed files on `git commit`.
 - For CI verification, setup `format` task, see https://docs.aspect.build/workflows/features/lint#formatting
-{{ end }}
+
+{{- end -}}
 
 ## Linting code
 
-We use [rules_lint](https://github.com/aspect-build/rules_lint) to run linting tools using Bazel's aspects feature.
-Linters produce report files, which are cached like any other Bazel actions.
-Printing the report files to the terminal can be done in a couple ways, as follows.
+Projects use [rules_lint](https://github.com/aspect-build/rules_lint) to run linting tools using Bazel's aspects feature.
+Linters produce report files, which they cache like any other Bazel actions.
+You can print the report files to the terminal in a couple ways, as follows.
 
-The [`lint` command](https://docs.aspect.build/cli/commands/aspect_lint) is provided by Aspect CLI but is *not* part of the Bazel CLI provided by Google.
-It collects the correct report files, presents them with nice colored boundaries, gives you interactive suggestions to apply fixes, produces a matching exit code, and more.
+The Aspect CLI provides the [`lint` command](https://docs.aspect.build/cli/commands/aspect_lint) but it is *not* part of the Bazel CLI provided by Google.
+The command collects the correct report files, presents them with colored boundaries, gives you interactive suggestions to apply fixes, produces a matching exit code, and more.
 
 - Run `aspect lint //...` to check for lint violations.
 
 ## Installing dev tools
 
-For developers to be able to run a CLI tool without needing manual installation:
+For developers to be able to run additional CLI tools without needing manual installation:
 
 1. Add the tool to `tools/tools.lock.json`
 2. `cd tools; ln -s _multitool_run_under_cwd.sh name_of_tool`
@@ -32,7 +34,8 @@ For developers to be able to run a CLI tool without needing manual installation:
 
 See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
-{{ if .Computed.javascript }}
+{{ if .Computed.javascript -}}
+
 ## Working with npm packages
 
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
@@ -47,15 +50,16 @@ Similarly, you can run other `pnpm` commands to add or remove packages. Use `baz
 path/to/package% $(bazel info workspace)/tools/pnpm add http-server
 ```
 
-This ensures you use the same pnpm version as other developers, and the lockfile format will stay constant.
-{{- end }}
+This ensures you use the same pnpm version as other developers, and the lockfile format stays constant.
+{{- end -}}
 
-{{ if .Computed.python }}
+{{ if .Computed.python -}}
+
 ## Working with Python packages
 
 After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
 
-If the package is not already a dependency of the project, you'll have to do some additional steps:
+If the package is not already a dependency of the project, you have to do some additional steps:
 
 ```shell
 # Update dependencies table to include your new dependency
@@ -78,27 +82,29 @@ Then edit the new entry in `tools/BUILD` to replace `package_name_snake_case` wi
 >[!NOTE]
 >See https://rules-python.readthedocs.io/en/stable/api/python/entry_points/py_console_script_binary.html for more details.
 
-{{- end }}
+{{- end -}}
 
-{{ if .Computed.go }}
+{{ if .Computed.go -}}
+
 ## Working with Go modules
 
 After adding a new `import` statement in Go code, run `aspect configure` to update the BUILD file.
 
-If the package is not already a dependency of the project, you'll have to do some additional steps:
+If the package is not already a dependency of the project, you have to do some additional steps:
 
 ```shell
 # Update go.mod and go.sum, using same Go SDK as Bazel
-% aspect run @rules_go//go -- mod tidy -v
+% aspect run @rules_go//go - mod tidy -v
 # Update MODULE.bazel to include the package in `use_repo`
 % aspect mod tidy
 # Repeat
 % aspect configure
 ```
 
-{{- end }}
+{{- end -}}
 
-{{ if .Scaffold.stamp }}
+{{ if .Scaffold.stamp -}}
+
 ## Stamping release builds
 
 Stamping produces non-deterministic outputs by including information such as a version number or commit hash.
@@ -108,15 +114,16 @@ Read more: https://blog.aspect.build/stamping-bazel-builds-with-selective-delive
 To declare a build output which can be stamped, use a rule that is stamp-aware such as
 [expand_template](https://docs.aspect.build/rulesets/aspect_bazel_lib/docs/expand_template).
 
-Available keys are listed in `/tools/workspace_status.sh` and may include:
+The `/tools/workspace_status.sh` file lists available keys and may include:
 
 - `STABLE_GIT_COMMIT`: the commit hash of the HEAD (current) commit
 - `STABLE_MONOREPO_VERSION`: a semver-compatible version in the form `2020.44.123+abc1234`
 
-To request stamped build outputs, add the flag `--config=release`.
-{{ end }}
+To request stamped build outputs, add the flag `-config=release`.
+{{- end -}}
 
-{{ if .Computed.rust }}
+{{ if .Computed.rust -}}
+
 ## Working with Cargo
 
 If you need to run `cargo` outside of Bazel, you can do so by running `./tools/cargo`, e.g.
@@ -136,4 +143,4 @@ If you need to run `cargo` outside of Bazel, you can do so by running `./tools/c
     Updating crates.io index
 ```
 
-{{ end }}
+{{- end -}}
