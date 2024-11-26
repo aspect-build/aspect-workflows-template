@@ -10,7 +10,7 @@ bazel_dep(name = "aspect_rules_ts", version = "3.3.1")
 {{- end }}
 {{- if .Computed.java }}
 bazel_dep(name = "rules_java", version = "8.5.1")
-bazel_dep(name = "rules_jvm_external", version = "6.5")
+bazel_dep(name = "rules_jvm_external", version = "6.6")
 {{- end }}
 {{- if .Computed.python }}
 bazel_dep(name = "rules_python", version = "0.40.0")
