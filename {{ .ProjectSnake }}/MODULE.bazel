@@ -6,7 +6,7 @@ bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
 bazel_dep(name = "rules_multitool", version = "1.0.0")
 {{- if .Computed.javascript }}
 bazel_dep(name = "aspect_rules_js", version = "2.1.2")
-bazel_dep(name = "aspect_rules_ts", version = "3.3.1")
+bazel_dep(name = "aspect_rules_ts", version = "3.3.2")
 {{- end }}
 {{- if .Computed.java }}
 bazel_dep(name = "rules_java", version = "8.6.2")
