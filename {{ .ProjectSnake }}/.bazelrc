@@ -8,6 +8,9 @@ import %workspace%/.aspect/bazelrc/performance.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
+# Disable skymeld; see https://github.com/bazelbuild/bazel/issues/23743
+common --noexperimental_merged_skyframe_analysis_execution
+
 {{- if .Computed.javascript }}
 # for speed, passes an argument `--skipLibCheck` to *every* spawn of tsc
 common --@aspect_rules_ts//ts:skipLibCheck=always
