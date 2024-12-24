@@ -2,6 +2,9 @@ bazel_dep(name = "aspect_bazel_lib", version = "2.10.0")
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.0.8")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
+{{ if .Computed.cpp -}}
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+{{- end }}
 {{- end }}
 bazel_dep(name = "rules_multitool", version = "1.0.0")
 {{- if .Computed.javascript }}
@@ -60,7 +63,6 @@ npm.npm_translate_lock(
     name = "npm",
     npmrc = "//:.npmrc",
     pnpm_lock = "//:pnpm-lock.yaml",
-    verify_node_modules_ignored = "//:.bazelignore",
 )
 use_repo(npm, "npm")
 
@@ -136,6 +138,17 @@ use_repo(
     "maven",
     "unpinned_maven",
 )
+{{if .Scaffold.lint -}}
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "net_sourceforge_pmd",
+    build_file_content = """java_import(name = "net_sourceforge_pmd", jars = glob(["*.jar"]), visibility = ["//visibility:public"])""",
+    integrity = "sha256-vov2j2wdZphL2WRak+Yxt4ocL0L18PhxkIL+rWdVOUA=",
+    strip_prefix = "pmd-bin-7.7.0/lib",
+    url = "https://github.com/pmd/pmd/releases/download/pmd_releases/7.7.0/pmd-dist-7.7.0-bin.zip",
+)
+{{- end }}
 {{- end }}
 
 
