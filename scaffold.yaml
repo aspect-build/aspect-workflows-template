@@ -67,6 +67,7 @@ features:
       - "**/weekly_tag.yaml"
   - value: "{{ .Computed.javascript }}"
     globs:
+      - "*/REPO.bazel"
       - "*/package.json"
       - "*/pnpm-*.yaml"
       - "*/*.config.cjs*"
