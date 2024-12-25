@@ -55,7 +55,7 @@ ruff = lint_ruff_aspect(
 ruff_test = lint_test(aspect = ruff)
 
 {{ end -}}
-{{ if .Computed.bash }}
+{{ if .Computed.shell }}
 shellcheck = lint_shellcheck_aspect(
     binary = "@multitool//tools/shellcheck",
     config = "@@//:.shellcheckrc",

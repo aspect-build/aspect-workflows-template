@@ -17,7 +17,7 @@ alias(
     actual = "//tools/format",
 )
 {{- end }}
-{{- if .Computed.bash }}
+{{- if .Computed.shell }}
 exports_files(
     [
         ".shellcheckrc",
