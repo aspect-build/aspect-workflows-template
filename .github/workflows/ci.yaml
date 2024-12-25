@@ -11,15 +11,15 @@ jobs:
                 scaffold-version:
                     - v0.3.0
                 preset:
-                    - kitchen-sink
-                    - shell
+                    - cpp
+                    - go
                     - java
                     - js
-                    - go
-                    - py
-                    - cpp
-                    - rust
+                    - kitchen-sink
                     - minimal
+                    - py
+                    - rust
+                    - shell
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -59,33 +59,9 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: git diff --exit-code
 
-            - name: Tools smoke test
+            - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'kitchen-sink' }}"
-              run: |
-                ./tools/copier --help
-                ./tools/yq --help
-              
-            - name: Java smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'java' }}"
-              run: |
-                mkdir src
-                >src/Demo.java echo -e 'class Demo { public static void main(String[] args) { System.out.println("Hello from Java");}}'
-                >src/BUILD.bazel echo -e 'java_binary(name="Demo", srcs=["Demo.java"])'
-                output="$(bazel run src:Demo)"
-                [[ "${output}" == "Hello from Java" ]] || { echo >&2 "Wanted output 'Hello from Java' but got '${output}'" ; exit 1 ; }
-
-            - name: Python smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' }}"
-              run: |
-                mkdir app
-                >app/__main__.py echo -e 'import requests\nprint(requests.get("https://api.github.com").text)'
-                >app/app_test.py echo -e 'def test_bad():\n  assert 1 == 2'
-                sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
-                ./tools/repin
-                bazel run //app:app_bin
+              run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
               continue-on-error: true # for some reason `bazel test || true` still failing.
@@ -97,48 +73,6 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
-
-            - name: Go smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'go' }}"
-              run: ./tools/go mod tidy
-            
-            - name: JS smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'js' }}"
-              run: ./tools/pnpm list
-
-            - name: Shell smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'shell' }}"
-              run: |
-                >hello.sh echo -e '#!/usr/bin/env bash\necho "Hello from Bash"'
-                chmod u+x hello.sh
-                bazel configure || true
-                output="$(bazel run :hello)"
-                [[ "${output}" == "Hello from Bash" ]] || { echo >&2 "Wanted output 'Hello from Bash' but got '${output}'" ; exit 1 ; }
-
-            - name: Rust smoke test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'rust' }}"
-              run: |
-                mkdir -p hello_world/src
-
-                cat >hello_world/BUILD.bazel <<EOF
-                load("@rules_rust//rust:defs.bzl", "rust_binary")
-
-                rust_binary(
-                    name = "hello_world",
-                    srcs = ["src/main.rs"],
-                )
-                EOF
-
-                cat >hello_world/src/main.rs <<EOF
-                fn main() { println!("Hello from Rust"); }
-                EOF
-
-                output="$(bazel run //hello_world)"
-                [[ "${output}" == "Hello from Rust" ]] || { echo >&2 "Wanted output 'Hello from Rust' but got '${output}'" ; exit 1 ; }
 
             - run: bazel lint ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"

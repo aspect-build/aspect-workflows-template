@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Example user workflows within an `aspect init`-generated repository
+# with the Go language enabled.
+set -o errexit -o pipefail -o nounset
+
+# Create/update the go.mod file
+./tools/go mod tidy
+

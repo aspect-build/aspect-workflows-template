@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Verify that the templated Bazel repository works with the 'shell' preset.
+set -o errexit -o pipefail -o nounset
+
+mkdir app
+# Create a simple application with an external package dependency
+>app/__main__.py cat <<EOF
+import requests
+print(requests.get("https://api.github.com").status_code)
+EOF
+
+# Create a simple failing test
+>app/app_test.py cat <<EOF
+def test_bad():
+  assert 1 == 2
+EOF
+
+# Declare our dependency in the project definition
+# NB: there's not a good machine-editing utility for TOML
+sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
+
+# Run the re-pinning operation
+./tools/repin
+
+# Now the application executes
+output=$(bazel run //app:app_bin)
+
+# Verify the application output matches expectation
+[[ "${output}" == "200" ]] || {
+    echo >&2 "Wanted output '200' but got '${output}'"
+    exit 1
+}

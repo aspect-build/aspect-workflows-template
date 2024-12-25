@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Verify that the templated Bazel repository works with no languages selected.
+set -o errexit -o pipefail -o nounset
+
+bazel build ...
