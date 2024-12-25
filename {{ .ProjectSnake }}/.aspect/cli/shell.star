@@ -7,14 +7,14 @@ def declare_targets(ctx):
 
     ctx.targets.add(
         kind = "sh_library",
-        name = "shell",
+        name = "scripts",
         attrs = {
             "srcs": [s.path for s in ctx.sources],
         },
     )
 
 aspect.register_configure_extension(
-    id = "silo_sh_library",
+    id = "rules_shell",
     prepare = lambda cfg: aspect.PrepareResult(
         sources = [
             aspect.SourceExtensions(".bash", ".sh"),
