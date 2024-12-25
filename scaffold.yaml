@@ -33,6 +33,7 @@ questions:
         - Java
         - C & C++
         - Rust
+        - Shell (Bash)
   - name: copier
     prompt:
       confirm: Setup code generation?
@@ -59,12 +60,14 @@ features:
     globs:
       - "*/tools/format/*"
       - "*/tools/lint/*"
-      - "*/.shellcheckrc"
       - "*/.pre-commit-config.yaml"
   - value: "{{ .Scaffold.stamp }}"
     globs:
       - "*/tools/workspace_status.sh"
       - "**/weekly_tag.yaml"
+  - value: "{{ .Computed.bash }}"
+    globs:
+      - "*/.shellcheckrc"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "*/package.json"
@@ -116,14 +119,25 @@ computed:
   java: "{{ has \"Java\" .Scaffold.langs }}"
   cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
   rust: "{{ has \"Rust\" .Scaffold.langs }}"
+  bash: "{{ has \"Shell (Bash)\" .Scaffold.langs }}"
 
 presets:
   kitchen-sink:
     lint: true
-    langs: ['C & C++', 'JavaScript & TypeScript', 'Python', 'Go', 'Java', 'Rust']
+    langs:
+      - 'C & C++'
+      - 'JavaScript & TypeScript'
+      - 'Python'
+      - 'Go'
+      - 'Java'
+      - 'Rust'
+      - 'Shell (Bash)'
     copier: true
     stamp: true
     oci: true
+  bash:
+    langs: ['Shell (Bash)']
+    lint: true
   go:
     langs: ['Go']
     lint: true

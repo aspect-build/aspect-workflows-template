@@ -31,6 +31,9 @@ bazel_dep(name = "gazelle", version = "0.40.0")
 {{- if .Computed.cpp }}
 bazel_dep(name = "toolchains_llvm", version = "1.2.0")
 {{- end }}
+{{- if .Computed.bash }}
+bazel_dep(name = "rules_shell", version = "0.3.0")
+{{- end }}
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.0")
 {{- end }}

@@ -12,6 +12,7 @@ jobs:
                     - v0.3.0
                 preset:
                     - kitchen-sink
+                    - bash
                     - java
                     - js
                     - go
@@ -106,6 +107,16 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'js' }}"
               run: ./tools/pnpm list
+
+            - name: Shell smoke test
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              if: "${{ matrix.preset == 'bash' }}"
+              run: |
+                >test.sh echo -e '#!/usr/bin/env bash\necho "hello from Bash"'
+                >BUILD.bazel echo -e 'load("@rules_shell//shell:sh_binary.bzl", "sh_binary")\nsh_binary(name = "test", srcs = ["test.sh"])'
+                output="$(bazel run :test)"
+                [[ "${output}" == "Hello from Bash" ]] || { echo >&2 "Wanted output 'Hello from Bash' but got '${output}'" ; exit 1 ; }
+                
 
             - name: Rust smoke test
               working-directory: "${{ steps.scaffold.outputs.dir }}"

@@ -27,7 +27,9 @@ configure:
 {{- if .Scaffold.lint }}
 lint:
   aspects:
+{{- if .Computed.bash }}
     - //tools/lint:linters.bzl%shellcheck
+{{- end }}
 {{- if .Computed.javascript }}
     - //tools/lint:linters.bzl%eslint
 {{- end }}
