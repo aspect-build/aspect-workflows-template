@@ -16,11 +16,10 @@ alias(
     name = "format",
     actual = "//tools/format",
 )
-
+{{- end }}
+{{- if .Computed.shell }}
 exports_files(
-    [
-        ".shellcheckrc",
-    ],
+    [".shellcheckrc"],
     visibility = ["//:__subpackages__"],
 )
 {{- end }}
