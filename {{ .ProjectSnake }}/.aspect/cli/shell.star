@@ -6,14 +6,8 @@ def declare_targets(ctx):
 
     is_test = lambda f: f.path.endswith("_test.sh")
     is_executable = lambda f: len(f.query_results["shebang"]) > 0
-    ctx.targets.add(
-        kind = "sh_library",
-        name = "shell",
-        attrs = {
-            "srcs": [s.path for s in ctx.sources if not is_test(s) and not is_executable(s)],
-        },
-    )
 
+    library_srcs = []
     for file in ctx.sources:
         if is_executable(file) or is_test(file):
             ctx.targets.add(
@@ -23,6 +17,17 @@ def declare_targets(ctx):
                     "srcs": [file.path],
                 }
             )
+        else:
+            library_srcs.push(file)
+
+    if len(library_srcs):
+        ctx.targets.add(
+            kind = "sh_library",
+            name = "shell_lib",
+            attrs = {
+                "srcs": library_srcs,
+            },
+        )
 
 aspect.register_configure_extension(
     id = "rules_shell",
