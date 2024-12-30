@@ -10,6 +10,9 @@ configure:
     python: true
 {{- end }}
   plugins:
+{{- if .Computed.shell }}
+    - .aspect/cli/shell.star
+{{- end }}
 {{- if .Computed.javascript }}
     - .aspect/cli/package-json-scripts.star
 {{- end }}
@@ -27,7 +30,9 @@ configure:
 {{- if .Scaffold.lint }}
 lint:
   aspects:
+{{- if .Computed.shell }}
     - //tools/lint:linters.bzl%shellcheck
+{{- end }}
 {{- if .Computed.javascript }}
     - //tools/lint:linters.bzl%eslint
 {{- end }}
