@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Example user workflows within an `aspect init`-generated repository
+# with the JavaScript / TypeScript language enabled.
+set -o errexit -o pipefail -o nounset
+
+# Demonstrate that the pnpm tool can be run
+./tools/pnpm list

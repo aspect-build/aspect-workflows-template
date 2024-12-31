@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Example user workflows within an `aspect init`-generated repository
+# that work across all languages.
+
+./tools/copier --help
+./tools/yq --help
