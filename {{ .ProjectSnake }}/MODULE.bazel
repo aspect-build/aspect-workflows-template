@@ -45,6 +45,11 @@ use_repo(multitool, "multitool")
 
 #########################
 # Go
+go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+{{ if .Scaffold.lint }}
+go_sdk.nogo(nogo = "//tools/lint:nogo")
+{{ end }}
+
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
