@@ -37,6 +37,7 @@ bazel_dep(name = "rules_shell", version = "0.3.0")
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.0")
 {{- end }}
+bazel_dep(name = "platforms", version = "0.0.10")
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")

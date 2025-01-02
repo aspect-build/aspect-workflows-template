@@ -47,3 +47,6 @@ output=$(curl localhost:8080)
 
 # Shutdown server
 kill %1
+
+# Build an OCI container for the target platform
+bazel build //cmd/hello:image.load
