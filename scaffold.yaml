@@ -78,6 +78,7 @@ features:
       - "*/.npmrc"
       - "**/packages/**"
       - "*/tools/pnpm"
+      - "*/.aspect/bazelrc/javascript.bazelrc"
       - "*/.aspect/cli/package-json*.star"
   - value: "{{ .Computed.python }}"
     globs:
@@ -93,6 +94,7 @@ features:
     globs:
       - "*/maven_install.json"
       - "*/pmd.xml"
+      - "*/.aspect/bazelrc/java.bazelrc"
   - value: "{{ .Computed.cpp }}"
     globs:
       - "*/.clang-tidy"

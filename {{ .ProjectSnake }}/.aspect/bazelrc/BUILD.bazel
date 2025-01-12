@@ -5,11 +5,15 @@ load("@aspect_bazel_lib//lib:bazelrc_presets.bzl", "write_aspect_bazelrc_presets
 write_aspect_bazelrc_presets(
     name = "update_aspect_bazelrc_presets",
     presets = [
-        "bazel7",
+        "bazel8",
         "convenience",
         "correctness",
         "debug",
+{{- if .Computed.java }}
+        "java",
+{{- if .Computed.javascript }}
         "javascript",
+{{- end }}
         "performance",
     ],
 )
