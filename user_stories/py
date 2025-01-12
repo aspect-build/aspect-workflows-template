@@ -45,7 +45,7 @@ EOF
 ./tools/repin
 
 output=$(bazel run //app:app_bin)
-[[ "${output}" == "200" ]] || {
-    echo >&2 "Wanted output '200' but got '${output}'"
+[[ "${output}" !~ "| 200 |" ]] || {
+    echo >&2 "Wanted output containing '| 200 |' but got '${output}'"
     exit 1
 }
