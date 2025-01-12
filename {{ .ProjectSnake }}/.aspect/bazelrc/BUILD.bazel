@@ -11,6 +11,7 @@ write_aspect_bazelrc_presets(
         "debug",
 {{- if .Computed.java }}
         "java",
+{{- end }}
 {{- if .Computed.javascript }}
         "javascript",
 {{- end }}
