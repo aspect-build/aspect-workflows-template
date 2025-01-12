@@ -30,3 +30,22 @@ output=$(bazel run //app:app_bin)
     echo >&2 "Wanted output '200' but got '${output}'"
     exit 1
 }
+
+# Scaffold out a library and add its dependencies
+./tools/copier copy gh:alexeagle/aspect-template-python-lib mylib
+./tools/buildozer "add data //${_}:requirements" //requirements:requirements.all
+echo "-r ../mylib/requirements.txt" >> requirements/all.in
+
+# Update the application to use that library
+>app/__main__.py cat <<EOF
+import requests
+from mylib import say
+say.moo(requests.get("https://api.github.com").status_code)
+EOF
+./tools/repin
+
+output=$(bazel run //app:app_bin)
+[[ "${output}" == "200" ]] || {
+    echo >&2 "Wanted output '200' but got '${output}'"
+    exit 1
+}
