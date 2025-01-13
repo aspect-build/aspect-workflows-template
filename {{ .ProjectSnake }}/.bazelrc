@@ -3,7 +3,7 @@ import %workspace%/.aspect/bazelrc/bazel8.bazelrc
 import %workspace%/.aspect/bazelrc/convenience.bazelrc
 import %workspace%/.aspect/bazelrc/correctness.bazelrc
 import %workspace%/.aspect/bazelrc/debug.bazelrc
-{{- if .Computed.javascript }}
+{{- if .Computed.java }}
 import %workspace%/.aspect/bazelrc/java.bazelrc
 {{- end }}
 {{- if .Computed.javascript }}
