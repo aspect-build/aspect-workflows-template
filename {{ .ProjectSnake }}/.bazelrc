@@ -1,9 +1,14 @@
 # Import Aspect bazelrc presets
-import %workspace%/.aspect/bazelrc/bazel7.bazelrc
+import %workspace%/.aspect/bazelrc/bazel8.bazelrc
 import %workspace%/.aspect/bazelrc/convenience.bazelrc
 import %workspace%/.aspect/bazelrc/correctness.bazelrc
 import %workspace%/.aspect/bazelrc/debug.bazelrc
+{{- if .Computed.java }}
+import %workspace%/.aspect/bazelrc/java.bazelrc
+{{- end }}
+{{- if .Computed.javascript }}
 import %workspace%/.aspect/bazelrc/javascript.bazelrc
+{{- end }}
 import %workspace%/.aspect/bazelrc/performance.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
