@@ -4,6 +4,16 @@ aspect.register_rule_kind("py_pytest_main", {
     "ResolveAttrs": ["deps"],
 })
 
+def declare_target(ctx):
+    if len(ctx.sources):
+        ctx.targets.add(
+            kind = "py_pytest_main",
+            name = "__test__",
+            attrs = {
+                "deps": ["@pip//pytest"],
+            },
+        )
+
 aspect.register_configure_extension(
     id = "pytest_main",
     prepare = lambda cfg: aspect.PrepareResult(
@@ -11,11 +21,5 @@ aspect.register_configure_extension(
             aspect.SourceGlobs("*_test.py"),
         ],
     ),
-    declare = lambda ctx: ctx.targets.add(
-        kind = "py_pytest_main",
-        name = "__test__",
-        attrs = {
-            "deps": ["@pip//pytest"],
-        },
-    ),
+    declare = declare_target,
 )
