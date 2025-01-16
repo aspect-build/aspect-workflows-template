@@ -18,7 +18,7 @@ def declare_targets(ctx):
                 }
             )
         else:
-            library_srcs.push(file)
+            library_srcs.append(file)
 
     if len(library_srcs):
         ctx.targets.add(
