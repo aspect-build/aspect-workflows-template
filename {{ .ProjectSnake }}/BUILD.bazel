@@ -1,4 +1,4 @@
-"""Targets in the workspace root"""
+"""Targets in the repository root"""
 {{- if or .Computed.javascript .Computed.python }}
 {{ if .Computed.javascript }}
 load("@aspect_rules_js//js:defs.bzl", "js_library")
