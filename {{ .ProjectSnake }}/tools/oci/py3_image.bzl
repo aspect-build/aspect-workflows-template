@@ -30,7 +30,7 @@ def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = N
         base = base,
         tars = py_image_layer(
             name = name + "_layers",
-            py_binary = binary,
+            binary = binary,
             root = root,
             layer_groups = layer_groups,
         ),
