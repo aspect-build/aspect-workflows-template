@@ -70,7 +70,6 @@ features:
       - "*/.shellcheckrc"
   - value: "{{ .Computed.javascript }}"
     globs:
-      - "*/REPO.bazel"
       - "*/package.json"
       - "*/pnpm-*.yaml"
       - "*/*.config.cjs*"
