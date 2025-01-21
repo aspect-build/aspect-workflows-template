@@ -22,7 +22,7 @@ bazel_dep(name = "aspect_rules_py", version = "1.1.0")
 bazel_dep(name = "rules_uv", version = "0.51.0")
 {{- end }}
 {{- if .Computed.rust }}
-bazel_dep(name = "rules_rust", version = "0.56.0")
+bazel_dep(name = "rules_rust", version = "0.57.0")
 {{- end }}
 {{- if .Computed.go }}
 bazel_dep(name = "rules_go", version = "0.52.0")
