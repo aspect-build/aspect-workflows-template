@@ -23,10 +23,10 @@ messages:
 
 questions:
   - name: langs
+    validate:
+      min: 1
     prompt:
       multi: true
-      validate:
-        min: 1
       message: Languages to be used in the project
       options:
         - JavaScript & TypeScript
