@@ -1,4 +1,13 @@
 "Create sh_* targets for .bash and .sh files"
+aspect.register_rule_kind("sh_binary", {
+    "From": "@rules_shell//shell:sh_binary.bzl",
+})
+aspect.register_rule_kind("sh_library", {
+    "From": "@rules_shell//shell:sh_library.bzl",
+})
+aspect.register_rule_kind("sh_test", {
+    "From": "@rules_shell//shell:sh_test.bzl",
+})
 
 def declare_targets(ctx):
     if not ctx.sources:
