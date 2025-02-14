@@ -10,6 +10,7 @@ jobs:
             matrix:
                 scaffold-version:
                     - v0.3.0
+                    - v0.6.1
                 preset:
                     - cpp
                     - go
