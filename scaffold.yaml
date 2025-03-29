@@ -20,6 +20,10 @@ messages:
 
     4. Add source code and run `aspect configure` to create 
        additional `BUILD.bazel` files.
+    
+    🌟 Star Aspect CLI on GitHub: https://github.com/aspect-build/aspect-cli
+    📢 Stay up to date: https://www.linkedin.com/company/aspect-build/
+    💬 Discuss on Bazel Slack: https://slack.bazel.build in the #aspect-build channel
 
 questions:
   - name: langs
