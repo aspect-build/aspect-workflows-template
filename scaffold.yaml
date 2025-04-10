@@ -76,7 +76,7 @@ features:
       - "*/.shellcheckrc"
   - value: "{{ .Computed.javascript }}"
     globs:
-      - "*/package.json"
+      - "**/package.json"
       - "*/pnpm-*.yaml"
       - "*/*.config.cjs*"
       - "*/*.config.mjs*"
