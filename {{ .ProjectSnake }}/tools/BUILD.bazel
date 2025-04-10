@@ -40,7 +40,7 @@ py_console_script_binary(
 
 {{ if .Computed.javascript }}
 {{ if .Scaffold.codegen }}
-load("@npm//tools:yo/package_json.bzl")
+load("@npm//tools:yo/package_json.bzl", yo_bin = "bin")
 yo_bin.yo_binary(name = "yo")
 {{ end }}
 
