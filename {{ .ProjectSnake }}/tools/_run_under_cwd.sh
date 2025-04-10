@@ -1,30 +1,6 @@
 #!/bin/sh
 # See https://blog.aspect.build/run-tools-installed-by-bazel
-case "$(basename "$0")" in
-  buildifier)
-    target="@buildifier_prebuilt//:buildifier"
-    ;;
-{{- if .Scaffold.copier }}
-  copier)
-    target="//tools:copier"
-    ;;
-{{- end }}
-  cargo)
-    # Being documented in https://github.com/bazelbuild/rules_rust/pull/2890
-    target="@rules_rust//tools/upstream_wrapper:cargo"
-    ;;
-  go)
-    # https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/bzlmod.md#using-a-go-sdk
-    target="@rules_go//go"
-    ;;
-  pnpm)
-    # https://github.com/aspect-build/rules_js/blob/main/docs/faq.md#can-i-use-bazel-managed-pnpm
-    target="@pnpm"
-    ;;
-  *)
-    target="@multitool//tools/$(basename "$0")"
-    ;;
-esac
+target="//tools:$(basename "$0")"
 
 # NB: we don't use 'bazel run' because it may leave behind zombie processes under ibazel
 # shellcheck disable=SC2046

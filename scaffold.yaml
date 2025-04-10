@@ -21,9 +21,9 @@ messages:
     4. Add source code and run `aspect configure` to create 
        additional `BUILD.bazel` files.
     
-    🌟 Star Aspect CLI on GitHub: https://github.com/aspect-build/aspect-cli
-    📢 Stay up to date: https://www.linkedin.com/company/aspect-build/
-    💬 Discuss on Bazel Slack: https://slack.bazel.build in the #aspect-build channel
+    🌟 Star Aspect CLI on GitHub: <https://github.com/aspect-build/aspect-cli>
+    📢 Stay up to date: <https://www.linkedin.com/company/aspect-build/>
+    💬 Discuss on Bazel Slack: <https://slack.bazel.build> in the #aspect-build channel
 
 questions:
   - name: langs
@@ -40,11 +40,10 @@ questions:
         - C & C++
         - Rust
         - Shell (Bash)
-  - name: copier
+  - name: codegen
     prompt:
       confirm: Setup code generation?
-      description: "Installs https://copier.readthedocs.io/"
-      when: "{{ has \"Python\" .langs }}"
+      description: "Installs https://copier.readthedocs.io/ (Python) and/or https://yeoman.io (JS)"
   - name: lint
     prompt:
       confirm: Setup format and linting?
@@ -59,9 +58,10 @@ questions:
       description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
-  - value: "{{ .Scaffold.copier }}"
+  - value: "{{ .Scaffold.codegen }}"
     globs:
       - "*/tools/copier"
+      - "*/tools/yo"
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
@@ -140,7 +140,7 @@ presets:
       - 'Java'
       - 'Rust'
       - 'Shell (Bash)'
-    copier: true
+    codegen: true
     stamp: true
     oci: true
   shell:
@@ -152,10 +152,11 @@ presets:
     oci: true
   js:
     langs: ['JavaScript & TypeScript']
+    codegen: true
     lint: true
   py:
     langs: ['Python']
-    copier: true
+    codegen: true
     lint: true
   java:
     langs: ['Java']
