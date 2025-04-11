@@ -1,3 +1,4 @@
 # See https://pnpm.io/pnpm-workspace_yaml
 packages:
  - packages/*
+ - tools

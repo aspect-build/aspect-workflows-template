@@ -5,3 +5,7 @@ set -o errexit -o pipefail -o nounset
 
 # Demonstrate that the pnpm tool can be run
 ./tools/pnpm list
+
+# Scaffold out a library and add its dependencies
+./tools/pnpm add -w generator-bazel-fastify-route
+./tools/yo bazel-fastify-route
