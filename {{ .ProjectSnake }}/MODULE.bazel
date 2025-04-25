@@ -8,7 +8,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 {{- end }}
 bazel_dep(name = "rules_multitool", version = "1.2.0")
 {{- if .Computed.javascript }}
-bazel_dep(name = "aspect_rules_js", version = "2.3.6")
+bazel_dep(name = "aspect_rules_js", version = "2.3.7")
 bazel_dep(name = "aspect_rules_ts", version = "3.5.2")
 {{- end }}
 {{- if .Computed.java }}
