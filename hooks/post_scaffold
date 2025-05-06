@@ -1,23 +1,11 @@
-#!/bin/bash
-
-# Boot direnv
-eval "$(direnv hook bash)"
-
-# Mark the dir as allowed
-direnv allow {{ .ProjectSnake }}
+#!/bin/sh
 
 cd {{ .ProjectSnake }}
 
-set -ex
-
-# Set up the bazel_env
-bazel build //tools:bazel_env
-
-eval "$(direnv export bash)"
-
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
 set +o errexit # ignore exit code
-buildifier -r .  # Exits nonzero if it makes changes, and we expect that
+# Exits nonzero if it makes changes, and we expect that
+bazel run --run_under="cd $PWD &&" @buildifier_prebuilt//:buildifier -r .
 set -o errexit
 
 # Run the format tool

@@ -66,6 +66,14 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: git diff --exit-code
 
+            - name: setup direnv
+              run: |
+                eval "$(direnv hook bash)"
+                direnv allow "${{ steps.scaffold.outputs.dir }}"
+                # Set up the bazel_env
+                bazel build //tools:bazel_env
+                eval "$(direnv export bash)"
+
             - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
