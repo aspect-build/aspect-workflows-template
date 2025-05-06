@@ -25,10 +25,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Install direnv
-              run: |
-                sudo apt-get install -y direnv
-
             - uses: bazel-contrib/setup-bazel@0.14.0
               with:
                 bazelisk-cache: true
@@ -67,9 +63,11 @@ jobs:
               run: git diff --exit-code
 
             - name: setup direnv
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
+                sudo apt-get install -y direnv
                 eval "$(direnv hook bash)"
-                direnv allow "${{ steps.scaffold.outputs.dir }}"
+                direnv allow .
                 # Set up the bazel_env
                 bazel build //tools:bazel_env
                 eval "$(direnv export bash)"
