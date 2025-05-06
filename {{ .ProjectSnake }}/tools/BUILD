@@ -1,37 +1,18 @@
-"""Developer tool binaries"""
-package(default_visibility = ["//visibility:public"])
+"""FIXME"""
 
-[
-    alias(name = tool, actual = "@multitool//tools/" + tool)
-    # This list matches tools.lock.json
-    for tool in [
-        "buf",
-        "buildozer",
-        "docker-compose",
-        "ibazel",
-        "multitool",
-        "terraform",
-        "yq",
-    ]
-]
-
-{{ if .Scaffold.lint }}
-alias(name = "buildifier", actual = "@buildifier_prebuilt//:buildifier")
+load("@bazel_env.bzl", "bazel_env")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+{{ if .Computed.javascript }}
+load("@npm//:defs.bzl", "npm_link_all_packages")
 {{ end }}
-
-{{ if .Computed.rust }}
-# See https://github.com/bazelbuild/rules_rust/blob/main/docs/src/upstream_tooling.md
-alias(name = "cargo", actual = "@rules_rust//tools/upstream_wrapper:cargo")
-{{ end }}
-
-{{ if .Computed.go }}
-# https://github.com/bazelbuild/rules_go/blob/master/docs/go/core/bzlmod.md#using-a-go-sdk
-alias(name = "go", actual = "@rules_go//go")
-{{ end }}
-
 {{ if and .Scaffold.codegen .Computed.python }}
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
+{{ end  }}
+load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 
+package(default_visibility = ["//visibility:public"])
+
+{{ if and .Scaffold.codegen .Computed.python }}
 py_console_script_binary(
     name = "copier",
     pkg = "@pip//copier",
@@ -44,6 +25,47 @@ load("@npm//tools:yo/package_json.bzl", yo_bin = "bin")
 yo_bin.yo_binary(name = "yo")
 {{ end }}
 
-# https://github.com/aspect-build/rules_js/blob/main/docs/faq.md#can-i-use-bazel-managed-pnpm
-alias(name = "pnpm", actual = "@pnpm")
+npm_link_all_packages(name = "node_modules")
+
 {{ end }}
+
+bazel_env(
+    name = "bazel_env",
+    toolchains = {
+{{ if .Computed.java }}
+        "jdk": "@rules_java//toolchains:current_host_java_runtime",
+{{ end }}
+{{ if .Computed.javascript }}
+        "python": "@rules_python//python:current_py_toolchain",
+{{ end }}
+{{ if .Computed.javascript }}
+        "nodejs": "@nodejs_toolchains//:resolved_toolchain",
+{{ end }}
+    },
+    tools = {
+{{ if .Scaffold.lint }}
+        "buildifier": "@buildifier_prebuilt//:buildifier",
+{{ end }}
+{{ if .Computed.rust }}
+        "cargo": "@rules_rust//tools/upstream_wrapper:cargo",
+{{ end }}
+{{ if .Computed.go }}
+        "go": "@rules_go//go",
+{{ end }}
+        "jar": "$(JAVABASE)/bin/jar",
+        "java": "$(JAVA)",
+{{ if .Computed.javascript }}
+        "node": "$(NODE_PATH)",
+        "pnpm": "@pnpm",
+{{ if .Scaffold.codegen }}
+        "yo": ":yo",
+{{ end }}
+{{ end }}
+{{ if .Computed.python }}
+        "python": "$(PYTHON3)",
+{{ end }}
+    } | {
+        t: "@multitool//tools/" + t
+        for t in MULTITOOL_TOOLS
+    },
+)
