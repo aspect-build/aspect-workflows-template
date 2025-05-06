@@ -70,11 +70,12 @@ jobs:
                 direnv allow .
                 # Set up the bazel_env
                 bazel build //tools:bazel_env
-                eval "$(direnv export bash)"
 
             - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
+              run: |
+                eval "$(direnv export bash)"
+                $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
               continue-on-error: true # for some reason `bazel test || true` still failing.
