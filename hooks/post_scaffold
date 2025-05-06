@@ -9,6 +9,8 @@ bazel build //tools:bazel_env
 eval "$(direnv hook bash)"
 direnv allow .
 direnv reload
+env
+echo "$PATH" | tr ':' '\n'
 
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
 set +o errexit # ignore exit code
