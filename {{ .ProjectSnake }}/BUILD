@@ -12,6 +12,16 @@ load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 {{- end }}
 {{- if .Scaffold.lint }}
 
+# gazelle:build_file_name BUILD
+
+{{ if .Computed.javascript }}
+# TODO: remove https://github.com/aspect-build/aspect-cli/issues/834
+# gazelle:js_tsconfig enabled
+
+# TODO: remove once https://github.com/aspect-build/aspect-cli/issues/560 done
+# gazelle:js_npm_package_target_name pkg
+{{- end }}
+
 alias(
     name = "format",
     actual = "//tools/format",
