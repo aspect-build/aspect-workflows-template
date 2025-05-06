@@ -5,7 +5,7 @@ cd {{ .ProjectSnake }}
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
 set +o errexit # ignore exit code
 # Exits nonzero if it makes changes, and we expect that
-bazel run --run_under="cd $PWD &&" @buildifier_prebuilt//:buildifier -r .
+bazel run --run_under="cd $PWD &&" -- @buildifier_prebuilt//:buildifier -r .
 set -o errexit
 
 # Run the format tool
