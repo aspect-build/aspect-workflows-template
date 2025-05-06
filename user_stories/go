@@ -28,8 +28,7 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
-which go
-pwd
+ls -R
 go mod tidy
 # Update the BUILD files
 bazel configure || true
