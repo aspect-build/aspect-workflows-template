@@ -12,10 +12,6 @@ load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 {{- end }}
 {{- if .Scaffold.lint }}
 
-alias(
-    name = "format",
-    actual = "//tools/format",
-)
 {{- end }}
 {{- if .Computed.shell }}
 exports_files(

@@ -1,26 +1,19 @@
 #!/bin/sh
 
 cd {{ .ProjectSnake }}
-# Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
-set +o errexit # ignore exit code
 
+# Set up the bazel_env
 bazel build //tools:bazel_env
 direnv allow .
 direnv reload
 
-echo $PATH | tr ":" "\n"
-
-which -a buildifier
-
-buildifier -r .
+# Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
+set +o errexit # ignore exit code
+buildifier -r .  # Exits nonzero if it makes changes, and we expect that
 set -o errexit
 
-{{ if .Computed.python }}
-# Re-run uv pip compile since the requirements depend on answers to prompts
-bazel run //requirements:runtime.update
-bazel run //requirements:requirements.all.update
-bazel run //:gazelle_python_manifest.update
-{{ end }}
+# Run the repin tool
+repin
 
 {{ if .Computed.js }}
 which pnpm

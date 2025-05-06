@@ -54,6 +54,12 @@ bazel_env(
     },
     tools = {
         # Mapping from tool binary name ($PATH entry) to Bazel label
+
+        ## Firstparty tools
+        "format": "//tools/format:format",
+        "repin": "//tools/repin:repin",
+
+        ## Thirdparty tools
 {{ if .Scaffold.lint }}
         "buildifier": "@buildifier_prebuilt//:buildifier",
 {{ end }}
