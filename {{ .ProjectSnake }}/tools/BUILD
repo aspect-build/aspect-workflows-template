@@ -45,7 +45,7 @@ bazel_env(
 {{ if .Computed.java }}
         "jdk": "@rules_java//toolchains:current_host_java_runtime",
 {{ end }}
-{{ if .Computed.javascript }}
+{{ if .Computed.python }}
         "python": "@rules_python//python:current_py_toolchain",
 {{ end }}
 {{ if .Computed.javascript }}
