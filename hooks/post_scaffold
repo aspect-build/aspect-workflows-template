@@ -24,8 +24,11 @@ set +o errexit # ignore exit code
 buildifier -r .  # Exits nonzero if it makes changes, and we expect that
 set -o errexit
 
+# Run the format tool
+bazel run //tools/format
+
 # Run the repin tool
-repin
+bazel run //tools/repin
 
 {{ if .Computed.js }}
 which pnpm
