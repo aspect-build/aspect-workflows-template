@@ -1,4 +1,15 @@
-"""FIXME"""
+"""
+Build supporting tools.
+
+The tools subpackage is used to define build rules and configurations for tools
+used throughout the repository. Firstparty tools not required for build support
+should live elsewhere.
+
+Of special note is that we're using the `bazel_env.bzl` tool to re-export tools
+used under Bazel as a `bin/` tree which can be added to the `$PATH`. The
+included `.envrc` automates this for you.
+
+"""
 
 load("@bazel_env.bzl", "bazel_env")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
@@ -43,6 +54,7 @@ bazel_env(
 {{ end }}
     },
     tools = {
+        # Mapping from tool binary name ($PATH entry) to Bazel label
 {{ if .Scaffold.lint }}
         "buildifier": "@buildifier_prebuilt//:buildifier",
 {{ end }}
