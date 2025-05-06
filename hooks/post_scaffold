@@ -1,15 +1,22 @@
 #!/bin/bash
 
+# Boot direnv
+eval "$(direnv hook bash)"
+
+# Mark the dir as allowed
+direnv allow {{ .ProjectSnake }}
+
 cd {{ .ProjectSnake }}
+
+set -ex
 
 # Set up the bazel_env
 bazel build //tools:bazel_env
 
-# Boot direnv
-eval "$(direnv hook bash)"
-direnv allow .
-direnv reload
+eval "$(direnv export bash)"
+
 env
+
 echo "$PATH" | tr ':' '\n'
 
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively

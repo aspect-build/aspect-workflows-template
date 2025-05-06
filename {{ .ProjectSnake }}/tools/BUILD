@@ -56,8 +56,8 @@ bazel_env(
         # Mapping from tool binary name ($PATH entry) to Bazel label
 
         ## Firstparty tools
-        "format": "@//tools/format:format",
-        "repin": "@//tools/repin:repin",
+        "format": "//tools/format:format",
+        "repin": "//tools/repin:repin",
 
         ## Thirdparty tools
 {{ if .Scaffold.lint }}
