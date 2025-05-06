@@ -64,14 +64,14 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
                 sudo apt-get install -y direnv
-                eval "$(direnv hook bash)"
-                direnv allow .
-                # Set up the bazel_env
-                bazel build //tools:bazel_env
 
             - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
+                eval "$(direnv hook bash)"
+                direnv allow .
+                # Set up the bazel_env
+                bazel build //tools:bazel_env
                 eval "$(direnv export bash)"
                 $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
