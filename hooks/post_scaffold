@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 cd {{ .ProjectSnake }}
 
 # Set up the bazel_env
 bazel build //tools:bazel_env
+
+# Boot direnv
+eval "$(direnv hook bash)"
 direnv allow .
 direnv reload
 
