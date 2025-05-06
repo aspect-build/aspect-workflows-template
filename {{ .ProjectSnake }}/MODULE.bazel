@@ -32,7 +32,7 @@ bazel_dep(name = "gazelle", version = "0.43.0")
 bazel_dep(name = "toolchains_llvm", version = "1.4.0")
 {{- end }}
 {{- if .Computed.shell }}
-bazel_dep(name = "rules_shell", version = "0.4.0")
+bazel_dep(name = "rules_shell", version = "0.4.1")
 {{- end }}
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.6")
