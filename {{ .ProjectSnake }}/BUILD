@@ -10,7 +10,6 @@ load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 {{- end }}
 {{- end }}
-{{- if .Scaffold.lint }}
 
 # gazelle:build_file_name BUILD
 
@@ -19,6 +18,7 @@ load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
 # gazelle:js_npm_package_target_name pkg
 {{- end }}
 
+{{- if .Scaffold.lint }}
 alias(
     name = "format",
     actual = "//tools/format",

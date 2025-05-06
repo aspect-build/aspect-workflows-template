@@ -29,8 +29,8 @@ The command collects the correct report files, presents them with colored bounda
 For developers to be able to run additional CLI tools without needing manual installation:
 
 1. Add the tool to `tools/tools.lock.json`
-2. `cd tools; ln -s _multitool_run_under_cwd.sh name_of_tool`
-3. Instruct developers to run `./tools/name_of_tool` rather than install that tool on their machine.
+2. Run `bazel run //tools:bazel_env` (following any instructions it prints)
+3. When working within the workspace, tools will be available on the PATH
 
 See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 
@@ -41,7 +41,7 @@ See https://blog.aspect.build/run-tools-installed-by-bazel for details.
 To install a `node_modules` tree locally for the editor or other tooling outside of Bazel:
 
 ```shell
-% ./tools/pnpm install
+% pnpm install
 ```
 
 Similarly, you can run other `pnpm` commands to add or remove packages. Use `bazel info workspace` to avoid having a bunch of `../` segments when running tools from a subdirectory:
@@ -71,7 +71,7 @@ If the package is not already a dependency of the project, you have to do some a
 To create a runnable binary for a console script from a third-party package, run the following:
 
 ```shell
-% cat<<'EOF' | ./tools/buildozer -f -
+% cat<<'EOF' | buildozer -f -
 new_load @rules_python//python/entry_points:py_console_script_binary.bzl py_console_script_binary|new py_console_script_binary scriptname|tools:__pkg__
 set pkg "@pip//package_name_snake_case"|tools:scriptname
 EOF
@@ -126,10 +126,10 @@ To request stamped build outputs, add the flag `-config=release`.
 
 ## Working with Cargo
 
-If you need to run `cargo` outside of Bazel, you can do so by running `./tools/cargo`, e.g.
+You can run `cargo` outside of Bazel, using the tool installed on the PATH.
 
 ```console
-% ./tools/cargo add reqwest
+% cargo add reqwest
     Updating crates.io index
       Adding reqwest v0.12.7 to dependencies.
              Features:

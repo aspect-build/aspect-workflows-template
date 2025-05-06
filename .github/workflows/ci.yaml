@@ -27,7 +27,7 @@ jobs:
             - uses: bazel-contrib/setup-bazel@0.14.0
               with:
                 bazelisk-cache: true
-                repository-cache: true 
+                repository-cache: true
             - uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
                 repo: hay-kot/scaffold
@@ -51,7 +51,7 @@ jobs:
 
             - run: bazel test ...
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              
+
             - run: bazel run format
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
@@ -60,9 +60,20 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: git diff --exit-code
 
+            - name: setup direnv
+              working-directory: "${{ steps.scaffold.outputs.dir }}"
+              run: |
+                sudo apt-get install -y direnv
+
             - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
-              run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
+              run: |
+                eval "$(direnv hook bash)"
+                direnv allow .
+                # Set up the bazel_env
+                bazel build //tools:bazel_env
+                eval "$(direnv export bash)"
+                $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
               continue-on-error: true # for some reason `bazel test || true` still failing.
