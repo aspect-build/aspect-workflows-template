@@ -15,5 +15,5 @@ bazel run //tools/format
 ./tools/repin
 
 {{ if .Computed.js }}
-pnpm install --lockfile-only
+bazel run @pnpm -- --dir=$PWD install --lockfile-only
 {{ end }}
