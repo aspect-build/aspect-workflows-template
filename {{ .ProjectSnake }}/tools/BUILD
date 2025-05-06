@@ -74,7 +74,7 @@ bazel_env(
         "node": "$(NODE_PATH)",
         "pnpm": "@pnpm",
 {{ if .Scaffold.codegen }}
-        "yo": Label(":yo"),
+        "yo": ":yo",
 {{ end }}
 {{ end }}
 {{ if .Computed.python }}

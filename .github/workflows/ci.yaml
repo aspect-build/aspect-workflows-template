@@ -25,7 +25,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            # FIXME: Can we get this in the base container?
             - name: Install direnv
               run: |
                 sudo apt-get install -y direnv
