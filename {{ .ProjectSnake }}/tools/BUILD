@@ -63,8 +63,10 @@ bazel_env(
 {{ if .Computed.go }}
         "go": "@rules_go//go",
 {{ end }}
+{{ if .Computed.java }}
         "jar": "$(JAVABASE)/bin/jar",
         "java": "$(JAVA)",
+{{ end }}
 {{ if .Computed.javascript }}
         "node": "$(NODE_PATH)",
         "pnpm": "@pnpm",
