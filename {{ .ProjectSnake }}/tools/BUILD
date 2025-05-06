@@ -12,7 +12,6 @@ included `.envrc` automates this for you.
 """
 
 load("@bazel_env.bzl", "bazel_env")
-load("@bazel_skylib//rules:write_file.bzl", "write_file")
 {{ if .Computed.javascript }}
 load("@npm//:defs.bzl", "npm_link_all_packages")
 {{ end }}
