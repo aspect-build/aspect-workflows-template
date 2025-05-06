@@ -63,6 +63,9 @@ bazel_env(
 {{ if .Computed.rust }}
         "cargo": "$(CARGO)",
 {{ end }}
+{{ if and .Scaffold.codegen .Computed.python }}
+        "copier": ":copier",
+{{ end }}
 {{ if .Computed.go }}
         "go": "@rules_go//go",
 {{ end }}
