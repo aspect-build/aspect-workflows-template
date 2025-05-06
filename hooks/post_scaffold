@@ -15,10 +15,6 @@ bazel build //tools:bazel_env
 
 eval "$(direnv export bash)"
 
-env
-
-echo "$PATH" | tr ':' '\n'
-
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
 set +o errexit # ignore exit code
 buildifier -r .  # Exits nonzero if it makes changes, and we expect that
@@ -28,9 +24,8 @@ set -o errexit
 bazel run //tools/format
 
 # Run the repin tool
-bazel run //tools/repin
+./tools/repin
 
 {{ if .Computed.js }}
-which pnpm
 pnpm install --lockfile-only
 {{ end }}

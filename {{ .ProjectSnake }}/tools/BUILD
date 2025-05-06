@@ -51,6 +51,9 @@ bazel_env(
 {{ if .Computed.javascript }}
         "nodejs": "@nodejs_toolchains//:resolved_toolchain",
 {{ end }}
+{{ if .Computed.rust }}
+        "rust": "@rules_rust//rust/toolchain:current_rust_toolchain",
+{{ end }}
     },
     tools = {
         # Mapping from tool binary name ($PATH entry) to Bazel label
@@ -58,7 +61,7 @@ bazel_env(
         "buildifier": "@buildifier_prebuilt//:buildifier",
 {{ end }}
 {{ if .Computed.rust }}
-        "cargo": "@rules_rust//tools/upstream_wrapper:cargo",
+        "cargo": "$(CARGO)",
 {{ end }}
 {{ if .Computed.go }}
         "go": "@rules_go//go",
