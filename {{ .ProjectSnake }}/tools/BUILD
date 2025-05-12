@@ -22,6 +22,8 @@ load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 
 package(default_visibility = ["//visibility:public"])
 
+alias(name = "go", actual = "@rules_go//go")
+
 {{ if and .Scaffold.codegen .Computed.python }}
 py_console_script_binary(
     name = "copier",
