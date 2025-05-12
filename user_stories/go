@@ -29,7 +29,7 @@ EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
 ls -R
-bazel run @rules_go//go mod tidy
+bazel run --run_under="cd $PWD &&" @rules_go//go mod tidy
 # Update the BUILD files
 bazel configure || true
 bazel build cmd/hello
