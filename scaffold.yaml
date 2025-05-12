@@ -60,10 +60,6 @@ questions:
       description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
-  - value: "{{ .Scaffold.codegen }}"
-    globs:
-      - "*/tools/copier"
-      - "*/tools/yo"
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
@@ -84,7 +80,6 @@ features:
       - "*/*.config.mjs*"
       - "*/.npmrc"
       - "**/packages/**"
-      - "*/tools/pnpm"
       - "*/.aspect/bazelrc/javascript.bazelrc"
       - "*/.aspect/cli/package-json*.star"
   - value: "{{ .Computed.python }}"
@@ -96,7 +91,6 @@ features:
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
-      - "*/tools/go"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
@@ -119,7 +113,6 @@ features:
   - value: "{{ .Computed.rust }}"
     globs:
       - "*/Cargo.toml"
-      - "*/tools/cargo"
       - "*/src/main.rs"
 
 computed:
