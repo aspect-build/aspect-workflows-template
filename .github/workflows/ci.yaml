@@ -70,9 +70,9 @@ jobs:
               run: |
                 eval "$(direnv hook bash)"
                 direnv allow .
-                # Set up the bazel_env
-                bazel build //tools:bazel_env
-                eval "$(direnv export bash)"
+                # TODO: Set up the bazel_env
+                # bazel build //tools:bazel_env
+                # eval "$(direnv export bash)"
                 $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
