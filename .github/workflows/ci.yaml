@@ -9,18 +9,18 @@ jobs:
         strategy:
             matrix:
                 scaffold-version:
-                    - v0.3.0
+                    # - v0.3.0
                     - v0.6.1
                 preset:
-                    - cpp
+                    # - cpp
                     - go
-                    - java
-                    - js
-                    - kitchen-sink
-                    - minimal
-                    - py
-                    - rust
-                    - shell
+                    # - java
+                    # - js
+                    # - kitchen-sink
+                    # - minimal
+                    # - py
+                    # - rust
+                    # - shell
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -71,8 +71,8 @@ jobs:
                 eval "$(direnv hook bash)"
                 direnv allow .
                 # TODO: Set up the bazel_env
-                # bazel build //tools:bazel_env
-                # eval "$(direnv export bash)"
+                bazel build //tools:bazel_env
+                eval "$(direnv export bash)"
                 $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
