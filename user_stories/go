@@ -28,8 +28,10 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
-ls -R
-bazel run --run_under="cd $PWD &&" @rules_go//go mod tidy
+# FIXME: why doesn't the tools pattern work here??
+bazel 2>/dev/null build --build_runfile_links @rules_go//go && \
+  $(bazel 2>/dev/null info execution_root)/$(bazel 2>/dev/null cquery --output=files "@rules_go//go") mod tidy
+
 # Update the BUILD files
 bazel configure || true
 bazel build cmd/hello
