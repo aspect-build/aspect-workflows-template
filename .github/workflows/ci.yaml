@@ -61,14 +61,13 @@ jobs:
               run: git diff --exit-code
 
             - name: setup direnv
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
                 sudo apt-get install -y direnv
+                eval "$(direnv hook bash)"
 
             - name: User Stories
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
-                eval "$(direnv hook bash)"
                 direnv allow .
                 # TODO: Set up the bazel_env
                 bazel run //tools:bazel_env
