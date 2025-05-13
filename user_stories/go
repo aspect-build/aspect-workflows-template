@@ -30,6 +30,7 @@ EOF
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
 ./tools/go mod tidy
 # Update the BUILD files
+bazel run //:gazelle
 bazel configure || true
 bazel build cmd/hello
 # Run the application, starting a server
