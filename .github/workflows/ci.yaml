@@ -71,7 +71,7 @@ jobs:
                 eval "$(direnv hook bash)"
                 direnv allow .
                 # TODO: Set up the bazel_env
-                bazel build //tools:bazel_env
+                bazel run //tools:bazel_env
                 eval "$(direnv export bash)"
                 $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
