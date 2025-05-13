@@ -1,16 +1,19 @@
 #!/bin/sh
 
 cd {{ .ProjectSnake }}
+
 # Format all Starlark files (i.e. BUILD, WORKSPACE, .bzl, or .sky) in this directory recursively
 set +o errexit # ignore exit code
-./tools/buildifier -r .
+# Exits nonzero if it makes changes, and we expect that
+bazel run --run_under="cd $PWD &&" -- @buildifier_prebuilt//:buildifier -r .
 set -o errexit
-{{ if .Computed.python }}
-# Re-run uv pip compile since the requirements depend on answers to prompts
-bazel run //requirements:runtime.update
-bazel run //requirements:requirements.all.update
-bazel run //:gazelle_python_manifest.update
-{{ end }}
+
+# Run the format tool
+bazel run //tools/format
+
+# Run the repin tool
+./tools/repin
+
 {{ if .Computed.js }}
-./tools/pnpm install --lockfile-only
+bazel run @pnpm -- --dir=$PWD install --lockfile-only
 {{ end }}

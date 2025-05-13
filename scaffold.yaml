@@ -10,15 +10,17 @@ messages:
 
     1. `cd {{ .ProjectSnake }}`, or open that folder in your editor.
     2. Read the developer guide in `/README.bazel.md`.
-    3. Try out some commands, such as:
+    3. Setup your environment by running `bazel run tools:bazel_env`
+       Note, this requires installing direnv: https://direnv.net/
+    4. Try out some commands, such as:
     {{- if .Scaffold.lint }}
       - Format:        `aspect run format`
       - Lint:          `aspect lint //...`
     {{- end }}
       - Run all tests: `aspect test //...`
-      - Watch mode:    `./tools/ibazel run //my:devserver`
+      - Watch mode:    `ibazel run //my:devserver`
 
-    4. Add source code and run `aspect configure` to create 
+    5. Add source code and run `aspect configure` to create 
        additional `BUILD.bazel` files.
     
     🌟 Star Aspect CLI on GitHub: <https://github.com/aspect-build/aspect-cli>
@@ -58,10 +60,6 @@ questions:
       description: "Install rules_oci; see https://github.com/bazel-contrib/rules_oci"
 
 features:
-  - value: "{{ .Scaffold.codegen }}"
-    globs:
-      - "*/tools/copier"
-      - "*/tools/yo"
   - value: "{{ .Scaffold.lint }}"
     globs:
       - "*/tools/format/*"
@@ -82,7 +80,6 @@ features:
       - "*/*.config.mjs*"
       - "*/.npmrc"
       - "**/packages/**"
-      - "*/tools/pnpm"
       - "*/.aspect/bazelrc/javascript.bazelrc"
       - "*/.aspect/cli/package-json*.star"
   - value: "{{ .Computed.python }}"
@@ -94,7 +91,6 @@ features:
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
-      - "*/tools/go"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
@@ -117,7 +113,6 @@ features:
   - value: "{{ .Computed.rust }}"
     globs:
       - "*/Cargo.toml"
-      - "*/tools/cargo"
       - "*/src/main.rs"
 
 computed:
