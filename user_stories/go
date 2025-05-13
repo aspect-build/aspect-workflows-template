@@ -28,9 +28,9 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
-# FIXME: why doesn't the tools pattern work here??
-./tools/go mod tidy
-
+go mod tidy
+# WORKAROUND: run gazelle before configure, because the latter tries to run bazel mod tidy in a wrong working directory
+bazel run //:gazelle
 # Update the BUILD files
 bazel configure || true
 bazel build cmd/hello
