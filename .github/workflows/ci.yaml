@@ -69,9 +69,8 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               run: |
                 direnv allow .
-                # TODO: Set up the bazel_env
-                bazel run //tools:bazel_env
                 eval "$(direnv export bash)"
+                bazel run //tools:bazel_env
                 $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}
 
             - name: Python test that fails
