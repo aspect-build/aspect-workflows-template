@@ -1,52 +1,16 @@
 """Targets in the repository root"""
-{{- if or .Computed.javascript .Computed.python }}
-{{ if .Computed.javascript }}
-load("@aspect_rules_js//js:defs.bzl", "js_library")
-load("@npm//:defs.bzl", "npm_link_all_packages")
-{{- end }}
-{{- if .Computed.python }}
-load("@pip//:requirements.bzl", "all_whl_requirements")
-load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
-load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
-{{- end }}
-{{- end }}
 
+# We prefer BUILD instead of BUILD.bazel
 # gazelle:build_file_name BUILD
 
 {{ if .Computed.javascript }}
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
 # TODO: remove once https://github.com/aspect-build/aspect-cli/issues/560 done
 # gazelle:js_npm_package_target_name pkg
-{{- end }}
-
-{{- if .Scaffold.lint }}
-alias(
-    name = "format",
-    actual = "//tools/format",
-)
-{{- end }}
-{{- if .Computed.shell }}
-exports_files(
-    [".shellcheckrc"],
-    visibility = ["//:__subpackages__"],
-)
-{{- end }}
-{{- if .Computed.go }}
-load("@gazelle//:def.bzl", "gazelle")
-
-# gazelle:prefix github.com/example/project
-gazelle(name = "gazelle")
-{{- end }}
-{{- if .Computed.python }}
-
-exports_files(
-    ["pyproject.toml"],
-    visibility = ["//:__subpackages__"],
-)
-{{- end }}
-{{- if .Computed.javascript }}
-
 npm_link_all_packages(name = "node_modules")
-{{- if .Scaffold.lint }}
+{{ if .Scaffold.lint }}
 
 js_library(
     name = "eslintrc",
@@ -64,9 +28,39 @@ js_library(
     deps = [],
     visibility = ["//tools/format:__pkg__"],
 )
-{{- end }}
-{{- end }}
-{{- if .Computed.python }}
+{{ end }}
+{{ end }}
+
+{{ if .Scaffold.lint }}
+alias(
+    name = "format",
+    actual = "//tools/format",
+)
+{{ end }}
+
+{{ if .Computed.shell }}
+exports_files(
+    [".shellcheckrc"],
+    visibility = ["//:__subpackages__"],
+)
+{{ end }}
+
+{{ if .Computed.go }}
+load("@gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/example/project
+gazelle(name = "gazelle")
+{{ end }}
+
+{{ if .Computed.python }}
+load("@pip//:requirements.bzl", "all_whl_requirements")
+load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
+load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
+
+exports_files(
+    ["pyproject.toml"],
+    visibility = ["//:__subpackages__"],
+)
 
 # Set `aspect configure` to produce aspect_rules_py targets rather than rules_python
 # aspect:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
@@ -96,4 +90,4 @@ gazelle_python_manifest(
     pip_repository_name = "pip",
 )
 
-{{- end }}
+{{ end }}

@@ -12,21 +12,13 @@ included `.envrc` automates this for you.
 """
 
 load("@bazel_env.bzl", "bazel_env")
-{{ if .Computed.javascript }}
-load("@npm//:defs.bzl", "npm_link_all_packages")
-{{ end }}
-{{ if and .Scaffold.codegen .Computed.python }}
-load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
-{{ end  }}
 load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 
 package(default_visibility = ["//visibility:public"])
 
-{{ if .Computed.go }}
-alias(name = "go", actual = "@rules_go//go")
-{{ end }}
-
 {{ if and .Scaffold.codegen .Computed.python }}
+load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
+
 py_console_script_binary(
     name = "copier",
     pkg = "@pip//copier",
@@ -34,13 +26,14 @@ py_console_script_binary(
 {{ end }}
 
 {{ if .Computed.javascript }}
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
 {{ if .Scaffold.codegen }}
 load("@npm//tools:yo/package_json.bzl", yo_bin = "bin")
 yo_bin.yo_binary(name = "yo")
 {{ end }}
-
-npm_link_all_packages(name = "node_modules")
-
 {{ end }}
 
 bazel_env(
@@ -87,8 +80,5 @@ bazel_env(
 {{ if .Computed.python }}
         "python": "$(PYTHON3)",
 {{ end }}
-    } | {
-        t: "@multitool//tools/" + t
-        for t in MULTITOOL_TOOLS
-    },
+    } | MULTITOOL_TOOLS,
 )
