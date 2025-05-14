@@ -30,12 +30,6 @@ exports_files(
     visibility = ["//:__subpackages__"],
 )
 {{- end }}
-{{- if .Computed.go }}
-load("@gazelle//:def.bzl", "gazelle")
-
-# gazelle:prefix github.com/example/project
-gazelle(name = "gazelle")
-{{- end }}
 {{- if .Computed.python }}
 
 exports_files(
