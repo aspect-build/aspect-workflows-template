@@ -9,12 +9,12 @@ write_aspect_bazelrc_presets(
         "convenience",
         "correctness",
         "debug",
-{{- if .Computed.java }}
+{{ if .Computed.java }}
         "java",
-{{- end }}
-{{- if .Computed.javascript }}
+{{ end }}
+{{ if .Computed.javascript }}
         "javascript",
-{{- end }}
+{{ end }}
         "performance",
     ],
 )

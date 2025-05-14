@@ -4,26 +4,17 @@ This is in its own package because it has so many loading-time symbols,
 we don't want to trigger eager fetches of these for builds which aren't running linters.
 """
 
-{{ if .Computed.cpp }}
-load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
-{{ end }}
-{{ if .Computed.javascript }}
-load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
-{{ end }}
-{{ if .Computed.java }}
-load("@rules_java//java:defs.bzl", "java_binary")
-{{ end }}
-{{ if .Computed.go }}
-load("@rules_go//go:def.bzl", "nogo", "TOOLS_NOGO")
-{{ end }}
-
 package(default_visibility = ["//:__subpackages__"])
 
 {{ if .Computed.javascript }}
+load("@npm//:eslint/package_json.bzl", eslint_bin = "bin")
+
 eslint_bin.eslint_binary(name = "eslint")
 {{ end }}
 
 {{ if .Computed.java }}
+load("@rules_java//java:defs.bzl", "java_binary")
+
 java_binary(
     name = "pmd",
     main_class = "net.sourceforge.pmd.PMD",
@@ -32,6 +23,8 @@ java_binary(
 {{ end }}
 
 {{ if .Computed.cpp}}
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
 native_binary(
     name = "clang_tidy",
     src = select(
@@ -51,6 +44,8 @@ native_binary(
 {{ end }}
 
 {{ if .Computed.go }}
+load("@rules_go//go:def.bzl", "nogo", "TOOLS_NOGO")
+
 nogo(
     name = "nogo",
     deps = TOOLS_NOGO,

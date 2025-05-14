@@ -5,13 +5,12 @@ we don't want to trigger eager fetches of these for builds that don't want to ru
 """
 
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
-{{- if .Computed.javascript }}
-load("@npm//:prettier/package_json.bzl", prettier = "bin")
-{{- end }}
 
 package(default_visibility = ["//:__subpackages__"])
 
-{{ if .Computed.javascript -}}
+{{ if .Computed.javascript }}
+load("@npm//:prettier/package_json.bzl", prettier = "bin")
+
 prettier.prettier_binary(
     name = "prettier",
     # Allow the binary to be run outside bazel
@@ -28,24 +27,24 @@ prettier.prettier_binary(
         "--log-level=warn",
     ],
 )
+{{ end }}
 
-{{ end -}}
 format_multirun(
     name = "format",
-{{- if .Computed.cpp}}
+{{ if .Computed.cpp}}
     cc = "@llvm_toolchain_llvm//:bin/clang-format",
-{{- end }}
-{{- if .Computed.go }}
+{{ end }}
+{{ if .Computed.go }}
     go = "@aspect_rules_lint//format:gofumpt",
-{{- end }}
-{{- if .Computed.javascript }}
+{{ end }}
+{{ if .Computed.javascript }}
     javascript = ":prettier",
-{{- end }}
-{{- if .Computed.python }}
+{{ end }}
+{{ if .Computed.python }}
     python = "@aspect_rules_lint//format:ruff",
-{{- end }}
-{{- if .Computed.rust }}
+{{ end }}
+{{ if .Computed.rust }}
     rust = "@rules_rust//tools/rustfmt:upstream_rustfmt",
-{{- end }}
+{{ end }}
     starlark = "@buildifier_prebuilt//:buildifier",
 )
