@@ -45,6 +45,13 @@ exports_files(
 )
 {{ end }}
 
+{{ if .Computed.cpp }}
+exports_files(
+    [".clang-tidy"],
+    visibility = ["//:__subpackages__"],
+)
+{{ end }}
+
 {{ if .Computed.go }}
 load("@gazelle//:def.bzl", "gazelle")
 
