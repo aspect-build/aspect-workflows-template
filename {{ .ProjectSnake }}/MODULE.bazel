@@ -125,6 +125,14 @@ llvm.toolchain(
 use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 
 register_toolchains("@llvm_toolchain//:all")
+
+# bazel run @hedron_compile_commands//:refresh_all
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "4f28899228fb3ad0126897876f147ca15026151e",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+)
 {{- end }}
 {{- if .Computed.rust }}
 
