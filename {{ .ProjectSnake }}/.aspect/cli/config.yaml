@@ -39,6 +39,9 @@ lint:
 {{- if .Computed.python }}
     - //tools/lint:linters.bzl%ruff
 {{- end }}
+{{- if .Computed.cpp }}
+    - //tools/lint:linters.bzl%clang_tidy
+{{- end }}
 {{- end }}
 
 plugins:
