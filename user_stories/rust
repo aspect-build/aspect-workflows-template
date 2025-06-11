@@ -11,7 +11,7 @@ EOF
 
 # We don't have any BUILD file generation for Rust yet,
 # so users are forced to create it manually.
-cat >hello_world/BUILD.bazel <<EOF
+cat >hello_world/BUILD <<EOF
 load("@rules_rust//rust:defs.bzl", "rust_binary")
 
 rust_binary(

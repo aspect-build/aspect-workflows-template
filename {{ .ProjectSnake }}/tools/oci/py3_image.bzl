@@ -42,8 +42,8 @@ def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = N
         name = name,
         srcs = [name + "_image"],
         target_platform = select({
-            "@platforms//cpu:arm64": "//tools/oci:linux_arm64",
-            "@platforms//cpu:x86_64": "//tools/oci:linux_amd64",
+            "@platforms//cpu:arm64": "//tools/platforms:linux_aarch64",
+            "@platforms//cpu:x86_64": "//tools/platforms:linux_x86_64",
         }),
     )
     oci_load(
