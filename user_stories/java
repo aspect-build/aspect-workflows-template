@@ -13,7 +13,7 @@ EOF
 
 # We didn't wire up the BUILD file generator for Java yet, so users
 # are forced to write this manually.
->src/BUILD.bazel cat <<EOF
+>src/BUILD cat <<EOF
 java_binary(name="Demo", srcs=["Demo.java"])
 EOF
 
