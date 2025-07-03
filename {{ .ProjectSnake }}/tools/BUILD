@@ -10,11 +10,13 @@ used under Bazel as a `bin/` tree which can be added to the `$PATH`. The
 included `.envrc` automates this for you.
 
 """
-
+load("@bazelrc-preset.bzl", "bazelrc_preset")
 load("@bazel_env.bzl", "bazel_env")
 load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 
 package(default_visibility = ["//visibility:public"])
+
+bazelrc_preset(name = "preset")
 
 {{ if and .Scaffold.codegen .Computed.python }}
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
