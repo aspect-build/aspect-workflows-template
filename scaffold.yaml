@@ -94,6 +94,7 @@ features:
     globs:
       - "*/maven_install.json"
       - "*/pmd.xml"
+      - "*/tools/java17.bazelrc"
   - value: "{{ .Computed.cpp }}"
     globs:
       - "*/.clang-tidy"
