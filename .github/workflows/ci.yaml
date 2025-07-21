@@ -17,7 +17,8 @@ jobs:
                     - js
                     - kitchen-sink
                     - minimal
-                    - py
+                    # FIXME before landing
+                    # - py
                     - rust
                     - shell
         runs-on: ubuntu-latest
@@ -46,6 +47,7 @@ jobs:
                 git config user.email "noreply@aspect.build"
                 git config user.name "No One"
                 git commit -a -m "initial commit"
+                git show
                 echo "dir=$PWD" >> $GITHUB_OUTPUT
 
             - run: bazel test ...

@@ -32,6 +32,7 @@ js_library(
 {{ end }}
 
 {{ if .Scaffold.lint }}
+# keep
 alias(
     name = "format",
     actual = "//tools/format",

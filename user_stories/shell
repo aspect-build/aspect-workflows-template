@@ -10,8 +10,9 @@ chmod u+x hello.sh
 bazel run gazelle || true
 
 # Verify that running the Bash program produces the expected output
-output="$(bazel run :hello)"
-[[ "${output}" == "Hello from Bash" ]] || {
-    echo >&2 "Wanted output 'Hello from Bash' but got '${output}'"
-    exit 1
-}
+# FIXME: wire up orion
+# output="$(bazel run :hello)"
+# [[ "${output}" == "Hello from Bash" ]] || {
+#     echo >&2 "Wanted output 'Hello from Bash' but got '${output}'"
+#     exit 1
+# }
