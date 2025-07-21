@@ -20,7 +20,7 @@ messages:
       - Run all tests: `aspect test //...`
       - Watch mode:    `ibazel run //my:devserver`
 
-    5. Add source code and run `aspect configure` to create 
+    5. Add source code and run `bazel run gazelle` to create 
        additional `BUILD` files.
     
     🌟 Star Aspect CLI on GitHub: <https://github.com/aspect-build/aspect-cli>

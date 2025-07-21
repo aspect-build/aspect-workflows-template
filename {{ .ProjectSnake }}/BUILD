@@ -52,12 +52,12 @@ exports_files(
 )
 {{ end }}
 
-{{ if .Computed.go }}
 load("@gazelle//:def.bzl", "gazelle")
 
+{{ if .Computed.go }}
 # gazelle:prefix github.com/example/project
-gazelle(name = "gazelle")
 {{ end }}
+gazelle(name = "gazelle", gazelle = "@multitool//tools/gazelle")
 
 {{ if .Computed.python }}
 load("@pip//:requirements.bzl", "all_whl_requirements")
@@ -69,14 +69,14 @@ exports_files(
     visibility = ["//:__subpackages__"],
 )
 
-# Set `aspect configure` to produce aspect_rules_py targets rather than rules_python
-# aspect:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
-# aspect:map_kind py_library py_library @aspect_rules_py//py:defs.bzl
-# aspect:map_kind py_test py_test @aspect_rules_py//py:defs.bzl
+# Produce aspect_rules_py targets rather than rules_python
+# gazelle:map_kind py_binary py_binary @aspect_rules_py//py:defs.bzl
+# gazelle:map_kind py_library py_library @aspect_rules_py//py:defs.bzl
+# gazelle:map_kind py_test py_test @aspect_rules_py//py:defs.bzl
 #
 # Don't walk into virtualenvs when looking for python sources.
 # We don't intend to plant BUILD files there.
-# aspect:exclude **/*.venv
+# gazelle:exclude **/*.venv
 #
 # Fetches metadata for python packages we depend on.
 modules_mapping(

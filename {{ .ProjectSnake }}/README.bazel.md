@@ -57,7 +57,7 @@ This ensures you use the same pnpm version as other developers, and the lockfile
 
 ## Working with Python packages
 
-After adding a new `import` statement in Python code, run `aspect configure` to update the BUILD file.
+After adding a new `import` statement in Python code, run `bazel run gazelle` to update the BUILD file.
 
 If the package is not already a dependency of the project, you have to do some additional steps:
 
@@ -88,17 +88,17 @@ Then edit the new entry in `tools/BUILD` to replace `package_name_snake_case` wi
 
 ## Working with Go modules
 
-After adding a new `import` statement in Go code, run `aspect configure` to update the BUILD file.
+After adding a new `import` statement in Go code, run `bazel run gazelle` to update the BUILD file.
 
 If the package is not already a dependency of the project, you have to do some additional steps:
 
 ```shell
-# Update go.mod and go.sum, using same Go SDK as Bazel
-% aspect run @rules_go//go - mod tidy -v
+# Update go.mod and go.sum, using same Go SDK as Bazel (it comes from direnv)
+% go mod tidy -v
 # Update MODULE.bazel to include the package in `use_repo`
-% aspect mod tidy
+% bazel mod tidy
 # Repeat
-% aspect configure
+% bazel run gazelle
 ```
 
 {{- end -}}

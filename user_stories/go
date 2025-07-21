@@ -29,10 +29,10 @@ EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
 go mod tidy
-# WORKAROUND: run gazelle before configure, because the latter tries to run bazel mod tidy in a wrong working directory
+# WORKAROUND: run gazelle twice, because the latter tries to run bazel mod tidy in a wrong working directory
 bazel run //:gazelle
 # Update the BUILD files
-bazel configure || true
+bazel run //:gazelle || true
 bazel build cmd/hello
 # Run the application, starting a server
 bazel run cmd/hello &
