@@ -22,15 +22,14 @@ sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
 # Run the re-pinning operation
 ./tools/repin
 
-# FIXME: gazelle for python
-# # Now the application executes
-# output=$(bazel run //app:app_bin)
+# Now the application executes
+output=$(bazel run //app:app_bin)
 
-# # Verify the application output matches expectation
-# [[ "${output}" == "200" ]] || {
-#     echo >&2 "Wanted output '200' but got '${output}'"
-#     exit 1
-# }
+# Verify the application output matches expectation
+[[ "${output}" == "200" ]] || {
+    echo >&2 "Wanted output '200' but got '${output}'"
+    exit 1
+}
 
 # Scaffold out a library and add its dependencies
 copier copy gh:alexeagle/aspect-template-python-lib mylib
@@ -45,9 +44,8 @@ say.moo(requests.get("https://api.github.com").status_code)
 EOF
 ./tools/repin
 
-# FIXME: gazelle for python
-# output=$(bazel run //app:app_bin)
-# [[ "${output}" == *"| 200 |"* ]] || {
-#     echo >&2 "Wanted output containing '| 200 |' but got '${output}'"
-#     exit 1
-# }
+output=$(bazel run //app:app_bin)
+[[ "${output}" == *"| 200 |"* ]] || {
+    echo >&2 "Wanted output containing '| 200 |' but got '${output}'"
+    exit 1
+}
