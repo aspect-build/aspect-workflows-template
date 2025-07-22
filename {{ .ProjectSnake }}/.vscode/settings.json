@@ -1,0 +1,16 @@
+{
+    "search.exclude": {
+        "bazel-*": true
+    },
+    "files.watcherExclude": {
+        "bazel-*/**": true
+    },
+    "files.exclude": {
+        "bazel-*": true
+    },
+{{ if .Computed.python }}
+    "python.analysis.exclude": [
+        "bazel-*/**"
+    ],
+{{ end }}
+}
