@@ -40,6 +40,7 @@ output=$(bazel run //app:app_bin)
 copier copy gh:alexeagle/aspect-template-python-lib mylib
 buildozer "add data //${_}:requirements" //requirements:requirements.all
 echo "-r ../mylib/requirements.txt" >> requirements/all.in
+./tools/repin
 
 # Update the application to use that library
 >app/__main__.py cat <<EOF
@@ -47,7 +48,8 @@ import requests
 from mylib import say
 say.moo(requests.get("https://api.github.com").status_code)
 EOF
-./tools/repin
+
+bazel run gazelle
 
 output=$(bazel run //app:app_bin)
 [[ "${output}" == *"| 200 |"* ]] || {
