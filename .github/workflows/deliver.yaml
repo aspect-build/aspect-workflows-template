@@ -22,6 +22,9 @@ jobs:
               with:
                 repo: hay-kot/scaffold
                 tag: v0.6.1
+            - name: setting to always run hooks
+              if: "${{ matrix.preset != 'minimal' }}"
+              run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
             - name: Scaffold new app
               id: scaffold
               run: |
@@ -30,19 +33,19 @@ jobs:
                 git init
                 git add .
                 git config user.email "marvin@aspect.build"
-                git config user.name "Marvin"
-                git commit -a -m "initial commit"
+                git config user.name "Marvin, the Aspect bot"
+                git commit -a -m "template"
                 echo "dir=$PWD" >> $GITHUB_OUTPUT
             - name: Convert preset name to deploy secret name
               id: which-secret
               run: |
                 CLEAN="${{ matrix.preset }}"
                 CLEAN="${CLEAN//-/_}"       
-                echo "secret_name=STARTER_DEPLOY_${CLEAN^^}" >> "$GITHUB_OUTPUT"
-            - name: Push to Starter repo
+                echo "secret-name=STARTER_DEPLOY_${CLEAN^^}" >> "$GITHUB_OUTPUT"
+            - name: Force-Push to Starter repo
               working-directory: ${{ steps.scaffold.outputs.dir }}
               run: |
                 eval $(ssh-agent -s)
-                ssh-add - <<< '${{ secrets[steps.which-secret.outputs.secret_name] }}'
+                ssh-add - <<< '${{ secrets[steps.which-secret.outputs.secret-name] }}'
                 git push  --force git@github.com:bazel-starters/${{ matrix.preset }}.git HEAD:main
         
