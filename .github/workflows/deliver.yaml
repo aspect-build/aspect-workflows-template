@@ -33,10 +33,15 @@ jobs:
                 git config user.name "Marvin"
                 git commit -a -m "initial commit"
                 echo "dir=$PWD" >> $GITHUB_OUTPUT
+            - name: Convert preset name to deploy secret name
+              id: which-secret
+              run: |
+                TO_UNDERSCORE="${{ matrix.preset//-/_ }}"
+                echo "secret_name=STARTER_DEPLOY_${TO_UNDERSCORE^^}" >> "$GITHUB_OUTPUT"
             - name: Push to Starter repo
               working-directory: ${{ steps.scaffold.outputs.dir }}
               run: |
                 eval $(ssh-agent -s)
-                ssh-add - <<< '${{ secrets.STARTER_DEPLOY_TOKEN }}'
+                ssh-add - <<< '${{ secrets[steps.which-secret.outputs.secret_name] }}'
                 git push  --force git@github.com:bazel-starters/${{ matrix.preset }}.git HEAD:main
         
