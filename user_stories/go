@@ -29,10 +29,8 @@ EOF
 
 # Create/update the go.mod file, including the nmyk.io/cowsay dependency pinning
 go mod tidy
-# WORKAROUND: run gazelle before configure, because the latter tries to run bazel mod tidy in a wrong working directory
-bazel run //:gazelle
 # Update the BUILD files
-bazel configure || true
+bazel run gazelle || true
 bazel build cmd/hello
 # Run the application, starting a server
 bazel run cmd/hello &
@@ -52,4 +50,5 @@ output=$(curl localhost:8080)
 kill %1
 
 # Build an OCI container for the target platform
-bazel build //cmd/hello:image.load
+# TODO: orion plugin
+# bazel build //cmd/hello:image.load

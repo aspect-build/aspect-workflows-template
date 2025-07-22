@@ -22,6 +22,12 @@ sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
 # Run the re-pinning operation
 ./tools/repin
 
+bazel run gazelle
+# TODO: get orion working so the pytest_main.star file does this:
+buildozer 'set pytest_main True' //app:app_test
+buildozer 'add deps @pip//pytest' //app:app_test
+buildozer 'comment deps @pip//pytest keep' //app:app_test
+
 # Now the application executes
 output=$(bazel run //app:app_bin)
 
@@ -35,6 +41,7 @@ output=$(bazel run //app:app_bin)
 copier copy gh:alexeagle/aspect-template-python-lib mylib
 buildozer "add data //${_}:requirements" //requirements:requirements.all
 echo "-r ../mylib/requirements.txt" >> requirements/all.in
+./tools/repin
 
 # Update the application to use that library
 >app/__main__.py cat <<EOF
@@ -42,7 +49,8 @@ import requests
 from mylib import say
 say.moo(requests.get("https://api.github.com").status_code)
 EOF
-./tools/repin
+
+bazel run gazelle
 
 output=$(bazel run //app:app_bin)
 [[ "${output}" == *"| 200 |"* ]] || {

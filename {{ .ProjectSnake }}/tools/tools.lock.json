@@ -89,6 +89,31 @@
       }
     ]
   },
+  "gazelle": {
+    "binaries": [
+      {
+        "kind": "file",
+        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.30+f33bce6/gazelle-darwin_arm64_cgo",
+        "sha256": "4aa9a4eff3b4e09762f2d471a0d469696b821a6523b3d06f004b68021746c1d4",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.30+f33bce6/gazelle-linux_amd64_cgo",
+        "sha256": "7a53e90c4ae605e441b45a90fff496dbf58743c2ccfb3dfd6d23193deb25c1a1",
+        "os": "linux",
+        "cpu": "x86_64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.30+f33bce6/gazelle-linux_arm64_cgo",
+        "sha256": "04932db0357fe60401112885d57c079581f1ba2c7aa01bf2d4ad5a8c8c406208",
+        "os": "linux",
+        "cpu": "arm64"
+      }
+    ]
+  },
   "ibazel": {
     "binaries": [
       {
