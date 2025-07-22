@@ -1,0 +1,9 @@
+{
+    "recommended": [
+      "BazelBuild.vscode-bazel",
+{{ if .Computed.python }}
+      "ms-python.python",
+      "charliermarsh.ruff",
+{{ end }}
+    ],
+}

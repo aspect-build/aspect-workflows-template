@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+{{ if .Computed.python }}        
+        {
+            "name": "Python: Attach",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "localhost",
+        },
+{{ end }}
+    ]
+}
