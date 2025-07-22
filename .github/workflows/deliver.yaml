@@ -36,8 +36,9 @@ jobs:
             - name: Convert preset name to deploy secret name
               id: which-secret
               run: |
-                TO_UNDERSCORE="${{ matrix.preset//-/_ }}"
-                echo "secret_name=STARTER_DEPLOY_${TO_UNDERSCORE^^}" >> "$GITHUB_OUTPUT"
+                CLEAN="${{ matrix.preset }}"
+                CLEAN="${CLEAN//-/_}"       
+                echo "secret_name=STARTER_DEPLOY_${CLEAN^^}" >> "$GITHUB_OUTPUT"
             - name: Push to Starter repo
               working-directory: ${{ steps.scaffold.outputs.dir }}
               run: |
