@@ -22,6 +22,11 @@ sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
 # Run the re-pinning operation
 ./tools/repin
 
+bazel run gazelle
+# TODO: get orion working so the pytest_main.star file does this:
+buildozer 'set pytest_main True' //app:app_test
+buildozer 'add deps @pip//pytest' //app:app_test
+
 # Now the application executes
 output=$(bazel run //app:app_bin)
 
