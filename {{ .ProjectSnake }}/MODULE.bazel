@@ -22,7 +22,7 @@ bazel_dep(name = "rules_jvm_external", version = "6.8")
 {{- if .Computed.python }}
 bazel_dep(name = "rules_python", version = "1.5.1")
 bazel_dep(name = "rules_python_gazelle_plugin", version = "1.5.1")
-bazel_dep(name = "aspect_rules_py", version = "1.6.0")
+bazel_dep(name = "aspect_rules_py", version = "1.6.1")
 bazel_dep(name = "rules_uv", version = "0.83.0")
 {{- end }}
 {{- if .Computed.rust }}
