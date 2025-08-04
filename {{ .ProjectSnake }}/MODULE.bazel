@@ -11,7 +11,7 @@ bazel_dep(name = "rules_multitool", version = "1.8.0")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
 bazel_dep(name = "bazelrc-preset.bzl", version = "1.1.0")
 {{- if .Computed.javascript }}
-bazel_dep(name = "rules_nodejs", version = "6.4.0")
+bazel_dep(name = "rules_nodejs", version = "6.5.0")
 bazel_dep(name = "aspect_rules_js", version = "2.4.2")
 bazel_dep(name = "aspect_rules_ts", version = "3.6.3")
 {{- end }}
