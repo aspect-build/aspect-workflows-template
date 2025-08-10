@@ -21,7 +21,7 @@ jobs:
             - uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
                 repo: hay-kot/scaffold
-                tag: v0.6.1
+                tag: v0.10.3
             - name: setting to always run hooks
               if: "${{ matrix.preset != 'minimal' }}"
               run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
