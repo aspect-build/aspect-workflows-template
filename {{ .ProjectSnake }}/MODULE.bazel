@@ -53,6 +53,11 @@ use_repo(multitool, "multitool")
 #########################
 # Go
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+
+# Download an SDK for the host OS & architecture as well as common remote execution
+# platforms, using the version given from the `go.mod` file.
+go_sdk.from_file(go_mod = "//:go.mod")
+
 {{ if .Scaffold.lint }}
 go_sdk.nogo(nogo = "//tools/lint:nogo")
 {{ end }}
@@ -60,9 +65,15 @@ go_sdk.nogo(nogo = "//tools/lint:nogo")
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 
+# Avoid runtime code dependencies being affected by build tooling.
+# See https://github.com/bazel-contrib/rules_go/blob/master/docs/go/core/bzlmod.md#depending-on-tools
+go_tool_deps = use_extension("@gazelle//:extensions.bzl", "go_deps", isolate = True)
+go_tool_deps.from_file(go_mod = "//tools:go.mod")
+
 # All *direct* Go dependencies of the module have to be listed explicitly.
 # Run 'bazel mod tidy' to update this
 use_repo(go_deps)
+use_repo(go_tool_deps, "com_github_hay_kot_scaffold")
 {{- end }}
 {{- if .Computed.javascript }}
 
