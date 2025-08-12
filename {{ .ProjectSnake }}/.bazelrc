@@ -3,8 +3,10 @@ try-import %workspace%/tools/java17.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
-# Belongs in the preset; see https://github.com/bazelbuild/bazel/issues/20186
+{{- if .Computed.go }}
+# See https://github.com/bazelbuild/bazel/issues/20186
 common --experimental_isolated_extension_usages
+{{ end }}
 
 # Disable skymeld; see https://github.com/bazelbuild/bazel/issues/23743
 # fixes src/main/tools/process-wrapper-legacy.cc:80: "execvp(external/aspect_bazel_lib++toolchains+coreutils_linux_amd64/coreutils, ...)": No such file or directory
