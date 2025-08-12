@@ -93,8 +93,6 @@ features:
     globs:
       - "*/go.mod"
       - "*/tools/tools.go"
-      - "*/tools/go.mod"
-      - "*/tools/go.sum"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
