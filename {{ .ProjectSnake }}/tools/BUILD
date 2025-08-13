@@ -67,6 +67,9 @@ bazel_env(
 {{ end }}
 {{ if .Computed.go }}
         "go": "@rules_go//go",
+{{ if .Scaffold.codegen }}
+        "scaffold": "@com_github_hay_kot_scaffold//:scaffold",
+{{ end }}
 {{ end }}
 {{ if .Computed.java }}
         "jar": "$(JAVABASE)/bin/jar",

@@ -1,4 +1,6 @@
 # yaml-language-server: $schema=https://hay-kot.github.io/scaffold/schema.json
+metadata:
+  minumum_version: v0.6.1
 messages:
   pre: |
     # Welcome to Aspect, the multi-language monorepo dev platform
@@ -45,7 +47,7 @@ questions:
   - name: codegen
     prompt:
       confirm: Setup code generation?
-      description: "Installs https://copier.readthedocs.io/ (Python) and/or https://yeoman.io (JS)"
+      description: "Installs https://copier.readthedocs.io/ (Python), https://yeoman.io (JS), and https://hay-kot.github.io/scaffold/ (Go)"
   - name: lint
     prompt:
       confirm: Setup format and linting?
@@ -90,6 +92,8 @@ features:
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
+      - "*/go.sum"
+      - "*/tools/tools.go"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
@@ -141,6 +145,7 @@ presets:
     langs: ['Shell (Bash)']
     lint: true
   go:
+    codegen: true
     langs: ['Go']
     lint: true
     oci: true
