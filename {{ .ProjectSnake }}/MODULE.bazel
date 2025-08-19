@@ -207,7 +207,7 @@ use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base
 oci.pull(
     name = "python_base",
     image = "ubuntu",
-    digest = "sha256:1e622c5f073b4f6bfad6632f2616c7f59ef256e96fe78bf6a595d1dc4376ac02",
+    digest = "sha256:7c06e91f61fa88c08cc74f7e1b7c69ae24910d745357e0dfe1d2c0322aaf20f9",
     platforms = [
         "linux/arm64/v8",
         "linux/amd64",
