@@ -23,7 +23,7 @@ sed -i 's/dependencies = \[/dependencies = ["requests",/' pyproject.toml
 ./tools/repin
 
 bazel run gazelle
-# TODO: get orion working so the pytest_main.star file does this:
+# TODO: add Orion extension to do this:
 buildozer 'set pytest_main True' //app:app_test
 buildozer 'add deps @pip//pytest' //app:app_test
 buildozer 'comment deps @pip//pytest keep' //app:app_test
