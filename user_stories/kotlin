@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Example user workflows within an `aspect init`-generated repository
+# with the Kotlin language enabled.
+
+mkdir src
+>src/Demo.kt cat <<EOF
+fun main() {
+    println("Hello from Kotlin")
+}
+EOF
+
+# We didn't wire up the BUILD file generator for Java yet, so users
+# are forced to write this manually.
+>src/BUILD cat <<EOF
+kt_binary(name="Demo", srcs=["Demo.kt"])
+EOF
+
+# Now the application should run
+output="$(bazel run src:Demo)"
+
+# Verify it produced the expected output
+[[ "${output}" == "Hello from Kotlin" ]] || {
+    echo >&2 "Wanted output 'Hello from Kotlin' but got '${output}'"
+    exit 1
+}
