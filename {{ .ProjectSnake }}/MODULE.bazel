@@ -185,7 +185,16 @@ http_archive(
 )
 {{- end }}
 {{- end }}
-
+{{- if .Computed.kotlin }}
+{{if .Scaffold.lint -}}
+http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
+http_jar(
+    name = "ktfmt",
+    integrity = "sha256-l/x/vRlNAan6RdgUfAVSQDAD1VusSridhNe7TV4/SN4=",
+    url = "https://repo1.maven.org/maven2/com/facebook/ktfmt/0.46/ktfmt-0.46-jar-with-dependencies.jar",
+)
+{{- end }}
+{{- end }}
 
 {{- if .Scaffold.oci  }}
 

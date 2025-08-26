@@ -165,6 +165,7 @@ presets:
     lint: true
   kotlin:
     langs: ['Kotlin']
+    lint: true
   cpp:
     langs: ['C & C++']
     lint: true
