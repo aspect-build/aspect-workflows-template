@@ -14,6 +14,7 @@ jobs:
                     - cpp
                     - go
                     - java
+                    - kotlin
                     - js
                     - kitchen-sink
                     - minimal

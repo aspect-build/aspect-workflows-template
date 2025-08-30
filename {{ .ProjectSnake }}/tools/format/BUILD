@@ -29,6 +29,14 @@ prettier.prettier_binary(
 )
 {{ end }}
 
+{{ if .Computed.kotlin }}
+java_binary(
+    name = "ktfmt",
+    main_class = "com.facebook.ktfmt.cli.Main",
+    runtime_deps = ["@ktfmt//jar"],
+)
+{{ end }}
+
 format_multirun(
     name = "format",
 {{ if .Computed.cpp}}
@@ -39,6 +47,9 @@ format_multirun(
 {{ end }}
 {{ if .Computed.javascript }}
     javascript = ":prettier",
+{{ end }}
+{{ if .Computed.kotlin }}
+    kotlin = ":ktfmt",
 {{ end }}
 {{ if .Computed.python }}
     python = "@aspect_rules_lint//format:ruff",
