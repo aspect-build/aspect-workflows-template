@@ -12,11 +12,11 @@ messages:
 
     1. `cd {{ .ProjectSnake }}`, or open that folder in your editor.
     2. Read the developer guide in `/README.bazel.md`.
-    3. Setup your environment by running `bazel run tools:bazel_env`
+    3. Setup your dev environment by running `bazel run tools:bazel_env`
        Note, this requires installing direnv: https://direnv.net/
     4. Try out some commands, such as:
     {{- if .Scaffold.lint }}
-      - Format:        `aspect run format`
+      - Format:        `format`
       - Lint:          `aspect lint //...`
     {{- end }}
       - Run all tests: `aspect test //...`

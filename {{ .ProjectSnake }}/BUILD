@@ -31,14 +31,6 @@ js_library(
 {{ end }}
 {{ end }}
 
-{{ if .Scaffold.lint }}
-# keep
-alias(
-    name = "format",
-    actual = "//tools/format",
-)
-{{ end }}
-
 {{ if .Computed.shell }}
 exports_files(
     [".shellcheckrc"],
