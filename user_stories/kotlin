@@ -19,15 +19,14 @@ EOF
 # FIXME: alexeagle - wire up BUILD generator
 touch src/BUILD
 buildozer 'new_load @rules_kotlin//kotlin:jvm.bzl kt_jvm_library' src:__pkg__
-buildozer 'new_load @rules_java//java:java_binary.bzl java_binary' src:__pkg__
-buildozer 'new kt_jvm_library Demo' src:__pkg__
-buildozer 'add srcs Demo.kt' src:Demo
+buildozer 'new kt_jvm_library demo' src:__pkg__
+buildozer 'add srcs Demo.kt' src:demo
 buildozer 'new java_binary app' src:__pkg__
 buildozer 'set main_class app.MyApp' src:app
-buildozer 'add runtime_deps :Demo' src:app
+buildozer 'add runtime_deps :demo' src:app
 
 # Now the application should run
-output="$(bazel run src:Demo)"
+output="$(bazel run src:app)"
 
 # Verify it produced the expected output
 [[ "${output}" == "Hello from Kotlin" ]] || {
