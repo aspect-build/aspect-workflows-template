@@ -5,7 +5,7 @@ bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.8.1")
 {{ if .Computed.cpp -}}
-bazel_dep(name = "rules_cc", version = "0.2.2")
+bazel_dep(name = "rules_cc", version = "0.2.3")
 {{- end }}
 bazel_dep(name = "rules_multitool", version = "1.9.0")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
