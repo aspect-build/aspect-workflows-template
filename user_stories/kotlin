@@ -16,14 +16,12 @@ class MyApp {
 }
 EOF
 
-# FIXME: alexeagle - wire up BUILD generator
-touch src/BUILD
-buildozer 'new_load @rules_kotlin//kotlin:jvm.bzl kt_jvm_library' src:__pkg__
-buildozer 'new kt_jvm_library demo' src:__pkg__
-buildozer 'add srcs Demo.kt' src:demo
+bazel run gazelle
+
+# gazelle-prebuilt doesn't have Java support yet, so we have to do this manually
 buildozer 'new java_binary app' src:__pkg__
 buildozer 'set main_class app.MyApp' src:app
-buildozer 'add runtime_deps :demo' src:app
+buildozer 'add runtime_deps :src' src:app
 
 # Now the application should run
 output="$(bazel run src:app)"

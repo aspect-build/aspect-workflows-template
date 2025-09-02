@@ -6,6 +6,7 @@ we don't want to trigger eager fetches of these for builds that don't want to ru
 
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 
+# gazelle:exclude
 package(default_visibility = ["//:__subpackages__"])
 
 {{ if .Computed.javascript }}
