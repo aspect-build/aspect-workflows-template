@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Example user workflows within an `aspect init`-generated repository
+# with the Kotlin language enabled.
+
+mkdir src
+>src/Demo.kt cat <<EOF
+package app
+
+class MyApp {
+  companion object {
+    @JvmStatic
+    fun main(args: Array<String>) {
+      println("Hello from Kotlin")
+    }
+  }
+}
+EOF
+
+# FIXME: alexeagle - wire up BUILD generator
+touch src/BUILD
+buildozer 'new_load @rules_kotlin//kotlin:jvm.bzl kt_jvm_library' src:__pkg__
+buildozer 'new kt_jvm_library demo' src:__pkg__
+buildozer 'add srcs Demo.kt' src:demo
+buildozer 'new java_binary app' src:__pkg__
+buildozer 'set main_class app.MyApp' src:app
+buildozer 'add runtime_deps :demo' src:app
+
+# Now the application should run
+output="$(bazel run src:app)"
+
+# Verify it produced the expected output
+[[ "${output}" == "Hello from Kotlin" ]] || {
+    echo >&2 "Wanted output 'Hello from Kotlin' but got '${output}'"
+    exit 1
+}
