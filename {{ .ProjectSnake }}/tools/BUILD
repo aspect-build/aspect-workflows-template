@@ -60,7 +60,7 @@ bazel_env(
         "buildifier": "@buildifier_prebuilt//:buildifier",
 {{ end }}
 {{ if .Computed.rust }}
-        "cargo": "$(CARGO)",
+        "cargo": "@rules_rust//tools/upstream_wrapper:cargo",
 {{ end }}
 {{ if and .Scaffold.codegen .Computed.python }}
         "copier": ":copier",
