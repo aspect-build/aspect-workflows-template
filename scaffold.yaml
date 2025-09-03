@@ -76,7 +76,7 @@ features:
     globs:
       - "*/tools/workspace_status.sh"
       - "**/weekly_tag.yaml"
-  - value: "{{ .Computed.shell }}"
+  - value: "{{ and .Scaffold.lint .Computed.shell }}"
     globs:
       - "*/.shellcheckrc"
   - value: "{{ .Computed.javascript }}"
@@ -102,8 +102,10 @@ features:
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
-      - "*/pmd.xml"
       - "*/tools/java17.bazelrc"
+  - value: "{{ and .Scaffold.lint .Computed.java }}"
+    globs:
+      - "*/pmd.xml"
   - value: "{{ .Computed.cpp }}"
     globs:
       - "*/.clang-tidy"

@@ -42,6 +42,9 @@ lint:
 {{- if .Computed.cpp }}
     - //tools/lint:linters.bzl%clang_tidy
 {{- end }}
+{{- if .Computed.java }}
+    - //tools/lint:linters.bzl%pmd
+{{- end }}
 {{- end }}
 
 plugins:
