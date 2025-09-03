@@ -11,16 +11,16 @@ jobs:
                 scaffold-version:
                     - v0.6.1
                 preset:
-                    # - cpp
-                    # - go
-                    # - java
+                    - cpp
+                    - go
+                    - java
                     - kotlin
-                    # - js
-                    # - kitchen-sink
-                    # - minimal
-                    # - py
-                    # - rust
-                    # - shell
+                    - js
+                    - kitchen-sink
+                    - minimal
+                    - py
+                    - rust
+                    - shell
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v5

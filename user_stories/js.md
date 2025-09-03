@@ -1,14 +1,28 @@
 # JavaScript / TypeScript Bazel Starter
 
+    # This is executable Markdown that's tested on CI.
+    set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
-# Example user workflows within an `aspect init`-generated repository
-# with the JavaScript / TypeScript language enabled.
-set -o errexit -o pipefail -o nounset
+This repo includes:
+- 🧱 Latest version of Bazel and dependencies
+- 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
+- 🧰 Developer environment setup with [bazel_env.bzl]
+- 🎨 `prettier` and `eslint`, using rules_lint
+- ✅ Pre-commit hooks for automatic linting and formatting
+- 📚 PNPM package manager integration
 
-# Demonstrate that the pnpm tool can be run
+## Developer tools
+
+The Bazel-managed version of pnpm is on the PATH thanks to direnv:
+
+~~~sh
 pnpm list
+~~~
 
-# Scaffold out a library and add its dependencies
+We can use Yeoman to scaffold out a library and add its dependencies:
+
+~~~sh
 pnpm add -w generator-bazel-fastify-route
 yo bazel-fastify-route
+~~~

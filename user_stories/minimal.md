@@ -1,7 +1,7 @@
 # Minimal Bazel starter with no languages
 
-    # This is executable Markdown!
-    set -o errexit
+    # This is executable Markdown that's tested on CI.
+    set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
 This repo includes:

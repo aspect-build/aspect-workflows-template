@@ -1,7 +1,7 @@
 # Kotlin Starter
 
-    # This is executable Markdown!
-    set -o errexit -o nounset
+    # This is executable Markdown that's tested on CI.
+    set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
 This repo includes:
@@ -35,6 +35,7 @@ class MyApp {
     }
   }
 }
+EOF
 ~~~
 
 Then run the BUILD file generation:
@@ -57,8 +58,8 @@ Now we can verify that the application runs and produces the expected output:
 ~~~sh
 output="$(bazel run src:app)"
 
-[[ "${output}" == "Hello1 from Kotlin" ]] || {
-    echo >&2 "Wanted output 'Hello1 from Kotlin' but got '${output}'"
+[ "${output}" = "Hello from Kotlin" ] || {
+    echo >&2 "Wanted output 'Hello from Kotlin' but got '${output}'"
     exit 1
 }
 ~~~

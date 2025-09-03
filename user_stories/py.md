@@ -1,8 +1,16 @@
 # Python Bazel Starter
 
-    # This is executable Markdown!
-    set -o errexit
+    # This is executable Markdown that's tested on CI.
+    set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
+
+This repo includes:
+- 🧱 Latest version of Bazel and dependencies
+- 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
+- 🧰 Developer environment setup with [bazel_env.bzl]
+- 🎨 `ruff`, using rules_lint
+- ✅ Pre-commit hooks for automatic linting and formatting
+- 📚 PyPI package manager integration
 
 ## Try it out
 
@@ -62,7 +70,7 @@ output=$(bazel run //app:app_bin)
 Let's verify the application output matches expectation:
 
 ~~~sh
-[[ "${output}" == "200" ]] || {
+[ "${output}" = "200" ] || {
     echo >&2 "Wanted output '200' but got '${output}'"
     exit 1
 }
@@ -75,7 +83,7 @@ We'll need to link its requirements file into the `requirements.all` collector a
 
 ~~~sh
 copier copy gh:alexeagle/aspect-template-python-lib mylib
-buildozer "add data //${_}:requirements" //requirements:requirements.all
+buildozer "add data //mylib:requirements" //requirements:requirements.all
 echo "-r ../mylib/requirements.txt" >> requirements/all.in
 ./tools/repin
 ~~~
@@ -100,7 +108,7 @@ Now run the application again to check it still works:
 
 ~~~sh
 output=$(bazel run //app:app_bin)
-[[ "${output}" == *"| 200 |"* ]] || {
+echo "${output}" | grep -q "| 200 |" || {
     echo >&2 "Wanted output containing '| 200 |' but got '${output}'"
     exit 1
 }
