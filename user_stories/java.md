@@ -46,3 +46,7 @@ output="$(bazel run src:Demo)"
     exit 1
 }
 ~~~
+
+### Linting
+
+Run `bazel lint`, the command added by Aspect CLI.

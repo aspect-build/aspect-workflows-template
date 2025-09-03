@@ -31,18 +31,18 @@ js_library(
 {{ end }}
 {{ end }}
 
-{{ if .Computed.shell }}
-exports_files(
-    [".shellcheckrc"],
-    visibility = ["//:__subpackages__"],
-)
-{{ end }}
-
+{{ if .Scaffold.lint}}
+exports_files([
 {{ if .Computed.cpp }}
-exports_files(
-    [".clang-tidy"],
-    visibility = ["//:__subpackages__"],
-)
+    ".clang-tidy",
+{{ end }}
+{{ if .Computed.java }}
+    "pmd.xml",
+{{ end }}
+{{ if .Computed.shell }}
+    ".shellcheckrc",
+{{ end }}
+], visibility = ["//:__subpackages__"])
 {{ end }}
 
 load("@gazelle//:def.bzl", "gazelle")
