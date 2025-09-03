@@ -46,3 +46,21 @@ output="$(bazel run src:Demo)"
     exit 1
 }
 ~~~
+
+### Linting
+
+Run <code>bazel lint</code>, the command added by Aspect CLI.
+This is configured to run PMD by default, though you could run other tools.
+
+~~~sh
+bazel lint //...
+~~~
+
+<code>
+INFO: Build completed successfully, 3 total actions
+Lint results for //src:Demo:
+
+Summary:
+
+* warnings: 0
+</code>
