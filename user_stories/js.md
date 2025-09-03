@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# JavaScript / TypeScript Bazel Starter
+
+    alias ~~~=":<<'~~~sh'";:<<'~~~sh'
+
 # Example user workflows within an `aspect init`-generated repository
 # with the JavaScript / TypeScript language enabled.
 set -o errexit -o pipefail -o nounset

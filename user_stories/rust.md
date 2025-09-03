@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# Rust Bazel Starter
+
+    alias ~~~=":<<'~~~sh'";:<<'~~~sh'
+
 # Verify that the templated Bazel repository works with the 'shell' preset.
 set -o errexit -o pipefail -o nounset
 

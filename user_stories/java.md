@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+# Java Bazel Starter
+
+    alias ~~~=":<<'~~~sh'";:<<'~~~sh'
+
 # Example user workflows within an `aspect init`-generated repository
 # with the Java language enabled.
 

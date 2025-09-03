@@ -31,6 +31,7 @@ jobs:
               run: |
                 scaffold new --preset=${{ matrix.preset }} --no-prompt $GITHUB_WORKSPACE
                 cd scaffold_test*
+                cp $GITHUB_WORKSPACE/user_stories/${{ matrix.preset }}.md README.md
                 git init
                 git add .
                 git config user.email "marvin@aspect.build"
