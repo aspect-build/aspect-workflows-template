@@ -6,8 +6,10 @@ This repository uses [Aspect Workflows](https://aspect.build) to provide an exce
 
 ## Formatting code
 
-- Run `aspect run format` to re-format all files locally.
-- Run `aspect run format path/to/file` to re-format a single file.
+The `format` command is provided by the `.envrc` file, and the bazel-env.bzl setup in this repo.
+
+- Run `format` to re-format all files locally.
+- Run `format path/to/file` to re-format a single file.
 - Run `pre-commit install` to auto-format changed files on `git commit`.
 - For CI verification, setup `format` task, see https://docs.aspect.build/workflows/features/lint#formatting
 

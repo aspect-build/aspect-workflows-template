@@ -58,6 +58,7 @@ bazel_env(
         # Mapping from tool binary name ($PATH entry) to Bazel label
 {{ if .Scaffold.lint }}
         "buildifier": "@buildifier_prebuilt//:buildifier",
+        "format": "//tools/format:format",
 {{ end }}
 {{ if .Computed.rust }}
         "cargo": "@rules_rust//tools/upstream_wrapper:cargo",
