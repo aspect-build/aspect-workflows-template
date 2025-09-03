@@ -68,7 +68,7 @@ features:
       - "*/tools/format/*"
       - "*/tools/lint/*"
       - "*/.pre-commit-config.yaml"
-  - value: "{{ and .Scaffold.lint .Computed.javascript }}
+  - value: "{{ and .Scaffold.lint .Computed.javascript }}"
     globs:
       - "*/prettier.config.cjs"
   - value: "{{ .Scaffold.stamp }}"
