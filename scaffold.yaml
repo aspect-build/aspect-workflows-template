@@ -71,6 +71,7 @@ features:
   - value: "{{ and .Scaffold.lint .Computed.javascript }}"
     globs:
       - "*/prettier.config.cjs"
+      - "*/eslint.config.mjs"
   - value: "{{ .Scaffold.stamp }}"
     globs:
       - "*/tools/workspace_status.sh"
