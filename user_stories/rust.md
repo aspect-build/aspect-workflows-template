@@ -30,14 +30,10 @@ We don't have any BUILD file generation for Rust yet,
 so you're forced to create it manually.
 
 ~~~sh
-cat >hello_world/BUILD <<EOF
-load("@rules_rust//rust:defs.bzl", "rust_binary")
-
-rust_binary(
-    name = "hello_world",
-    srcs = ["src/main.rs"],
-)
-EOF
+touch hello_world/src/BUILD
+buildozer 'new_load @rules_rust//rust:defs.bzl rust_binary' src:__pkg__
+buildozer 'new rust_binary hello_world' src:__pkg__
+buildozer 'add srcs src/main.rs' src:hello_world
 ~~~
 
 Now you can run the program and assert that it produces the expected output.
