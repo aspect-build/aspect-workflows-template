@@ -13,6 +13,9 @@ This repo includes:
 
 ## Try it out
 
+> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+> This ensures that tools we call in the following steps will be on the PATH.
+
 Write a simple Bash executable:
 
 ~~~sh

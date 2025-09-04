@@ -14,6 +14,9 @@ This repo includes:
 
 ## Developer tools
 
+> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+> This ensures that tools we call in the following steps will be on the PATH.
+
 The Bazel-managed version of pnpm is on the PATH thanks to direnv:
 
 ~~~sh

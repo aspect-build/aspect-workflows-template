@@ -13,7 +13,7 @@ This repo includes:
 
 ## Try it out
 
-> First, setup the developer environment by running <code>direnv allow<code> and follow any instructions it prints.
+> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
 > This ensures that tools we call in the following steps will be on the PATH.
 
 To start with, let’s get the simplest possible program to execute.

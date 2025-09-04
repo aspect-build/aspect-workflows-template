@@ -17,8 +17,8 @@ This repo includes:
 
 ## Try it out
 
-To have tooling on your PATH, make sure you have installed direnv,
-and run `bazel run //tools:bazel_env`.
+> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+> This ensures that tools we call in the following steps will be on the PATH.
 
 First create some Kotlin source code:
 
