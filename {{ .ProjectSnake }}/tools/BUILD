@@ -16,7 +16,10 @@ load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
 
 package(default_visibility = ["//visibility:public"])
 
-bazelrc_preset(name = "preset")
+bazelrc_preset(
+    name = "preset",
+    doc_link_template = "https://registry.build/flag/bazel?filter={flag}",
+)
 
 {{ if and .Scaffold.codegen .Computed.python }}
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")

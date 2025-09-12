@@ -9,7 +9,7 @@ bazel_dep(name = "rules_cc", version = "0.2.5")
 {{- end }}
 bazel_dep(name = "rules_multitool", version = "1.9.0")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
-bazel_dep(name = "bazelrc-preset.bzl", version = "1.2.0")
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.2.1")
 {{- if .Computed.javascript }}
 bazel_dep(name = "rules_nodejs", version = "6.5.0")
 bazel_dep(name = "aspect_rules_js", version = "2.5.0")
