@@ -1,5 +1,5 @@
 {
-    "recommended": [
+    "recommendations": [
       "BazelBuild.vscode-bazel",
 {{ if .Computed.python }}
       "ms-python.python",
