@@ -58,5 +58,8 @@ format_multirun(
 {{ if .Computed.rust }}
     rust = "@rules_rust//tools/rustfmt:upstream_rustfmt",
 {{ end }}
+{{ if .Computed.shell }}
+    shell = "@aspect_rules_lint//format:shfmt",
+{{ end }}
     starlark = "@buildifier_prebuilt//:buildifier",
 )
