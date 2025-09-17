@@ -15,7 +15,7 @@ load("@aspect_rules_lint//lint:ruff.bzl", "lint_ruff_aspect")
 {{ end -}}
 {{ if .Computed.shell }}
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
-{{ end- }}
+{{ end -}}
 
 {{ if .Computed.cpp -}}
 clang_tidy = lint_clang_tidy_aspect(

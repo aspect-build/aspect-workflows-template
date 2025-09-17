@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "Dev image with direnv and Bazel",
+  "build": {
+    "dockerfile": "Dockerfile"
+  }
+}
