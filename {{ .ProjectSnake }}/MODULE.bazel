@@ -1,4 +1,7 @@
+{{- if .Computed.platforms }}
+# Currently bazel-lib is only load()ed when platforms is used.
 bazel_dep(name = "aspect_bazel_lib", version = "2.21.1")
+{{- end }}
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.7.0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
