@@ -18,7 +18,8 @@ common --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # rules_python is working to enable this default to avoid dependency on a system interpreter
 # See https://github.com/bazel-contrib/rules_python/issues/3187
 # NB: some tools run py_binary targets even if the user didn't select to add Python to their project
-common --@rules_python//python/config_settings:bootstrap_impl=script
+# so we use the canonical name to set the flag despite not having a bazel_dep on rules_python
+common --@@rules_python//python/config_settings:bootstrap_impl=script
 
 {{- if .Scaffold.stamp }}
 # To stamp release builds, run with
