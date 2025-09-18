@@ -3,5 +3,6 @@
   "name": "Dev image with direnv and Bazel",
   "build": {
     "dockerfile": "Dockerfile"
-  }
+  },
+  "postCreateCommand": "direnv allow; bazel run tools:bazel_env"
 }
