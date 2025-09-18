@@ -13,12 +13,5 @@ RUN curl -L https://github.com/bazelbuild/bazelisk/releases/latest/download/baze
     && chmod +x /usr/local/bin/bazelisk \
     && ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
 
-# Install Buildifier (always latest)
-# Even though bazel_env.bzl will download buildifier, the VSCode extension will complain if it's not
-# found on the PATH in the environment where the editor is running.
-RUN curl -L https://github.com/bazelbuild/buildtools/releases/latest/download/buildifier-linux-amd64 \
-      -o /usr/local/bin/buildifier \
-    && chmod +x /usr/local/bin/buildifier
-
 # Hook direnv into bash (default Codespaces shell)
 RUN echo 'eval "$(direnv hook bash)"' >> /etc/bash.bashrc
