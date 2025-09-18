@@ -8,7 +8,7 @@
     "files.exclude": {
         "bazel-*": true
     },
-    "bazel.buildifierExecutable": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/buildifier"
+    "bazel.buildifierExecutable": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/buildifier",
 {{ if .Computed.python }}
     "python.analysis.exclude": [
         "bazel-*/**"
