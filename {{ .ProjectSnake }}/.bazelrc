@@ -15,11 +15,10 @@ common --@aspect_rules_ts//ts:skipLibCheck=always
 common --@aspect_rules_ts//ts:default_to_tsc_transpiler
 {{ end }}
 
-{{- if .Computed.python }}
 # rules_python is working to enable this default to avoid dependency on a system interpreter
 # See https://github.com/bazel-contrib/rules_python/issues/3187
+# NB: some tools run py_binary targets even if the user didn't select to add Python to their project
 common --@rules_python//python/config_settings:bootstrap_impl=script
-{{ end }}
 
 {{- if .Scaffold.stamp }}
 # To stamp release builds, run with
