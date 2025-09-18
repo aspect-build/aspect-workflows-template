@@ -49,7 +49,9 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "rules_oci", version = "2.2.6")
 bazel_dep(name = "tar.bzl", version = "0.5.5")
 {{- end }}
+{{- if .Computed.platforms }}
 bazel_dep(name = "platforms", version = "1.0.0")
+{{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")

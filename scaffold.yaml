@@ -112,6 +112,9 @@ features:
   - value: "{{ .Scaffold.oci }}"
     globs:
       - "*/tools/oci/BUILD"
+  - value: "{{ .Computed.platforms }}"
+    globs:
+      - "*/tools/platforms/*"
   - value: "{{ and .Scaffold.oci .Computed.python }}"
     globs:
       - "*/.aspect/cli/py3_image.star"
@@ -134,7 +137,8 @@ computed:
   cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
   rust: "{{ has \"Rust\" .Scaffold.langs }}"
   shell: "{{ has \"Shell (Bash)\" .Scaffold.langs }}"
-
+  # Do we need to bazel_dep on platforms?
+  platforms: "{{ .Scaffold.oci }}"
 presets:
   kitchen-sink:
     lint: true
