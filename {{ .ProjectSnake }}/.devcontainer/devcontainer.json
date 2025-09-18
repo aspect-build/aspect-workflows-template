@@ -4,5 +4,5 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "direnv allow; bazel run tools:bazel_env"
+  "postCreateCommand": "direnv allow; bazel run tools:bazel_env || true"
 }
