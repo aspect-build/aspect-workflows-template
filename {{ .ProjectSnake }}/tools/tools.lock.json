@@ -64,31 +64,6 @@
       }
     ]
   },
-  "docker-compose": {
-    "binaries": [
-      {
-        "kind": "file",
-        "url": "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-aarch64",
-        "sha256": "6e9fbd5daa20dca5d7d89145081ae8155d68ef2928b497d9f85b54fe0f9dbb2c",
-        "os": "linux",
-        "cpu": "arm64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64",
-        "sha256": "383ce6698cd5d5bbf958d2c8489ed75094e34a77d340404d9f32c4ae9e12baf0",
-        "os": "linux",
-        "cpu": "x86_64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-darwin-aarch64",
-        "sha256": "12280cff0940035e1850b475e4972bcded09307a305a0b126ec70a3e6203ed34",
-        "os": "macos",
-        "cpu": "arm64"
-      }
-    ]
-  },
   "gazelle": {
     "binaries": [
       {
@@ -167,70 +142,31 @@
       }
     ]
   },
-  "terraform": {
+  "starpls": {
     "binaries": [
       {
         "kind": "archive",
-        "url": "https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_arm64.zip",
-        "file": "terraform",
-        "sha256": "193ce269aafd5c44f359cd73a75c5cc7aaab924eb5c3601784c1873575828ec7",
+        "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.21/starpls-linux-aarch64.tar.gz",
+        "file": "starpls",
+        "sha256": "2d2a97b7d2ed0a63a2a9acf74d1b17b6f5edb736556c6b2315634df8de97692b",
         "os": "linux",
         "cpu": "arm64"
       },
       {
         "kind": "archive",
-        "url": "https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_amd64.zip",
-        "file": "terraform",
-        "sha256": "e52520cf6d677155e69a8fcfe64054891f4d991802b0d36d4c8b670d60a7e899",
+        "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.21/starpls-linux-amd64.tar.gz",
+        "file": "starpls",
+        "sha256": "f236de322c86ccd7562aa6814ec481cc1d01f99b9ee165509da9dc09fdb8d418",
         "os": "linux",
         "cpu": "x86_64"
       },
       {
         "kind": "archive",
-        "url": "https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_darwin_arm64.zip",
-        "file": "terraform",
-        "sha256": "168cfeb339dbbfea6be651573ec168e6ca08bab79a4fc0474681eee1e9a95de9",
+        "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.21/starpls-darwin-arm64.tar.gz",
+        "file": "starpls",
+        "sha256": "1542edc2ed597feca65455fe87a81436e091ae06a6c4e455dc9625f5a92905fb",
         "os": "macos",
         "cpu": "arm64"
-      }
-    ]
-  },
-  "yq": {
-    "binaries": [
-      {
-        "kind": "file",
-        "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_arm64",
-        "sha256": "0e7e1524f68d91b3ff9b089872d185940ab0fa020a5a9052046ef10547023156",
-        "os": "linux",
-        "cpu": "arm64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64",
-        "sha256": "a2c097180dd884a8d50c956ee16a9cec070f30a7947cf4ebf87d5f36213e9ed7",
-        "os": "linux",
-        "cpu": "x86_64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_darwin_arm64",
-        "sha256": "559a594ef7a6ebc5b81a67b7717fb3accedd266d8fa7d8352da7fec9e463f48b",
-        "os": "macos",
-        "cpu": "arm64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_darwin_amd64",
-        "sha256": "216ddfa03e7ba0e5aba00b236ec78324b5bfc49b610db254fe92310878baea20",
-        "os": "macos",
-        "cpu": "x86_64"
-      },
-      {
-        "kind": "file",
-        "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_windows_amd64.exe",
-        "sha256": "d509d51e6db30ebb7c9363b7ca8714224f93a456a421d7a7819ab564b868acc7",
-        "os": "windows",
-        "cpu": "x86_64"
       }
     ]
   }
