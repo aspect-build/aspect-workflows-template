@@ -7,6 +7,9 @@ load("@aspect_rules_lint//lint:clang_tidy.bzl", "lint_clang_tidy_aspect")
 load("@aspect_rules_lint//lint:eslint.bzl", "lint_eslint_aspect")
 {{ end -}}
 load("@aspect_rules_lint//lint:lint_test.bzl", "lint_test")
+{{ if .Computed.kotlin -}}
+load("@aspect_rules_lint//lint:ktlint.bzl", "lint_ktlint_aspect")
+{{ end -}}
 {{ if .Computed.java -}}
 load("@aspect_rules_lint//lint:pmd.bzl", "lint_pmd_aspect")
 {{ end -}}
@@ -24,6 +27,13 @@ clang_tidy = lint_clang_tidy_aspect(
     lint_target_headers = True,
     angle_includes_are_system = False,
     verbose = False,
+)
+{{ end -}}
+{{ if .Computed.kotlin -}}
+ktlint = lint_ktlint_aspect(
+    binary = Label("@com_github_pinterest_ktlint//file"),
+    editorconfig = Label("//:.editorconfig"),
+    baseline_file = Label("//:ktlint-baseline.xml"),
 )
 {{ end -}}
 {{ if .Computed.java -}}

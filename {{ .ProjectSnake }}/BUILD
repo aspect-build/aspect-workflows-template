@@ -36,6 +36,10 @@ exports_files([
 {{ if .Computed.cpp }}
     ".clang-tidy",
 {{ end }}
+{{ if .Computed.kotlin }}
+    "ktlint-baseline.xml",
+    ".editorconfig",
+{{ end }}
 {{ if .Computed.java }}
     "pmd.xml",
 {{ end }}

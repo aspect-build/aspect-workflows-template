@@ -99,6 +99,10 @@ features:
       - "*/go.mod"
       - "*/go.sum"
       - "*/tools/tools.go"
+  - value: "{{ .Computed.kotlin }}"
+    globs:
+      - "*/ktlint-baseline.xml"
+      - "*/.editorconfig"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
