@@ -48,6 +48,7 @@ This doesn't include Java support yet, so we need to run a couple commands
 to manually create the java_binary target:
 
 ~~~sh
+buildozer 'new_load @rules_java//java:java_binary.bzl java_binary' src:__pkg__
 buildozer 'new java_binary app' src:__pkg__
 buildozer 'set main_class app.MyApp' src:app
 buildozer 'add runtime_deps :src' src:app

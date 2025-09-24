@@ -35,6 +35,7 @@ are forced to write this manually.
 
 ~~~sh
 touch src/BUILD
+buildozer 'new_load @rules_java//java:java_binary.bzl java_binary' src:__pkg__
 buildozer 'new java_binary Demo' src:__pkg__
 buildozer 'add srcs Demo.java' src:Demo
 ~~~
