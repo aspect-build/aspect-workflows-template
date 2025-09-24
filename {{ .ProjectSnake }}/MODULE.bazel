@@ -206,6 +206,13 @@ http_jar(
     integrity = "sha256-l/x/vRlNAan6RdgUfAVSQDAD1VusSridhNe7TV4/SN4=",
     url = "https://repo1.maven.org/maven2/com/facebook/ktfmt/0.46/ktfmt-0.46-jar-with-dependencies.jar",
 )
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+http_file(
+    name = "com_github_pinterest_ktlint",
+    sha256 = "2e28cf46c27d38076bf63beeba0bdef6a845688d6c5dccd26505ce876094eb92",
+    url = "https://github.com/pinterest/ktlint/releases/download/1.2.1/ktlint",
+    executable = True,
+)
 {{- end }}
 {{- end }}
 
