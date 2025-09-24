@@ -1,1 +1,2 @@
-8.4.1
+rolling
+# This selects Bazel 9, which is currently in pre-release as of Sept 2025, expected GA by end of 2025
