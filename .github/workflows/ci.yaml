@@ -16,7 +16,7 @@ jobs:
                     - java
                     - kotlin
                     - js
-                    # - kitchen-sink
+                    - kitchen-sink
                     - minimal
                     - py
                     - rust
