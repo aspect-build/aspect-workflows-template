@@ -31,6 +31,8 @@ prettier.prettier_binary(
 {{ end }}
 
 {{ if .Computed.kotlin }}
+load("@rules_java//java:java_binary.bzl", "java_binary")
+
 java_binary(
     name = "ktfmt",
     main_class = "com.facebook.ktfmt.cli.Main",
