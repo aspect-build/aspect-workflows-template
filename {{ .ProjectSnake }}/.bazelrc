@@ -7,6 +7,9 @@ try-import %workspace%/tools/java17.bazelrc
 # fixes src/main/tools/process-wrapper-legacy.cc:80: "execvp(external/aspect_bazel_lib++toolchains+coreutils_linux_amd64/coreutils, ...)": No such file or directory
 common --noexperimental_merged_skyframe_analysis_execution
 
+# also see: https://blog.aspect.build/configuring-bazels-downloader
+common --downloader_config=tools/downloader.cfg
+
 {{- if .Computed.javascript }}
 # for speed, passes an argument `--skipLibCheck` to *every* spawn of tsc
 common --@aspect_rules_ts//ts:skipLibCheck=always
