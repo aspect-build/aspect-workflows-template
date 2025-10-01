@@ -6,14 +6,14 @@
         "kind": "file",
         "url": "https://github.com/aspect-build/aspect-cli/releases/download/2025.11.0/aspect-darwin_arm64",
         "sha256": "faf3f6717858eee742c296980c78291c8cf4d1a77ff53463015260d2294e6feb",
-        "os": "darwin",
+        "os": "macos",
         "cpu": "arm64"
       },
       {
         "kind": "file",
         "url": "https://github.com/aspect-build/aspect-cli/releases/download/2025.11.0/aspect-darwin_amd64",
         "sha256": "826df1fca45887185f48b8e5b1d1084cdcad3ce5a5bd889289fcde8779029e4c",
-        "os": "darwin",
+        "os": "macos",
         "cpu": "x86_64"
       },
       {
