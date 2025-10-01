@@ -53,11 +53,11 @@ output="$(bazel run src:Demo)"
 
 ### Linting
 
-Run <code>bazel lint</code>, the command added by Aspect CLI.
+Run <code>aspect lint</code>, a task in Aspect CLI.
 This is configured to run PMD by default, though you could run other tools.
 
 ~~~sh
-bazel lint //...
+aspect lint //...
 ~~~
 
 <code>

@@ -47,7 +47,7 @@ bazel run gazelle
 You can check ktlint at this point:
 
 ~~~sh
-bazel lint //src:all
+aspect lint //src:all
 ~~~
 
 This doesn't include Java support yet, so we need to run a couple commands
