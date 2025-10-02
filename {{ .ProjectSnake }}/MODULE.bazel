@@ -54,7 +54,7 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 {{- end }}
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.6")
-bazel_dep(name = "tar.bzl", version = "0.5.6")
+bazel_dep(name = "tar.bzl", version = "0.6.0")
 {{- end }}
 {{- if .Computed.platforms }}
 bazel_dep(name = "platforms", version = "1.0.0")
