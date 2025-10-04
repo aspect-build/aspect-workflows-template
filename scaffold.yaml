@@ -67,7 +67,7 @@ features:
     globs:
       - "*/tools/format/*"
       - "*/tools/lint/*"
-      - "*/.pre-commit-config.yaml"
+      - "*/githooks/*"
   - value: "{{ and .Scaffold.lint .Computed.javascript }}"
     globs:
       - "*/prettier.config.cjs"

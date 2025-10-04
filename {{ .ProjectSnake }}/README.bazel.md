@@ -10,7 +10,7 @@ The `format` command is provided by the `.envrc` file, and the bazel-env.bzl set
 
 - Run `format` to re-format all files locally.
 - Run `format path/to/file` to re-format a single file.
-- Run `pre-commit install` to auto-format changed files on `git commit`.
+- Run `git config core.hooksPath githooks` to add the formatter pre-commit hook. 
 - For CI verification, setup `format` task, see https://docs.aspect.build/workflows/features/lint#formatting
 
 {{- end -}}

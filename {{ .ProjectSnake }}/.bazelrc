@@ -29,6 +29,10 @@ common --@rules_python//python/config_settings:bootstrap_impl=script
 common:release --stamp --workspace_status_command=./tools/workspace_status.sh
 {{ end }}
 
+{{- if .Scaffold.lint }}
+common --workspace_status_command=githooks/check-config.sh
+{{- end }}
+
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This
 # should be last statement in this config so the user configuration is able to overwrite flags from
