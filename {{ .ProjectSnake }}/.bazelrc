@@ -31,8 +31,27 @@ common:release --stamp --workspace_status_command=./tools/workspace_status.sh
 
 {{- if .Scaffold.lint }}
 common --workspace_status_command=githooks/check-config.sh
-{{- end }}
 
+common:lint --aspects=
+{{- if .Computed.shell -}}
+//tools/lint:linters.bzl%shellcheck
+{{- end -}}
+{{- if .Computed.javascript -}}
+//tools/lint:linters.bzl%eslint
+{{- end -}}
+{{- if .Computed.python -}}
+//tools/lint:linters.bzl%ruff
+{{- end -}}
+{{- if .Computed.cpp -}}
+//tools/lint:linters.bzl%clang_tidy
+{{- end -}}
+{{- if .Computed.kotlin -}}
+//tools/lint:linters.bzl%ktlint
+{{- end -}}
+{{- if .Computed.java -}}
+//tools/lint:linters.bzl%pmd
+{{- end -}}
+{{- end }}
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This
 # should be last statement in this config so the user configuration is able to overwrite flags from
