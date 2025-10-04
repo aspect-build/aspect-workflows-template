@@ -38,9 +38,11 @@ jobs:
               uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
                 repo: aspect-build/aspect-cli
+                tag: 2024.01 # secret old tag where binaries are stashed for now
                 asset-name: aspect
                 rename-to: aspect
-                arch: amd64
+                platform: unknown_linux
+                arch: x86_64
                 chmod: 0755
                 extension-matching: disable
             - name: Install direnv
@@ -102,6 +104,7 @@ jobs:
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
 
             - run: aspect lint ...
+              if: "${{ matrix.preset != 'minimal' }}"
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 
     # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges

@@ -26,30 +26,6 @@ configure:
     - .aspect/cli/py3_image.star
 {{- end }}
 
-
-{{- if .Scaffold.lint }}
-lint:
-  aspects:
-{{- if .Computed.shell }}
-    - //tools/lint:linters.bzl%shellcheck
-{{- end }}
-{{- if .Computed.javascript }}
-    - //tools/lint:linters.bzl%eslint
-{{- end }}
-{{- if .Computed.python }}
-    - //tools/lint:linters.bzl%ruff
-{{- end }}
-{{- if .Computed.cpp }}
-    - //tools/lint:linters.bzl%clang_tidy
-{{- end }}
-{{- if .Computed.kotlin }}
-    - //tools/lint:linters.bzl%ktlint
-{{- end }}
-{{- if .Computed.java }}
-    - //tools/lint:linters.bzl%pmd
-{{- end }}
-{{- end }}
-
 plugins:
     - name: fix-visibility
       from: github.com/aspect-build/plugin-fix-visibility
