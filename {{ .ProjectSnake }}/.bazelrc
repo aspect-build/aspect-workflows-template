@@ -30,6 +30,8 @@ common:release --stamp --workspace_status_command=./tools/workspace_status.sh
 {{ end }}
 
 {{- if .Scaffold.lint }}
+common --workspace_status_command=githooks/check-config.sh
+
 common:lint --aspects=
 {{- if .Computed.shell -}}
 //tools/lint:linters.bzl%shellcheck
