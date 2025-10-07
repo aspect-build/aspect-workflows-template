@@ -23,7 +23,7 @@ Write a simple Bash executable:
 chmod u+x hello.sh
 ~~~
 
-We should be able to generate BUILD files, see .aspect/cli/shell.star for the logic used
+We should be able to generate BUILD files, see .aspect/gazelle/shell.axl for the logic used
 
 ~~~sh
 bazel run gazelle || true
