@@ -54,22 +54,22 @@
     "binaries": [
       {
         "kind": "file",
-        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.32+42206e7/gazelle-darwin_arm64_cgo",
-        "sha256": "5b405c8935f475587afa4c9a686664a2021ed68f068b14738ecb4862f322ce09",
+        "url": "https://github.com/aspect-build/aspect-gazelle/releases/download/2025.40.31+6d204b1/gazelle-darwin_arm64_cgo",
+        "sha256": "22987e0c9848a07e6fd5d5277f1ce5efa2f2d52ab20b5e18a3ac4d84c76b152b",
         "os": "macos",
         "cpu": "arm64"
       },
       {
         "kind": "file",
-        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.32+42206e7/gazelle-linux_amd64_cgo",
-        "sha256": "1b5de748dd66b342f600e175c8e11bdb08e3ae4f723fea674e337aae285ae898",
+        "url": "https://github.com/aspect-build/aspect-gazelle/releases/download/2025.40.31+6d204b1/gazelle-linux_amd64_cgo",
+        "sha256": "96872bf9a421e380e47dcbc9903565797d8f63973fa91c52b08d1c1bccb6463c",
         "os": "linux",
         "cpu": "x86_64"
       },
       {
         "kind": "file",
-        "url": "https://github.com/alexeagle/gazelle-prebuilt/releases/download/2025.26.32+42206e7/gazelle-linux_arm64_cgo",
-        "sha256": "9f73d3637871d167294762dcdc1101ff53f4b53f578919689040bc73b5e784d3",
+        "url": "https://github.com/aspect-build/aspect-gazelle/releases/download/2025.40.31+6d204b1/gazelle-linux_arm64_cgo",
+        "sha256": "4fd4ec938c38e93a547dbb4d68e59184f2cb080776399499544ce01f1a7401bc",
         "os": "linux",
         "cpu": "arm64"
       }
