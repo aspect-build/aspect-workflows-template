@@ -73,6 +73,7 @@ jobs:
                   eval "$(direnv export bash)"
                   # GHA steps run as non-interactive shells so they don't source the .bashrc
                   echo "PATH=$PATH" >> $GITHUB_ENV
+                  echo "ORION_EXTENSIONS=$ORION_EXTENSIONS" >> $GITHUB_ENV
                   bazel run //tools:bazel_env
 
             - run: bazel test ...
