@@ -87,13 +87,13 @@ features:
       - "*/*.config.mjs*"
       - "*/.npmrc"
       - "**/packages/**"
-      - "*/.aspect/cli/package-json*.star"
+      - "*/.aspect/gazelle/package-json*.axl"
   - value: "{{ .Computed.python }}"
     globs:
       - "*/requirements/**"
       - "*/pyproject.toml"
       - "*/gazelle_python.yaml"
-      - "*/.aspect/cli/py*.star"
+      - "*/.aspect/gazelle/py*.axl"
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
@@ -121,11 +121,11 @@ features:
       - "*/tools/platforms/*"
   - value: "{{ and .Scaffold.oci .Computed.python }}"
     globs:
-      - "*/.aspect/cli/py3_image.star"
+      - "*/.aspect/gazelle/py3_image.axl"
       - "*/tools/oci/py3_image.bzl"
   - value: "{{ and .Scaffold.oci .Computed.go }}"
     globs:
-      - "*/.aspect/cli/go_image.star"
+      - "*/.aspect/gazelle/go_image.axl"
       - "*/tools/oci/go_image.bzl"
   - value: "{{ .Computed.rust }}"
     globs:
