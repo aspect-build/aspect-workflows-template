@@ -16,6 +16,7 @@ def impl(ctx: task_context) -> int:
         flags.append("--output_groups=rules_lint_patch")
         flags.append("--@aspect_rules_lint//lint:fix")
     out = ctx.std.io.stdout
+    print("out: {}".format(out.is_tty))
     if out.is_tty:
         flags.append("--output_groups=rules_lint_human")
     else:
@@ -35,16 +36,16 @@ def impl(ctx: task_context) -> int:
             for file in event.payload.files:
                 filepath = file.file.removeprefix("file://")
                 if file.name.endswith(".out"):
-                    generated = ctx.std.fs.read_to_string(filepath)
-                    ctx.std.io.stderr.write(generated)
+                    ctx.std.io.stderr.write(ctx.std.fs.read_to_string(filepath))
                 if file.name.endswith(".report"):
+                    print(filepath, ": ", ctx.std.fs.read_to_string(filepath))
                     if github_output:
                         ctx.std.fs.write(github_output, "lint-report=" + filepath)
                 if file.name.endswith(".patch"):
                     patches.append(file.file.removeprefix("file://"))
                 if file.name.endswith(".exit_code"):
                     if int(ctx.std.fs.read_to_string(filepath).rstrip()) != 0:
-                        print("exit_code from {}: {}".format(filepath, exit_code))
+                        print("exit_code from {}: {}".format(filepath, ctx.std.fs.read_to_string(filepath)))
                         exit_code = 1
     if ctx.args.fix:
         for patch in patches:
