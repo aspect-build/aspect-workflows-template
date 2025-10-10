@@ -4,17 +4,17 @@
     "binaries": [
       {
         "kind": "file",
-        "url": "https://github.com/aspect-build/aspect-cli/releases/download/2024.01/aspect-cli_x86_64_unknown_linux_musl",
+        "url": "https://github.com/aspect-build/aspect-cli/releases/download/2025.40-21-g705e63e/aspect-cli_x86_64_unknown_linux_musl",
         "os": "linux",
         "cpu": "x86_64",
-        "sha256": "4179bd062c9a83a884825b66ce65ddfdd4977deefec718fa1686eb06b3551f39"
+        "sha256": "0b1d43d4426c2f988410dfbf0e3c2bfb1f229f78eb393c54e9bb2a7a727bc721"
       },
       {
         "kind": "file",
-        "url": "https://github.com/aspect-build/aspect-cli/releases/download/2024.01/aspect-cli_aarch64_apple_darwin",
-        "os": "linux",
+        "url": "https://github.com/aspect-build/aspect-cli/releases/download/2025.40-21-g705e63e/aspect-cli_aarch64_apple_darwin",
+        "os": "macos",
         "cpu": "arm64",
-        "sha256": "797a51f273d789f111c653391c0f8955ea873e8ca0bbab09ed87fc6317e8e89f"
+        "sha256": "022d50f1dae1dc203a628dd7631a259d3cd7c608ce42f8fcf36c90342dbe798a"
       }
     ]
   },
