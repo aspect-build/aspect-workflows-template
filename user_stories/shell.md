@@ -19,7 +19,7 @@ This repo includes:
 Write a simple Bash executable:
 
 ~~~sh
->hello.sh echo -e '#!/usr/bin/env bash\necho "Hello from Bash"'
+>hello.sh printf '#!/usr/bin/env bash\necho "Hello from Bash"'
 chmod u+x hello.sh
 ~~~
 

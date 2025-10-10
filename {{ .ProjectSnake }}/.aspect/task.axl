@@ -2,5 +2,5 @@
 {{if .Scaffold.lint -}}
 load("@aspect_rules_lint/lint/lint.axl", _lint = "lint")
 
-# lint = _lint
+lint = _lint
 {{- end -}}
