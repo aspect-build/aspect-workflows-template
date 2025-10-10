@@ -21,7 +21,7 @@ def declare_targets(ctx):
                     },
                 )
             else:
-                print("package-json-scripts.star: unable to generate target for {} because command is not a recognized form: {}".format(script, cmd))
+                print("package-json-scripts.axl: unable to generate target for {} because command is not a recognized form: {}".format(script, cmd))
 
 aspect.register_configure_extension(
     id = "package-json-scripts",

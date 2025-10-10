@@ -56,7 +56,7 @@ Generate `BUILD` files:
 bazel run gazelle
 ~~~
 
-Ideally the `pytest_main.star` file would set these attributes as part of running gazelle.
+Ideally Orion would set these attributes as part of running gazelle.
 
 ~~~sh
 buildozer 'set pytest_main True' //app:app_test

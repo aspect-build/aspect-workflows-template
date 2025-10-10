@@ -19,20 +19,22 @@ This repo includes:
 Write a simple Bash executable:
 
 ~~~sh
->hello.sh echo -e '#!/usr/bin/env bash\necho "Hello from Bash"'
+>hello.sh printf '#!/usr/bin/env bash\necho "Hello from Bash"'
 chmod u+x hello.sh
 ~~~
 
-<!--
-We should be able to generate BUILD files, see .aspect/cli/shell.star for the logic used
+We should be able to generate BUILD files, see .aspect/gazelle/shell.axl for the logic used
 
+~~~sh
 bazel run gazelle || true
+~~~
 
-# Verify that running the Bash program produces the expected output
-# FIXME: wire up orion
+Now we verify that running the Bash program produces the expected output.
+
+~~~sh
 output="$(bazel run :hello)"
 [ "${output}" = "Hello from Bash" ] || {
     echo >&2 "Wanted output 'Hello from Bash' but got '${output}'"
     exit 1
 }
--->
+~~~
