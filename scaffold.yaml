@@ -94,6 +94,7 @@ features:
       - "*/pyproject.toml"
       - "*/gazelle_python.yaml"
       - "*/.aspect/gazelle/py*.axl"
+      - "*/tools/pytest/*"
   - value: "{{ .Computed.go }}"
     globs:
       - "*/go.mod"
