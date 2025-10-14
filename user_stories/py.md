@@ -56,14 +56,6 @@ Generate `BUILD` files:
 bazel run gazelle
 ~~~
 
-Ideally Orion would set these attributes as part of running gazelle.
-
-~~~sh
-buildozer 'set pytest_main True' //app:app_test
-buildozer 'add deps @pip//pytest' //app:app_test
-buildozer 'comment deps @pip//pytest keep' //app:app_test
-~~~
-
 That's it, now the application should execute:
 
 ~~~sh
