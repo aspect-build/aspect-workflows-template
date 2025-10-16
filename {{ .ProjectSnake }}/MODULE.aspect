@@ -4,7 +4,7 @@ axl_dep(
     name = "aspect_rules_lint",
     urls = ["https://github.com/aspect-build/rules_lint/archive/5837253fd2a1f86f952c44a50a1399813658d0a8.tar.gz"],
     integrity = "sha384-DIgszYfRk3aCPGPtgV5RSYCGwlgKWsFWU7z3F5Sm5xVXbS2f8WJk0Ri/WvSMjjFt",
-    strip_prefix = "rules_lint-b7d184ba6f09226085697d13961172315a8975ab",
+    strip_prefix = "rules_lint-5837253fd2a1f86f952c44a50a1399813658d0a8",
     dev = True,
 )
 {{- end -}}
