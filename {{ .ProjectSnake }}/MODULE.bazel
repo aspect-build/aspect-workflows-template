@@ -12,7 +12,7 @@ bazel_dep(name = "rules_cc", version = "0.2.11")
 {{- end }}
 bazel_dep(name = "rules_multitool", version = "1.9.0")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
-bazel_dep(name = "bazelrc-preset.bzl", version = "1.4.0")
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.5.0")
 # Bazel 9: Ensure transitives don't depend on rules_nodejs prior to
 # https://github.com/bazel-contrib/rules_nodejs/commit/1fc6b6b763c4f79994edc9edab10399f7446d8be
 bazel_dep(name = "rules_nodejs", version = "6.5.2")
