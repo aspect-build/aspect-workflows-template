@@ -6,50 +6,30 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - name: Fetch latest multitool release
-        id: fetch
+      - name: Install multitool
         run: |
-          set -eux
-          LATEST_URL=$(curl -s https://api.github.com/repos/bazel-contrib/multitool/releases/latest \
-            | jq -r '.assets[] | select(.name | test("linux_amd64$")) | .browser_download_url')
-          echo "Downloading $LATEST_URL"
-          curl -L "$LATEST_URL" -o multitool
-          chmod +x multitool
-          echo "path=$PWD/multitool" >> $GITHUB_OUTPUT
+          curl -L https://github.com/theoremlp/multitool/releases/download/v0.9.0/multitool-x86_64-unknown-linux-gnu.tar.xz -o multitool.tar.xz
+          tar -xf multitool.tar.xz
+          sudo mv multitool-x86_64-unknown-linux-gnu/multitool /usr/local/bin/multitool
+          sudo chmod +x /usr/local/bin/multitool
+          rm multitool.tar.xz multitool-x86_64-unknown-linux-gnu/*
 
       - name: Run multitool update
-        run: ${{ steps.fetch.outputs.path }} update
-
-      - name: Commit changes
-        run: |
-          set -eux
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          if ! git diff --quiet; then
-            branch="multitool-update-$(date +%Y%m%d)"
-            git checkout -b "$branch"
-            git add -A
-            git commit -m "chore: run multitool update"
-            git push origin "$branch"
-            echo "branch=$branch" >> $GITHUB_ENV
-          else
-            echo "No changes to commit."
-          fi
+        run: multitool --lockfile '{{ .ProjectSnake }}/tools/tools.lock.json' update
 
       - name: Create pull request
-        if: env.branch != ''
         uses: peter-evans/create-pull-request@v7
         with:
-          title: "chore: run multitool update"
+          title: "chore(deps): multitool update"
           body: |
             Automated update using [bazel-contrib/multitool](https://github.com/bazel-contrib/multitool)
-          branch: ${{ env.branch }}
-          base: main
-          labels: automation, multitool
+          labels: deps
           assignees: alexeagle
