@@ -13,11 +13,11 @@ jobs:
 
       - name: Install multitool
         run: |
-          set -eux
-          URL=$(curl -s https://api.github.com/repos/bazel-contrib/multitool/releases/latest \
-            | jq -r '.assets[] | select(.name | test("linux_amd64$")) | .browser_download_url')
-          curl -L "$URL" -o /usr/local/bin/multitool
-          chmod +x /usr/local/bin/multitool
+          url=https://github.com/theoremlp/multitool/releases/download/latest/multitool-x86_64-unknown-linux-gnu.tar.xz
+          curl -L "$url" -o multitool.tar.xz
+          tar -xf multitool.tar.xz
+          sudo mv multitool /usr/local/bin/multitool
+          sudo chmod +x /usr/local/bin/multitool
 
       - name: Run multitool update
         run: multitool update
