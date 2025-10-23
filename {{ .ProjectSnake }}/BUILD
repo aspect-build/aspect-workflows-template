@@ -54,7 +54,18 @@ load("@gazelle//:def.bzl", "gazelle")
 {{ if .Computed.go }}
 # gazelle:prefix github.com/example/project
 {{ end }}
-gazelle(name = "gazelle", gazelle = "@multitool//tools/gazelle")
+gazelle(
+    name = "gazelle",
+    gazelle = "@multitool//tools/gazelle",
+    env = {
+        "ENABLE_LANGUAGES": ",".join([
+            {{- if .Computed.go }}"go",{{- end }}
+            {{- if .Computed.python }}"python",{{- end }}
+            {{- if .Computed.javascript }}"javascript",{{- end }}
+            {{- if .Computed.cpp }}"cpp",{{- end }}
+        ]),
+    }
+)
 
 {{ if .Computed.python }}
 load("@pip//:requirements.bzl", "all_whl_requirements")
