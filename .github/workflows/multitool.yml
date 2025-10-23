@@ -11,9 +11,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: sigoden/install-binary@v1
-        with:
-          repo: bazel-contrib/multitool
+      - name: Install multitool
+        run: |
+          set -eux
+          URL=$(curl -s https://api.github.com/repos/bazel-contrib/multitool/releases/latest \
+            | jq -r '.assets[] | select(.name | test("linux_amd64$")) | .browser_download_url')
+          curl -L "$URL" -o /usr/local/bin/multitool
+          chmod +x /usr/local/bin/multitool
 
       - name: Run multitool update
         run: multitool update
