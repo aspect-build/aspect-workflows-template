@@ -13,7 +13,7 @@ jobs:
 
       - name: Install multitool
         run: |
-          url=https://github.com/theoremlp/multitool/releases/download/latest/multitool-x86_64-unknown-linux-gnu.tar.xz
+          url=https://github.com/theoremlp/multitool/releases/download/v0.9.0/multitool-x86_64-unknown-linux-gnu.tar.xz
           curl -L "$url" -o multitool.tar.xz
           tar -xf multitool.tar.xz
           sudo mv multitool /usr/local/bin/multitool
