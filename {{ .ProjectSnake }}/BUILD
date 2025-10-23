@@ -59,10 +59,13 @@ gazelle(
     gazelle = "@multitool//tools/gazelle",
     env = {
         "ENABLE_LANGUAGES": ",".join([
+            "starlark",
+            "proto",
             {{- if .Computed.go }}"go",{{- end }}
+            {{- if .Computed.kotlin }}"kotlin",{{- end }}
             {{- if .Computed.python }}"python",{{- end }}
             {{- if .Computed.javascript }}"javascript",{{- end }}
-            {{- if .Computed.cpp }}"cpp",{{- end }}
+            {{- if .Computed.cpp }}"cc",{{- end }}
         ]),
     }
 )
