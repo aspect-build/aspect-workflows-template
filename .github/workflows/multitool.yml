@@ -20,7 +20,7 @@ jobs:
           sudo chmod +x /usr/local/bin/multitool
 
       - name: Run multitool update
-        run: multitool update
+        run: multitool --lockfile '{{ .ProjectSnake }}/tools/tools.lock.json' update
 
       - name: Commit changes
         run: |
