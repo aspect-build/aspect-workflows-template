@@ -1,0 +1,55 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 1 2 */3 * *
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest multitool release
+        id: fetch
+        run: |
+          set -eux
+          LATEST_URL=$(curl -s https://api.github.com/repos/bazel-contrib/multitool/releases/latest \
+            | jq -r '.assets[] | select(.name | test("linux_amd64$")) | .browser_download_url')
+          echo "Downloading $LATEST_URL"
+          curl -L "$LATEST_URL" -o multitool
+          chmod +x multitool
+          echo "path=$PWD/multitool" >> $GITHUB_OUTPUT
+
+      - name: Run multitool update
+        run: ${{ steps.fetch.outputs.path }} update
+
+      - name: Commit changes
+        run: |
+          set -eux
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git diff --quiet; then
+            branch="multitool-update-$(date +%Y%m%d)"
+            git checkout -b "$branch"
+            git add -A
+            git commit -m "chore: run multitool update"
+            git push origin "$branch"
+            echo "branch=$branch" >> $GITHUB_ENV
+          else
+            echo "No changes to commit."
+          fi
+
+      - name: Create pull request
+        if: env.branch != ''
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "chore: run multitool update"
+          body: |
+            Automated update using [bazel-contrib/multitool](https://github.com/bazel-contrib/multitool)
+          branch: ${{ env.branch }}
+          base: main
+          labels: automation, multitool
+          assignees: alexeagle
