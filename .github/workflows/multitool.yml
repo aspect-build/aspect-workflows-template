@@ -16,6 +16,7 @@ jobs:
           url=https://github.com/theoremlp/multitool/releases/download/v0.9.0/multitool-x86_64-unknown-linux-gnu.tar.xz
           curl -L "$url" -o multitool.tar.xz
           tar -xf multitool.tar.xz
+          ls
           sudo mv multitool /usr/local/bin/multitool
           sudo chmod +x /usr/local/bin/multitool
 
