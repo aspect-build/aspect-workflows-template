@@ -1,7 +1,7 @@
 "py_image"
 
-load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@aspect_rules_py//py:defs.bzl", "py_image_layer")
+load("@bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
 
 def py3_image(name, binary, root = "/", layer_groups = {}, env = {}, workdir = None, base = "@python_base"):

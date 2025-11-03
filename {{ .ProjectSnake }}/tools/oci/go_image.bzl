@@ -1,8 +1,8 @@
 "go_image macro for OCI containers"
 
-load("@aspect_bazel_lib//lib:tar.bzl", "tar")
-load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
+load("@bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_load")
+load("@tar.bzl", "tar")
 
 def go_image(name, binary, base = "@distroless_base"):
     tar(
