@@ -1,9 +1,6 @@
 {{- if .Computed.platforms }}
 # Currently bazel-lib is only load()ed when platforms is used.
 bazel_dep(name = "bazel_lib", version = "3.0.0")
-
-# Currently used in templated code
-bazel_dep(name = "jq.bzl", version = "0.4.0")
 {{- end }}
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.10.2")
