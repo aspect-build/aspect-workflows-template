@@ -1,8 +1,5 @@
 """Targets in the repository root"""
 
-# We prefer BUILD instead of BUILD.bazel
-# gazelle:build_file_name BUILD
-
 {{ if .Computed.javascript }}
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@npm//:defs.bzl", "npm_link_all_packages")
@@ -54,6 +51,9 @@ load("@gazelle//:def.bzl", "gazelle")
 {{ if .Computed.go }}
 # gazelle:prefix github.com/example/project
 {{ end }}
+# We prefer BUILD instead of BUILD.bazel
+# gazelle:build_file_name BUILD
+# gazelle:exclude githooks/*
 gazelle(
     name = "gazelle",
     gazelle = "@multitool//tools/gazelle",
