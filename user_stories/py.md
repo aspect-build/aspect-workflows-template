@@ -89,7 +89,7 @@ Next, update the application we created earlier to use that library:
 >app/__main__.py cat <<EOF
 import requests
 from mylib import say
-say.moo(requests.get("https://api.github.com").status_code)
+say.marvin(requests.get("https://api.github.com").status_code)
 EOF
 ~~~
 
