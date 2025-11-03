@@ -114,7 +114,7 @@ Stamping produces non-deterministic outputs by including information such as a v
 Read more: https://blog.aspect.build/stamping-bazel-builds-with-selective-delivery
 
 To declare a build output which can be stamped, use a rule that is stamp-aware such as
-[expand_template](https://docs.aspect.build/rulesets/aspect_bazel_lib/docs/expand_template).
+[expand_template](https://registry.bazel.build/docs/bazel_lib/3.0.0#lib-expand_template-bzl).
 
 The `/tools/workspace_status.sh` file lists available keys and may include:
 

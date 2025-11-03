@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Produces space-separated key-values for stamp variables.
 # Those starting with "STABLE_" will cause actions to re-run when they change.
-# See https://docs.aspect.build/rulesets/aspect_bazel_lib/docs/stamping/
+# See https://registry.bazel.build/docs/bazel_lib/3.0.0#lib-stamping-bzl
 set -o errexit -o nounset -o pipefail
 
 git_commit=$(git rev-parse HEAD)
