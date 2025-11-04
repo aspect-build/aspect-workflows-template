@@ -77,7 +77,7 @@ Let's demonstrate using the `copier` utility to generate a new library in the pr
 We'll need to link its requirements file into the `requirements.all` collector and re-pin again.
 
 ~~~sh
-copier copy gh:alexeagle/aspect-template-python-lib mylib
+copier copy gh:alexeagle/aspect-template-python-lib mylib --vcs-ref HEAD
 buildozer "add data //mylib:requirements" //requirements:requirements.all
 echo "-r ../mylib/requirements.txt" >> requirements/all.in
 ./tools/repin
@@ -89,7 +89,7 @@ Next, update the application we created earlier to use that library:
 >app/__main__.py cat <<EOF
 import requests
 from mylib import say
-say.moo(requests.get("https://api.github.com").status_code)
+say.marvin(str(requests.get("https://httpbin.org/bytes/1").status_code))
 EOF
 ~~~
 
