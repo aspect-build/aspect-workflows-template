@@ -21,7 +21,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.7.0")
 bazel_dep(name = "aspect_rules_ts", version = "3.7.0")
 {{- end }}
 {{- if or .Computed.java .Computed.kotlin }}
-bazel_dep(name = "rules_java", version = "8.16.1")
+bazel_dep(name = "rules_java", version = "9.0.0")
 {{- end }}
 {{- if .Computed.java }}
 bazel_dep(name = "rules_jvm_external", version = "6.8")
