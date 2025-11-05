@@ -1,4 +1,4 @@
-aspect.register_rule_kind("js_binary", {
+aspect.gazelle_rule_kind("js_binary", {
     "From": "@aspect_rules_js//js:defs.bzl",
 })
 
@@ -23,7 +23,7 @@ def declare_targets(ctx):
             else:
                 print("package-json-scripts.axl: unable to generate target for {} because command is not a recognized form: {}".format(script, cmd))
 
-aspect.register_configure_extension(
+aspect.orion_extension(
     id = "package-json-scripts",
     prepare = lambda cfg: aspect.PrepareResult(
         sources = [aspect.SourceFiles("package.json")],

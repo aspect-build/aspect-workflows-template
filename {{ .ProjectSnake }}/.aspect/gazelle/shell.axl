@@ -1,11 +1,11 @@
 "Create sh_* targets for .bash and .sh files"
-aspect.register_rule_kind("sh_binary", {
+aspect.gazelle_rule_kind("sh_binary", {
     "From": "@rules_shell//shell:sh_binary.bzl",
 })
-aspect.register_rule_kind("sh_library", {
+aspect.gazelle_rule_kind("sh_library", {
     "From": "@rules_shell//shell:sh_library.bzl",
 })
-aspect.register_rule_kind("sh_test", {
+aspect.gazelle_rule_kind("sh_test", {
     "From": "@rules_shell//shell:sh_test.bzl",
 })
 
@@ -38,7 +38,7 @@ def declare_targets(ctx):
             },
         )
 
-aspect.register_configure_extension(
+aspect.orion_extension(
     id = "rules_shell",
     prepare = lambda cfg: aspect.PrepareResult(
         sources = [

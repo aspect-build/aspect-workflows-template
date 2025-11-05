@@ -1,5 +1,5 @@
 "Generate py_pytest_main targets"
-aspect.register_rule_kind("py3_image", {
+aspect.gazelle_rule_kind("py3_image", {
     "From": "//tools/oci:py3_image.bzl",
     "ResolveAttrs": ["binary"],
 })
@@ -19,7 +19,7 @@ def declare_targets(ctx):
             )
             break
 
-aspect.register_configure_extension(
+aspect.orion_extension(
     id = "py3_image",
     prepare = lambda cfg: aspect.PrepareResult(
         sources = [
