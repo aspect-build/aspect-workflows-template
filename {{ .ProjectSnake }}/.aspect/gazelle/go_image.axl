@@ -1,6 +1,6 @@
 "Orion extension for generating go_image targets."
 
-aspect.register_rule_kind("go_image", {
+aspect.gazelle_rule_kind("go_image", {
     "From": "//tools/oci:go_image.bzl",
     "ResolveAttrs": ["binary"],
 })
@@ -17,7 +17,7 @@ def declare_targets(ctx):
                 },
             )
 
-aspect.register_configure_extension(
+aspect.orion_extension(
     id = "go_image",
     prepare = lambda cfg: aspect.PrepareResult(
         sources = [aspect.SourceExtensions(".go")],
