@@ -6,5 +6,6 @@ axl_archive_dep(
     integrity = "sha384-yJypitM76DgTcjDfMV+IJt94yOfMHRvOUtkeK+QWMC68vMRhWnkxZy0Fe0xLcwWe",
     strip_prefix = "rules_lint-a64e10f0919ab5938f2e84e5254364c0d07c4ab6",
     dev = True,
+    auto_use_tasks = True,
 )
 {{- end -}}
