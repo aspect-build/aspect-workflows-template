@@ -2,9 +2,9 @@
 {{if .Scaffold.lint -}}
 axl_archive_dep(
     name = "aspect_rules_lint",
-    urls = ["https://github.com/aspect-build/rules_lint/archive/a64e10f0919ab5938f2e84e5254364c0d07c4ab6.tar.gz"],
-    integrity = "sha384-yJypitM76DgTcjDfMV+IJt94yOfMHRvOUtkeK+QWMC68vMRhWnkxZy0Fe0xLcwWe",
-    strip_prefix = "rules_lint-a64e10f0919ab5938f2e84e5254364c0d07c4ab6",
+    urls = ["https://github.com/aspect-build/rules_lint/archive/56a314b9247faa0cf852fd7aa139e96305b776d6.tar.gz"],
+    integrity = "sha384-9mkxHHHUECT36BB5BAA0Wf7M/7560mys6zRqNrLnu7UAxZhwG6NE0hBIXgNCRbCz",
+    strip_prefix = "rules_lint-56a314b9247faa0cf852fd7aa139e96305b776d6",
     dev = True,
     auto_use_tasks = True,
 )

@@ -1,6 +1,0 @@
-# Re-export external task symbols
-{{if .Scaffold.lint -}}
-load("@aspect_rules_lint//lint/lint.axl", _lint = "lint")
-
-lint = _lint
-{{- end -}}
