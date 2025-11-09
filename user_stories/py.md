@@ -108,3 +108,9 @@ echo "${output}" | grep -q "| 200 |" || {
     exit 1
 }
 ~~~
+
+We can use the `uv` lock file.
+
+~~~sh
+uv lock
+~~~

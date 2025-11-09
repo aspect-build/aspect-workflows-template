@@ -49,6 +49,7 @@ bazel_env(
 {{ end }}
 {{ if .Computed.python }}
         "python": "@rules_python//python:current_py_toolchain",
+        "uv": "@multitool//tools/uv:uv",
 {{ end }}
 {{ if .Computed.javascript }}
         "nodejs": "@nodejs_toolchains//:resolved_toolchain",
