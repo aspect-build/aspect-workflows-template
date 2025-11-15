@@ -6,8 +6,8 @@
         "kind": "file",
         "url": "https://github.com/aspect-build/aspect-cli/releases/download/v2025.46.6/aspect-cli-x86_64-unknown-linux-musl",
         "sha256": "6eff3e084b25bffd32b59105dba28cb7624527ac4c1263ec4e8ea04528f8a7d4",
-        "os": "linux",
-        "cpu": "x86_64"
+        "cpu": "x86_64",
+        "os": "linux"
       },
       {
         "kind": "file",
