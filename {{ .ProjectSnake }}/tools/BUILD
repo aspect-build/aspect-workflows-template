@@ -53,6 +53,7 @@ bazel_env(
 {{ end }}
 {{ if .Computed.javascript }}
         "nodejs": "@nodejs_toolchains//:resolved_toolchain",
+        "prettier": "//tools/format:prettier",
 {{ end }}
 {{ if .Computed.rust }}
         "rust": "@rules_rust//rust/toolchain:current_rust_toolchain",

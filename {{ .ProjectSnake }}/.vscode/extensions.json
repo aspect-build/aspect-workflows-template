@@ -5,5 +5,8 @@
       "ms-python.python",
       "charliermarsh.ruff",
 {{ end }}
+{{ if .Computed.javascript }}
+      "esbenp.prettier-vscode",
+{{ end }}
     ],
 }

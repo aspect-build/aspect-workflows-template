@@ -10,6 +10,7 @@
         {{ end }}
     },
     "C_Cpp.workspaceParsingPriority": "medium",
+    "prettier.prettierPath": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/prettier",
     "bazel.buildifierFixOnFormat": true,
     "bazel.enableCodeLens": true,
     "bazel.buildifierExecutable": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/buildifier",
