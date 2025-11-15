@@ -51,6 +51,11 @@ load("@gazelle//:def.bzl", "gazelle")
 {{ if .Computed.go }}
 # gazelle:prefix github.com/example/project
 {{ end }}
+{{ if .Computed.javascript }}
+# It's faster to avoid type-checking in a devserver when using monorepo packages.
+# If you commonly ship your npm packages outside the repo, change this to "npm_package"
+# gazelle:js_package_rule_kind js_library
+{{ end }}
 # We prefer BUILD instead of BUILD.bazel
 # gazelle:build_file_name BUILD
 # gazelle:exclude githooks/*
