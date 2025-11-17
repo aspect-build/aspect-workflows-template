@@ -13,8 +13,9 @@
         "kind": "file",
         "url": "https://github.com/aspect-build/aspect-cli/releases/download/v2025.46.20/aspect-cli-aarch64-apple-darwin",
         "sha256": "cfc132c1ac9647c5f68eb861a5fa0977ece026cab75a183d6555f2969348797e",
-        "os": "macos",
-        "cpu": "arm64"
+        "cpu": "arm64",
+        "os": "macos"
+        
       }
     ]
   },
