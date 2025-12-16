@@ -24,7 +24,7 @@ Create a simple application with an external package dependency:
 mkdir app
 >app/__main__.py cat <<EOF
 import requests
-print(requests.get("https://api.github.com").status_code)
+print(requests.get("https://www.google.com/generate_204").status_code)
 EOF
 ~~~
 
@@ -66,8 +66,8 @@ output=$(bazel run //app:app_bin)
 Let's verify the application output matches expectation:
 
 ~~~sh
-[ "${output}" = "200" ] || {
-    echo >&2 "Wanted output '200' but got '${output}'"
+[ "${output}" = "204" ] || {
+    echo >&2 "Wanted output '204' but got '${output}'"
     exit 1
 }
 ~~~
