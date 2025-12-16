@@ -8,9 +8,10 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `ruff`, using rules_lint
+- 🎨 Linting with `ruff`
 - ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 PyPI package manager integration
+- 🎨 Type-checking with [ty](https://docs.astral.sh/ty/)
 
 ## Try it out
 
@@ -69,6 +70,12 @@ Let's verify the application output matches expectation:
     echo >&2 "Wanted output '200' but got '${output}'"
     exit 1
 }
+~~~
+
+And type-check it by running linters:
+
+~~~sh
+aspect lint
 ~~~
 
 ## Scaffold out a library
