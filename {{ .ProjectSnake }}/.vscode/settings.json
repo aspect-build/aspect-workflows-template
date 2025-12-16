@@ -23,6 +23,7 @@
         "--experimental_enable_label_completions"
     ],
 {{ if .Computed.python }}
+    "python.languageServer": "None",
     "python.analysis.exclude": [
         "bazel-*/**"
     ],

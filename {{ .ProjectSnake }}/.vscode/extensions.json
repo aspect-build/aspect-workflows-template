@@ -4,6 +4,7 @@
 {{ if .Computed.python }}
       "ms-python.python",
       "charliermarsh.ruff",
+      "astral-sh.ty",
 {{ end }}
 {{ if .Computed.javascript }}
       "esbenp.prettier-vscode",
