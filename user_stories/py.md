@@ -96,7 +96,7 @@ Next, update the application we created earlier to use that library:
 >app/__main__.py cat <<EOF
 import requests
 from mylib import say
-say.marvin(str(requests.get("https://httpbin.org/bytes/1").status_code))
+say.marvin(str(requests.get("https://www.google.com/generate_204").status_code))
 EOF
 ~~~
 
@@ -110,8 +110,8 @@ Now run the application again to check it still works:
 
 ~~~sh
 output=$(bazel run //app:app_bin)
-echo "${output}" | grep -q "| 200 |" || {
-    echo >&2 "Wanted output containing '| 200 |' but got '${output}'"
+echo "${output}" | grep -q "| 204 |" || {
+    echo >&2 "Wanted output containing '| 204 |' but got '${output}'"
     exit 1
 }
 ~~~
