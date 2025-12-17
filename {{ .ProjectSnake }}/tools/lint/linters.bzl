@@ -69,7 +69,7 @@ ruff_test = lint_test(aspect = ruff)
 
 ty = lint_ty_aspect(
     binary = Label("@aspect_rules_lint//lint:ty_bin"),
-    config = Label("@//:ty.toml"),
+    config = Label("@//:pyproject.toml"),
 )
 
 {{ end -}}
