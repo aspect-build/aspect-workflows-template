@@ -40,7 +40,7 @@ common:lint --aspects=
 //tools/lint:linters.bzl%eslint
 {{- end -}}
 {{- if .Computed.python -}}
-//tools/lint:linters.bzl%ruff
+//tools/lint:linters.bzl%ruff,//tools/lint:linters.bzl%ty
 {{- end -}}
 {{- if .Computed.cpp -}}
 //tools/lint:linters.bzl%clang_tidy
