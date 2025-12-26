@@ -4,6 +4,11 @@ bazel_dep(name = "bazel_lib", version = "3.0.0")
 {{- end }}
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "1.13.0")
+git_override(
+    module_name = "aspect_rules_lint",
+    remote = "https://github.com/aspect-build/rules_lint.git",
+    commit = "49f67f9b42c39086d96c50ca0c4cc90555a8d7e9",
+)
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.8.2")

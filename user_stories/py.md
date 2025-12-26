@@ -75,7 +75,6 @@ Let's verify the application output matches expectation:
 And type-check it by running linters:
 
 ~~~sh
-cat app/*
 aspect lint
 ~~~
 
