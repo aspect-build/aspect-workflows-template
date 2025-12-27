@@ -3,7 +3,7 @@
 bazel_dep(name = "bazel_lib", version = "3.0.0")
 {{- end }}
 {{- if .Scaffold.lint }}
-bazel_dep(name = "aspect_rules_lint", version = "1.13.0")
+bazel_dep(name = "aspect_rules_lint", version = "2.0.0-beta.0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
