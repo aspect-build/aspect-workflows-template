@@ -105,7 +105,9 @@ jobs:
               if: "${{ matrix.preset == 'py' }}"
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
 
-            - run: aspect lint ...
+            - run: |
+                cat BUILD tools/oci/BUILD
+                aspect lint ...
               if: "${{ matrix.preset != 'minimal' }}"
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 
