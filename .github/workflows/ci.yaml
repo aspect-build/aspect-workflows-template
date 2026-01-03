@@ -24,7 +24,7 @@ jobs:
                     - shell
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v5
+            - uses: actions/checkout@v6
             - name: Install Bazel
               uses: bazel-contrib/setup-bazel@0.15.0
               with:
