@@ -12,7 +12,7 @@ included `.envrc` automates this for you.
 """
 load("@bazelrc-preset.bzl", "bazelrc_preset")
 load("@bazel_env.bzl", "bazel_env")
-load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
+load("@tools.bzl", "TOOLS")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -59,7 +59,7 @@ bazel_env(
         "rust": "@rules_rust//rust/toolchain:current_rust_toolchain",
 {{ end }}
     },
-    tools = {
+    tools = TOOLS | {
         # Mapping from tool binary name ($PATH entry) to Bazel label
 {{ if .Scaffold.lint }}
         "buildifier": "@buildifier_prebuilt//:buildifier",
@@ -91,5 +91,5 @@ bazel_env(
 {{ if .Computed.python }}
         "python": "$(PYTHON3)",
 {{ end }}
-    } | MULTITOOL_TOOLS,
+    },
 )
