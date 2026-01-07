@@ -15,6 +15,7 @@ eslint_bin.eslint_binary(name = "eslint")
 {{ if .Computed.java }}
 load("@rules_java//java:defs.bzl", "java_binary")
 
+# gazelle:exclude linters.bzl
 java_binary(
     name = "pmd",
     main_class = "net.sourceforge.pmd.cli.PmdCli",
