@@ -1,4 +1,4 @@
-{{- if or .Computed.rust .Computed.javascript -}}
+{{- if or .Computed.go .Computed.rust .Computed.javascript -}}
 9.*
 {{- else -}}
 8.5.0
