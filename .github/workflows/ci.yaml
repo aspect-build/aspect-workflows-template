@@ -20,7 +20,7 @@ jobs:
                     - py
                     # FIXME(alexeagle): why failing?
                     # - kitchen-sink
-                    # - rust
+                    - rust
                     - shell
         runs-on: ubuntu-latest
         steps:
