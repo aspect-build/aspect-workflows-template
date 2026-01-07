@@ -1,4 +1,4 @@
-{{- if .Computed.javascript -}}
+{{- if or .Computed.shell .Computed.javascript -}}
 9.*
 {{- else -}}
 8.5.0
