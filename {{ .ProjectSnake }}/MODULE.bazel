@@ -62,8 +62,8 @@ bazel_dep(name = "platforms", version = "1.0.0")
 {{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
-multitool.hub(lockfile = "//tools:tools.lock.json")
-use_repo(multitool, "multitool")
+multitool.hub(hub_name = "tools.bzl", lockfile = "//tools:tools.lock.json")
+use_repo(multitool, "tools.bzl")
 
 {{- if .Computed.go }}
 
