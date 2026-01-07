@@ -4,3 +4,4 @@
 {{- if .Computed.java }}
 maven_install.json     linguist-generated=true
 {{- end }}
+githooks/pre-commit    rules-lint-ignored=true

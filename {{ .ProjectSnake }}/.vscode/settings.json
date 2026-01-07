@@ -1,13 +1,16 @@
 {
     "search.exclude": {
-        "bazel-*": true
+        "**/bazel-*": true
     },
     "files.watcherExclude": {
-        "bazel-*/**": true,
+        "**/bazel-*/**": true,
         {{ if .Computed.python }}
         "**/__pycache__/**": true,
         "**/.mypy_cache/**": true,
         {{ end }}
+    },
+    "files.associations": {
+        "*.axl": "starlark"
     },
     "C_Cpp.workspaceParsingPriority": "medium",
     "prettier.prettierPath": "./bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/prettier",
@@ -23,6 +26,7 @@
         "--experimental_enable_label_completions"
     ],
 {{ if .Computed.python }}
+    "python.languageServer": "None",
     "python.analysis.exclude": [
         "bazel-*/**"
     ],

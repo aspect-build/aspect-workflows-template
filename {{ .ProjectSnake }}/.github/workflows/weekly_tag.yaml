@@ -25,7 +25,7 @@ jobs:
             --header 'authorization: Bearer {{ "${{ secrets.GITHUB_TOKEN }}" }}' \
             --data @- << EOF
         {
-            "ref": "refs/tags/$(date +%Y.%V)",
+            "ref": "refs/tags/$(date +%G.%V)",
             "sha": "{{ "${{ github.sha }}" }}"
         }
         EOF
