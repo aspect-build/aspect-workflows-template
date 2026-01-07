@@ -2,7 +2,7 @@
 # Currently bazel-lib is only load()ed when platforms is used.
 bazel_dep(name = "bazel_lib", version = "3.0.0")
 {{- end }}
-bazel_dep(name = "apple_support", version = "1.24.3")
+bazel_dep(name = "apple_support", version = "1.24.5")
 {{- if .Scaffold.lint }}
 bazel_dep(name = "aspect_rules_lint", version = "2.0.0-beta.1")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.1")
@@ -22,7 +22,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.8.3")
 bazel_dep(name = "aspect_rules_ts", version = "3.7.1")
 {{- end }}
 {{- if or .Computed.java .Computed.kotlin }}
-bazel_dep(name = "rules_java", version = "9.0.3")
+bazel_dep(name = "rules_java", version = "9.3.0")
 {{- end }}
 {{- if .Computed.java }}
 bazel_dep(name = "rules_jvm_external", version = "6.9")
