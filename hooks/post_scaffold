@@ -17,3 +17,6 @@ bazel run //tools/format
 {{ if .Computed.js }}
 bazel run @pnpm -- --dir=$PWD install --lockfile-only
 {{ end }}
+
+# Accept lockfile changes
+bazel mod deps --lockfile_mode=update
