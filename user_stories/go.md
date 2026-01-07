@@ -33,7 +33,7 @@ go mod tidy
 Now we generate BUILD files:
 
 ~~~sh
-bazel run gazelle || true
+bazel run gazelle
 ~~~
 
 We can see that the app builds now:

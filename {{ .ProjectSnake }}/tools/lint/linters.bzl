@@ -23,7 +23,7 @@ load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 
 {{ if .Computed.cpp -}}
 clang_tidy = lint_clang_tidy_aspect(
-    binary = Label(":clang_tidy"),
+    binary = Label("//tools/lint:clang_tidy"),
     configs = [Label("//:.clang-tidy")],
     lint_target_headers = True,
     angle_includes_are_system = False,
