@@ -1,7 +1,6 @@
-{{- if or .Computed.kotlin .Computed.java -}}
-8.5.0
-# Asked Nick K whether this is already a known issue
-{{- else -}}
+{{- if .Computed.javascript -}}
 9.*
-# This selects Bazel 9, which is currently in pre-release as of Sept 2025, expected GA by end of 2025
+{{- else -}}
+8.5.0
+# TODO: upgrade to Bazel 9
 {{- end }}
