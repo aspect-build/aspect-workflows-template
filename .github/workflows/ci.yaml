@@ -106,7 +106,8 @@ jobs:
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
 
             - run: aspect lint ...
-              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' }}"
+              # FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
+              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' && matrix.preset != 'cpp' }}"
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 
     # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges
