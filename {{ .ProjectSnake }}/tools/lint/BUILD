@@ -15,7 +15,6 @@ eslint_bin.eslint_binary(name = "eslint")
 {{ if .Computed.java }}
 load("@rules_java//java:defs.bzl", "java_binary")
 
-# gazelle:exclude linters.bzl
 java_binary(
     name = "pmd",
     main_class = "net.sourceforge.pmd.cli.PmdCli",
@@ -26,6 +25,7 @@ java_binary(
 {{ if .Computed.cpp}}
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
+# gazelle:exclude linters.bzl
 native_binary(
     name = "clang_tidy",
     src = select(
