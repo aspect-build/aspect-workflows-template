@@ -25,6 +25,7 @@ java_binary(
 {{ if .Computed.cpp}}
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
+# gazelle:exclude linters.bzl
 native_binary(
     name = "clang_tidy",
     src = select(

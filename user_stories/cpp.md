@@ -56,7 +56,7 @@ https://registry.bazel.build/modules/libmagic
 To install it, just add to <code>MODULE.bazel</code>
 
 ~~~sh
-echo 'bazel_dep(name = "libmagic", version = "5.46")' >> MODULE.bazel
+echo 'bazel_dep(name = "libmagic", version = "5.46.bcr.4")' >> MODULE.bazel
 ~~~
 
 Let's add another program <code>src/magic.c</code> that depends on libmagic:
