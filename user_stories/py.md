@@ -121,3 +121,9 @@ We can use the `uv` lock file.
 ~~~sh
 uv lock
 ~~~
+
+And run ruff and ty for linting:
+
+~~~sh
+aspect lint
+~~~

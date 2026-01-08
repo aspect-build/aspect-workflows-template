@@ -133,3 +133,8 @@ output=$(bazel run src:magic $PWD/BUILD)
     exit 1
 }
 ~~~
+
+## Linting
+
+> FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
+> aspect lint
