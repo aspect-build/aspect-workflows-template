@@ -41,3 +41,9 @@ output="$(bazel run :hello)"
     exit 1
 }
 ~~~
+
+Run shellcheck on the code:
+
+~~~sh
+aspect lint
+~~~

@@ -10,8 +10,7 @@ jobs:
                     - go
                     - java
                     - js
-                    # Turn off delivery until everything working on Bazel 9
-                    # - kitchen-sink
+                    - kitchen-sink
                     - kotlin
                     - minimal
                     - py

@@ -70,3 +70,9 @@ output="$(bazel run src:app)"
     exit 1
 }
 ~~~
+
+Run ktlint:
+
+~~~sh
+aspect lint
+~~~

@@ -18,8 +18,7 @@ jobs:
                     - js
                     - minimal
                     - py
-                    # FIXME(alexeagle): why failing?
-                    # - kitchen-sink
+                    - kitchen-sink
                     - rust
                     - shell
         runs-on: ubuntu-latest
@@ -35,17 +34,6 @@ jobs:
               with:
                 repo: hay-kot/scaffold
                 tag: ${{ matrix.scaffold-version }}
-            - name: Install Aspect CLI
-              uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
-              with:
-                repo: aspect-build/aspect-cli
-                tag: v2025.51.3
-                asset-name: aspect-cli
-                rename-to: aspect
-                platform: unknown-linux
-                arch: x86_64
-                chmod: 0755
-                extension-matching: disable
             - name: Install direnv
               run: |
                     sudo apt-get install -y direnv
@@ -104,11 +92,6 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
-
-            - run: aspect lint ...
-              # FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
-              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' && matrix.preset != 'cpp' && matrix.preset != 'rust' }}"
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
 
     # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges
     # on "all matrix jobs were successful".
