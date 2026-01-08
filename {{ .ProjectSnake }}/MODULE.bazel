@@ -1,6 +1,6 @@
 {{- if .Computed.platforms }}
 # Currently bazel-lib is only load()ed when platforms is used.
-bazel_dep(name = "bazel_lib", version = "3.0.0")
+bazel_dep(name = "bazel_lib", version = "3.1.0")
 {{- end }}
 bazel_dep(name = "apple_support", version = "2.1.0")
 {{- if .Scaffold.lint }}
