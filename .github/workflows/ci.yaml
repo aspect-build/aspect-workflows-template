@@ -107,7 +107,7 @@ jobs:
 
             - run: aspect lint ...
               # FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
-              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' && matrix.preset != 'cpp' }}"
+              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' && matrix.preset != 'cpp' && matrix.preset != 'rust' }}"
               working-directory: "${{ steps.scaffold.outputs.dir }}"
 
     # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges
