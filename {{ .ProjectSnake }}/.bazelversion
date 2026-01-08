@@ -1,6 +1,6 @@
-{{- if or .Computed.java .Computed.cpp .Computed.shell .Computed.go .Computed.rust .Computed.javascript -}}
-9.*
-{{- else -}}
+{{- if or .Computed.python .Computed.kotlin -}}
 8.5.0
-# TODO: upgrade to Bazel 9
+# TODO: upgrade to Bazel 9 when rules are fixed
+{{- else -}}
+9.*
 {{- end }}

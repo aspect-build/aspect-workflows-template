@@ -18,8 +18,7 @@ jobs:
                     - js
                     - minimal
                     - py
-                    # FIXME(alexeagle): why failing?
-                    # - kitchen-sink
+                    - kitchen-sink
                     - rust
                     - shell
         runs-on: ubuntu-latest
