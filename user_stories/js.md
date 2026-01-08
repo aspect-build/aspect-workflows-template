@@ -71,3 +71,11 @@ We can use Yeoman to scaffold out a library and add its dependencies:
 pnpm add -w generator-bazel-fastify-route
 yo bazel-fastify-route
 ~~~
+
+## Linting
+
+ESLint is already setup in the repo. Bazel doesn't have a lint command, so we use the Aspect CLI:
+
+~~~sh
+aspect lint
+~~~
