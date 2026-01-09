@@ -88,5 +88,10 @@ bazel_env(
 {{ if .Computed.python }}
         "python": "$(PYTHON3)",
 {{ end }}
+{{ if .Computed.ruby }}
+        "bundle": "@ruby//:bundle",
+        "gem": "@ruby//:gem",
+        "ruby": "@ruby",
+{{ end }}
     } | MULTITOOL_TOOLS,
 )

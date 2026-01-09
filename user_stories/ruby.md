@@ -1,0 +1,66 @@
+# Ruby Bazel Starter
+
+    # This is executable Markdown that's tested on CI.
+    set -o errexit -o nounset -o xtrace
+    alias ~~~=":<<'~~~sh'";:<<'~~~sh'
+
+This repo includes:
+- 🧱 Latest version of Bazel and dependencies
+- 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
+- 🧰 Developer environment setup with [bazel_env.bzl]
+- 🎨 `rubocop` and `standard`, using rules_lint
+- ✅ Pre-commit hooks for automatic linting and formatting
+
+## Try it out
+
+> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+> This ensures that tools we call in the following steps will be on the PATH.
+
+Write a simple Ruby application:
+
+~~~sh
+mkdir app
+>app/hello.rb cat <<EOF
+require "colorize"
+
+puts "Hello, Bazel + Ruby!".green
+EOF
+~~~
+
+Declare the dependency to the package manager:
+
+~~~sh
+echo 'gem "colorize"' >> Gemfile
+bundle config set path 'vendor/bundle'
+bundle install
+~~~
+
+There isn't a Gazelle extension yet, so write a BUILD file by hand:
+
+~~~sh
+>app/BUILD cat <<EOF
+load("@rules_ruby//ruby:defs.bzl", "rb_binary")
+
+rb_binary(
+    name = "hello",
+    srcs = ["hello.rb"],
+    main = "hello.rb",
+    deps = ["@bundle"],
+)
+EOF
+~~~
+
+Run it to see the result:
+
+~~~sh
+output=$(bazel run //app:hello)
+~~~
+
+Let's verify the application output matches expectation:
+
+~~~sh
+[ "${output}" = "Hello, Bazel + Ruby!" ] || {
+    echo >&2 "Wanted output 'Hello, Bazel + Ruby' but got '${output}'"
+    exit 1
+}
+~~~
