@@ -15,6 +15,7 @@ jobs:
                     - minimal
                     - py
                     - rust
+                    - ruby
                     - shell
         runs-on: ubuntu-latest
         steps:

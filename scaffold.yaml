@@ -44,6 +44,7 @@ questions:
         - Kotlin
         - C & C++
         - Rust
+        - Ruby
         - Shell (Bash)
   - name: codegen
     prompt:
@@ -104,6 +105,11 @@ features:
     globs:
       - "*/ktlint-baseline.xml"
       - "*/.editorconfig"
+  - value: "{{ .Computed.ruby }}"
+    globs:
+      - "*/Gemfile"
+      - "*/Gemfile.lock"
+      - "*/.ruby-version"
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
@@ -142,6 +148,7 @@ computed:
   cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
   rust: "{{ has \"Rust\" .Scaffold.langs }}"
   shell: "{{ has \"Shell (Bash)\" .Scaffold.langs }}"
+  ruby: "{{ has \"Ruby\" .Scaffold.langs }}"
   # Do we need to bazel_dep on platforms?
   platforms: "{{ .Scaffold.oci }}"
 presets:
@@ -155,6 +162,7 @@ presets:
       - 'Kotlin'
       - 'Java'
       - 'Rust'
+      - 'Ruby'
       - 'Shell (Bash)'
     codegen: true
     stamp: true
@@ -186,6 +194,9 @@ presets:
     lint: true
   rust:
     langs: ['Rust']
+    lint: true
+  ruby:
+    langs: ['Ruby']
     lint: true
   minimal:
     langs: []
