@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://hay-kot.github.io/scaffold/schema.json
 metadata:
-  minumum_version: v0.6.1
+  minimum_version: v0.6.1
 messages:
   pre: |
     # Welcome to Aspect, the multi-language monorepo dev platform

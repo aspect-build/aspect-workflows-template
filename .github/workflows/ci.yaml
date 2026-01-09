@@ -10,6 +10,7 @@ jobs:
             matrix:
                 scaffold-version:
                     - v0.6.1
+                    - v0.12.1
                 preset:
                     - cpp
                     - go
@@ -29,6 +30,9 @@ jobs:
               with:
                 bazelisk-cache: true
                 repository-cache: true
+                bazelrc: |
+                  common --announce_rc --color=yes --curses=yes
+                  common --show_progress_rate_limit=60 --show_timestamps
             - name: Install scaffold
               uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
