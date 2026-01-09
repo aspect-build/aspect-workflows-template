@@ -1,8 +1,8 @@
-# init.axl - Initialize a new Bazel project using aspect-workflows-template
+"init.axl - Provide a wizard to generate a new Bazel project using aspect-workflows-template"
 
+# NB: matches the version tested in the GitHub Actions CI workflow
 SCAFFOLD_VERSION = "0.12.1"
 TEMPLATE_URL = "https://github.com/aspect-build/aspect-workflows-template"
-VALID_PRESETS = ["kitchen-sink", "go", "js", "py", "java", "cpp", "rust", "minimal"]
 
 # Platform-specific download URLs and SRI integrity hashes
 # Note: scaffold uses Darwin/Linux/Windows (capitalized) and x86_64 (not amd64)
@@ -36,6 +36,10 @@ SCAFFOLD_BINARIES = {
         "integrity": "sha256-W/Yje7Fgu5Ea4vmz64HhPL+LWqMpUYOl7yxHkIRvPw8=",
     },
 }
+
+def _log(ctx, message):
+    if "VERBOSE" in ctx.std.env.vars():
+        ctx.std.io.stderr.write(message + "\n")
 
 def _detect_platform(ctx):
     """Detect OS and architecture using uname."""
@@ -78,8 +82,12 @@ def _download_and_extract_scaffold(ctx, url, integrity, dest_dir):
     archive_path = dest_dir + "/" + archive_name
 
     # Download the archive with integrity check
-    ctx.std.io.println("Downloading scaffold from: " + url)
-    ctx.http().download(url = url, output = archive_path, mode = 0o644, integrity = integrity).block()
+    _log(ctx, "Downloading scaffold from: " + url)
+    ctx.http().download(
+        url = url, output = archive_path, mode = 0o644, 
+        # FIXME: Integrity check is not supported yet
+        # integrity = integrity
+    ).block()
 
     # Extract the archive
     if is_zip:
@@ -91,7 +99,7 @@ def _download_and_extract_scaffold(ctx, url, integrity, dest_dir):
         extract_child = ctx.std.process.command("tar").args(["-xzf", archive_path, "-C", dest_dir]).spawn()
         extract_status = extract_child.wait()
 
-    if not extract_status.success():
+    if not extract_status:
         fail("Failed to extract scaffold archive")
 
     # Clean up archive
@@ -105,7 +113,7 @@ def _impl(ctx):
     """Implementation of init task."""
     # Detect platform
     os_name, arch = _detect_platform(ctx)
-    ctx.std.io.println("Detected platform: {} {}".format(os_name, arch))
+    _log(ctx, "Detected platform: {} {}".format(os_name, arch))
 
     # Create temp directory for scaffold binary
     temp_dir = ctx.std.env.temp_dir() + "/aspect-scaffold-" + SCAFFOLD_VERSION
@@ -126,7 +134,7 @@ def _impl(ctx):
             chmod_child = ctx.std.process.command("chmod").args(["+x", scaffold_bin]).spawn()
             chmod_child.wait()
     else:
-        ctx.std.io.println("Using cached scaffold binary")
+        _log(ctx, "Using cached scaffold binary")
 
     # Build scaffold command arguments
     scaffold_args = ["new", TEMPLATE_URL]
@@ -135,14 +143,8 @@ def _impl(ctx):
     if ctx.args.output_dir:
         scaffold_args.extend(["--output-dir", ctx.args.output_dir])
 
-    # Add preset if specified
-    if ctx.args.preset:
-        if ctx.args.preset not in VALID_PRESETS:
-            fail("Invalid preset '{}'. Valid presets: {}".format(ctx.args.preset, ", ".join(VALID_PRESETS)))
-        scaffold_args.extend(["--preset", ctx.args.preset])
-
     # Run scaffold with inherited stdio for interactive prompts
-    ctx.std.io.println("Running scaffold...")
+    _log(ctx, "Running scaffold...")
     cmd = ctx.std.process.command(scaffold_bin)
     cmd.args(scaffold_args)
 
@@ -163,10 +165,10 @@ def _impl(ctx):
     child = cmd.spawn()
     status = child.wait()
 
-    if not status.success():
+    if not status:
         fail("Scaffold failed with exit code: {}".format(status.code()))
 
-    ctx.std.io.println("Project initialized successfully!")
+    _log(ctx, "Project initialized successfully!")
     return 0
 
 init = task(
