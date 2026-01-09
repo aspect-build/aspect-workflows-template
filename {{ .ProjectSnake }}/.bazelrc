@@ -1,5 +1,5 @@
 import %workspace%/tools/preset.bazelrc
-try-import %workspace%/tools/java17.bazelrc
+try-import %workspace%/tools/java21.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
