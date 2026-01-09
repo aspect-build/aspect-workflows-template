@@ -33,6 +33,9 @@ exports_files([
 {{ if .Computed.cpp }}
     ".clang-tidy",
 {{ end }}
+{{ if .Computed.ruby }}
+    ".rubocop.yml",
+{{ end }}
 {{ if .Computed.kotlin }}
     "ktlint-baseline.xml",
     ".editorconfig",

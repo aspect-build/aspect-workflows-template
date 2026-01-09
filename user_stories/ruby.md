@@ -73,6 +73,14 @@ echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
 }
 ~~~
 
+## Linting
+
+We can lint the code with rubocop, by running the Aspect CLI:
+
+~~~sh
+aspect lint
+~~~
+
 ## Proto & gRPC
 
 Create the message and service definition:

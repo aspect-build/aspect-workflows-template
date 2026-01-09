@@ -58,6 +58,9 @@ common:lint --aspects=//tools/lint:linters.bzl%pmd
 {{ if .Computed.rust -}}
 common:lint --aspects=//tools/lint:linters.bzl%clippy
 {{- end }}
+{{ if .Computed.ruby -}}
+common:lint --aspects=//tools/lint:linters.bzl%rubocop
+{{- end }}
 {{- end }}
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This
