@@ -43,6 +43,7 @@ questions:
         - Java
         - Kotlin
         - C & C++
+        - iOS / Swift and other Apple platforms
         - Rust
         - Ruby
         - Shell (Bash)
@@ -138,8 +139,12 @@ features:
     globs:
       - "*/Cargo.toml"
       - "*/src/main.rs"
+  - value: "{{ .Computed.apple }}"
+    globs:
+      - "*/Package.*"
 
 computed:
+  apple: "{{ has \"iOS / Swift and other Apple platforms\" .Scaffold.langs }}"
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
   python: "{{ has \"Python\" .Scaffold.langs }}"
   go: "{{ has \"Go\" .Scaffold.langs }}"
@@ -159,6 +164,7 @@ presets:
       - 'JavaScript & TypeScript'
       - 'Python'
       - 'Go'
+      - 'iOS / Swift and other Apple platforms'
       - 'Kotlin'
       - 'Java'
       - 'Rust'
@@ -169,6 +175,9 @@ presets:
     oci: true
   shell:
     langs: ['Shell (Bash)']
+    lint: true
+  apple:
+    langs: ['iOS / Swift and other Apple platforms']
     lint: true
   go:
     codegen: true
