@@ -21,7 +21,7 @@ Write a simple Ruby application:
 ~~~sh
 mkdir app
 >app/hello.rb cat <<'EOF'
-require "faker"
+require 'faker'
 puts "Hello, #{Faker::Name.name} from Bazel + Ruby!"
 EOF
 ~~~
