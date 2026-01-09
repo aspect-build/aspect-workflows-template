@@ -1,6 +1,7 @@
 {{- if .Computed.platforms }}
 # Currently bazel-lib is only load()ed when platforms is used.
 bazel_dep(name = "bazel_lib", version = "3.0.0")
+bazel_dep(name = "platforms", version = "1.0.0")
 {{- end }}
 bazel_dep(name = "apple_support", version = "2.1.0")
 {{- if .Scaffold.lint }}
@@ -8,51 +9,21 @@ bazel_dep(name = "aspect_rules_lint", version = "2.0.0-beta.1")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
-{{ if .Computed.cpp -}}
-bazel_dep(name = "rules_cc", version = "0.2.16")
-{{- end }}
 bazel_dep(name = "rules_multitool", version = "1.11.1")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
 bazel_dep(name = "bazelrc-preset.bzl", version = "1.8.0")
 # Bazel 9: Ensure transitives don't depend on rules_nodejs prior to
 # https://github.com/bazel-contrib/rules_nodejs/commit/1fc6b6b763c4f79994edc9edab10399f7446d8be
 bazel_dep(name = "rules_nodejs", version = "6.6.2")
-{{- if .Computed.javascript }}
-bazel_dep(name = "aspect_rules_js", version = "2.8.3")
-bazel_dep(name = "aspect_rules_ts", version = "3.8.1")
-{{- end }}
 {{- if or .Computed.java .Computed.kotlin }}
 bazel_dep(name = "rules_java", version = "9.3.0")
-{{- end }}
-{{- if .Computed.java }}
-bazel_dep(name = "rules_jvm_external", version = "6.9")
-{{- end }}
-{{- if .Computed.kotlin }}
-bazel_dep(name = "rules_kotlin", version = "2.2.2")
-{{- end }}
-{{- if .Computed.ruby }}
-bazel_dep(name = "rules_ruby", version = "0.21.1")
 {{- end }}
 
 # We have to take a dependency on rules_python in order to set bootstrap=script
 # for transitive dependencies, even if there are no Python rules used in this repo.
 # See .bazelrc
 bazel_dep(name = "rules_python", version = "1.7.0")
-{{- if .Computed.python }}
-bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
-bazel_dep(name = "aspect_rules_py", version = "1.6.6")
-bazel_dep(name = "rules_uv", version = "0.89.2")
-{{- end }}
-{{- if .Computed.rust }}
-bazel_dep(name = "rules_rust", version = "0.68.1")
-{{- end }}
-{{- if .Computed.go }}
-bazel_dep(name = "rules_go", version = "0.59.0")
-{{- end }}
 bazel_dep(name = "gazelle", version = "0.47.0")
-{{- if .Computed.cpp }}
-bazel_dep(name = "toolchains_llvm", version = "1.6.0")
-{{- end }}
 {{- if .Computed.shell }}
 bazel_dep(name = "rules_shell", version = "0.6.1")
 {{- end }}
@@ -60,15 +31,13 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "rules_oci", version = "2.2.7")
 bazel_dep(name = "tar.bzl", version = "0.7.0")
 {{- end }}
-{{- if .Computed.platforms }}
-bazel_dep(name = "platforms", version = "1.0.0")
-{{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 
 {{- if .Computed.go }}
+bazel_dep(name = "rules_go", version = "0.59.0")
 
 #########################
 # Go
@@ -90,6 +59,8 @@ go_deps.from_file(go_mod = "//:go.mod")
 use_repo(go_deps, "com_github_hay_kot_scaffold")
 {{- end }}
 {{- if .Computed.javascript }}
+bazel_dep(name = "aspect_rules_js", version = "2.8.3")
+bazel_dep(name = "aspect_rules_ts", version = "3.8.1")
 
 #########################
 # JavaScript and pnpm package manager
@@ -122,6 +93,10 @@ use_repo(node, "nodejs_toolchains")
 
 #########################
 # Hermetic Python interpreter and pip dependencies
+bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
+bazel_dep(name = "aspect_rules_py", version = "1.6.6")
+bazel_dep(name = "rules_uv", version = "0.89.2")
+
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
@@ -137,6 +112,8 @@ pip.parse(
 use_repo(pip, "pip")
 {{- end }}
 {{- if .Computed.cpp }}
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
 #########################
 # Hermetic C++ toolchain, to relieve the dependency on a locally installed CC etc.
@@ -165,6 +142,8 @@ git_override(
 
 #########################
 # Support for Rust, see https://github.com/bazelbuild/rules_rust
+bazel_dep(name = "rules_rust", version = "0.68.1")
+
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
@@ -175,6 +154,8 @@ rust.toolchain(
 
 #########################
 # Support for Ruby, see https://github.com/bazel-contrib/rules_ruby
+bazel_dep(name = "rules_ruby", version = "0.21.1")
+
 ruby = use_extension("@rules_ruby//ruby:extensions.bzl", "ruby")
 ruby.toolchain(
     name = "ruby",
@@ -199,6 +180,8 @@ use_repo(ruby, "bundle")
 
 # In the Maven support variation, the dependencies are conveniently listed here
 # in the MODULE.bazel file.
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = ["io.grpc:grpc-all:1.51.1"],
@@ -225,6 +208,7 @@ http_archive(
 {{- end }}
 {{- end }}
 {{- if .Computed.kotlin }}
+bazel_dep(name = "rules_kotlin", version = "2.2.2")
 {{if .Scaffold.lint -}}
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 http_jar(
@@ -259,7 +243,7 @@ oci.pull(
     ],
 )
 use_repo(oci, "distroless_base", "distroless_base_linux_amd64", "distroless_base_linux_arm64")
-{{- end}}
+{{- end }}
 
 {{- if .Computed.python }}
 oci.pull(
@@ -273,7 +257,7 @@ oci.pull(
 )
 use_repo(oci, "python_base", "python_base_linux_amd64", "python_base_linux_arm64_v8")
 {{- end }}
-{{- end}}
+{{- end }}
 
 
 
