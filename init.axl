@@ -38,7 +38,7 @@ SCAFFOLD_BINARIES = {
 }
 
 def _log(ctx, message):
-    if "VERBOSE" in ctx.std.env.vars():
+    if ctx.std.env.var("VERBOSE"):
         ctx.std.io.stderr.write(message + "\n")
 
 def _detect_platform(ctx):
@@ -134,7 +134,7 @@ def _impl(ctx):
             chmod_child = ctx.std.process.command("chmod").args(["+x", scaffold_bin]).spawn()
             chmod_child.wait()
     else:
-        _log(ctx, "Using cached scaffold binary")
+        _log(ctx, "Using cached scaffold binary at " + scaffold_bin)
 
     # Build scaffold command arguments
     scaffold_args = ["new", TEMPLATE_URL]
