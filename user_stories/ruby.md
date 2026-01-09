@@ -20,9 +20,9 @@ Write a simple Ruby application:
 
 ~~~sh
 mkdir app
->app/hello.rb cat <<EOF
+>app/hello.rb cat <<'EOF'
 require "colorize"
-
+String.disable_colorization if !$stdout.tty? || ENV["CI"] || ENV["GITHUB_ACTIONS"]
 puts "Hello, Bazel + Ruby!".green
 EOF
 ~~~
@@ -51,16 +51,17 @@ EOF
 ~~~
 
 Run it to see the result:
+> (Note that Bundle will spam the stdout with install information, so we just want the last line)
 
 ~~~sh
-output=$(bazel run //app:hello)
+output=$(bazel run //app:hello | tail -1)
 ~~~
 
 Let's verify the application output matches expectation:
 
 ~~~sh
 [ "${output}" = "Hello, Bazel + Ruby!" ] || {
-    echo >&2 "Wanted output 'Hello, Bazel + Ruby' but got '${output}'"
+    echo >&2 "Wanted output 'Hello, Bazel + Ruby!' but got '${output}'"
     exit 1
 }
 ~~~

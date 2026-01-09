@@ -12,18 +12,17 @@ jobs:
                     - v0.6.1
                     - v0.12.1
                 preset:
-                    # DO NOT LAND: save some CI credits by not running the full matrix
-                    # - cpp
-                    # - go
-                    # - java
-                    # - kotlin
-                    # - js
-                    # - minimal
-                    # - py
-                    # - kitchen-sink
-                    # - rust
+                    - cpp
+                    - go
+                    - java
+                    - kotlin
+                    - js
+                    - minimal
+                    - py
+                    - kitchen-sink
+                    - rust
                     - ruby
-                    # - shell
+                    - shell
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
