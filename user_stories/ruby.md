@@ -21,16 +21,15 @@ Write a simple Ruby application:
 ~~~sh
 mkdir app
 >app/hello.rb cat <<'EOF'
-require "colorize"
-String.disable_colorization if !$stdout.tty? || ENV["CI"] || ENV["GITHUB_ACTIONS"]
-puts "Hello, Bazel + Ruby!".green
+require "faker"
+puts "Hello, #{Faker::Name.name} from Bazel + Ruby!"
 EOF
 ~~~
 
 Declare the dependency to the package manager:
 
 ~~~sh
-echo 'gem "colorize"' >> Gemfile
+echo 'gem "faker"' >> Gemfile
 bundle config set path 'vendor/bundle'
 bundle install
 ~~~
@@ -60,8 +59,8 @@ output=$(bazel run //app:hello | tail -1)
 Let's verify the application output matches expectation:
 
 ~~~sh
-[ "${output}" = "Hello, Bazel + Ruby!" ] || {
-    echo >&2 "Wanted output 'Hello, Bazel + Ruby!' but got '${output}'"
+echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
+    echo >&2 "Wanted output matching 'Hello, <name> from Bazel + Ruby!' but got '${output}'"
     exit 1
 }
 ~~~
