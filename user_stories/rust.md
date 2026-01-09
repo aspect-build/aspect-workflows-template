@@ -33,7 +33,7 @@ fn main() {
 EOF
 ~~~
 
-Add the dependency to Cargo.toml:
+Add the dependency to Cargo.toml, and run `check` to update the Cargo.lock file that Bazel reads:
 
 ~~~sh
 echo 'rand = "0.8"' >> hello_world/Cargo.toml

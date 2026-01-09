@@ -136,8 +136,7 @@ features:
       - "*/tools/oci/go_image.bzl"
   - value: "{{ .Computed.rust }}"
     globs:
-      - "*/Cargo.toml"
-      - "*/src/main.rs"
+      - "*/Cargo.*"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"
