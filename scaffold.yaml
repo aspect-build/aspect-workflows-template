@@ -116,6 +116,8 @@ features:
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
+  - value: "{{ or .Computed.java .Computed.ruby }}"
+    globs:
       - "*/tools/java17.bazelrc"
   - value: "{{ and .Scaffold.lint .Computed.java }}"
     globs:
