@@ -80,6 +80,9 @@ features:
   - value: "{{ and .Scaffold.lint .Computed.shell }}"
     globs:
       - "*/.shellcheckrc"
+  - value: "{{ and .Scaffold.lint .Computed.ruby }}"
+    globs:
+      - "*/.rubocop.yml"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "**/package.json"

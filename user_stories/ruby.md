@@ -64,3 +64,11 @@ echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
     exit 1
 }
 ~~~
+
+## Linting
+
+We can lint the code with rubocop, by running the Aspect CLI:
+
+~~~sh
+aspect lint
+~~~
