@@ -6,6 +6,7 @@ jobs:
         strategy:
             matrix:
                 preset:
+                    - apple
                     - cpp
                     - go
                     - java
@@ -14,8 +15,8 @@ jobs:
                     - kotlin
                     - minimal
                     - py
-                    - rust
                     - ruby
+                    - rust
                     - shell
         runs-on: ubuntu-latest
         steps:
