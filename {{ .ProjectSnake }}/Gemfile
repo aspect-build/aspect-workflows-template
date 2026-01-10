@@ -1,2 +1,5 @@
 source "https://rubygems.org"
 
+{{ if .Computed.ruby }}
+gem "rubocop"
+{{ end }}

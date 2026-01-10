@@ -1,3 +1,4 @@
+name: CI
 on:
     push:
         branches: [main]
@@ -8,8 +9,6 @@ jobs:
     test:
         strategy:
             matrix:
-                scaffold-version:
-                    - v0.12.1
                 preset:
                     - cpp
                     - go
@@ -37,7 +36,7 @@ jobs:
               uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
                 repo: hay-kot/scaffold
-                tag: ${{ matrix.scaffold-version }}
+                tag: v0.12.1
             - name: Install direnv
               run: |
                     sudo apt-get install -y direnv

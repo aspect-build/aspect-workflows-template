@@ -21,7 +21,7 @@ Write a simple Ruby application:
 ~~~sh
 mkdir app
 >app/hello.rb cat <<'EOF'
-require "faker"
+require 'faker'
 puts "Hello, #{Faker::Name.name} from Bazel + Ruby!"
 EOF
 ~~~
@@ -63,4 +63,12 @@ echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
     echo >&2 "Wanted output matching 'Hello, <name> from Bazel + Ruby!' but got '${output}'"
     exit 1
 }
+~~~
+
+## Linting
+
+We can lint the code with rubocop, by running the Aspect CLI:
+
+~~~sh
+aspect lint
 ~~~
