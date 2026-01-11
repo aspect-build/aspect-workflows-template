@@ -65,12 +65,12 @@ gazelle(
     env = {
         "ENABLE_LANGUAGES": ",".join([
             "starlark",
-            "proto",
-            {{- if .Computed.go }}"go",{{- end }}
-            {{- if .Computed.kotlin }}"kotlin",{{- end }}
-            {{- if .Computed.python }}"python",{{- end }}
-            {{- if .Computed.javascript }}"js",{{- end }}
-            {{- if .Computed.cpp }}"cc",{{- end }}
+            {{- if .Scaffold.proto }}"proto",{{ end }}
+            {{- if .Computed.go }}"go",{{ end }}
+            {{- if .Computed.kotlin }}"kotlin",{{ end }}
+            {{- if .Computed.python }}"python",{{ end }}
+            {{- if .Computed.javascript }}"js",{{ end }}
+            {{- if .Computed.cpp }}"cc",{{ end }}
         ]),
     }
 )

@@ -23,6 +23,11 @@ common --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # NB: some tools run py_binary targets even if the user didn't select to add Python to their project
 common --@rules_python//python/config_settings:bootstrap_impl=script
 
+{{- if .Scaffold.proto }}
+common --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+# TODO: remove for Bazel 9 final
+common --incompatible_enable_proto_toolchain_resolution
+{{- end }}
 {{- if .Scaffold.stamp }}
 # To stamp release builds, run with
 # --config=release
