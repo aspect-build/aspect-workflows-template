@@ -54,6 +54,10 @@ questions:
     prompt:
       confirm: Setup format and linting?
       description: "Installs https://github.com/aspect-build/rules_lint"
+  - name: proto
+    prompt:
+      confirm: Setup Protobuf and gRPC?
+      description: "Install protobuf and gRPC modules from Google"
   - name: stamp
     prompt:
       confirm: Setup version stamping?
@@ -185,6 +189,7 @@ presets:
     lint: true
   java:
     langs: ['Java']
+    proto: true
     lint: true
   kotlin:
     langs: ['Kotlin']
