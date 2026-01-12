@@ -33,8 +33,9 @@ use_repo(multitool, "multitool")
 {{ if .Scaffold.proto -}}
 #########################
 # Protobuf and gRPC
-bazel_dep(name = "protobuf", version = "33.3.bcr.1")
+bazel_dep(name = "protobuf", version = "33.4")
 bazel_dep(name = "protovalidate", version = "1.0.0")
+bazel_dep(name = "rules_proto", version = "7.1.0")
 {{- if .Computed.java }}
 bazel_dep(name = "grpc-java", version = "1.75.0")
 # Force later resolutions of some transitives to pick up Bazel 9 fixes

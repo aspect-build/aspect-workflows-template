@@ -76,19 +76,23 @@ Summary:
 
 ## Using protobuf and gRPC
 
-Let's introduce a small data schema and RPC message scheme.
+Let's introduce a small data schema.
 
 ~~~sh
->src/time_service.proto <<EOF
-syntax "proto3";
+>src/foo.proto cat <<EOF
+syntax = "proto3";
+option java_package = "build.aspect.examples";
+option java_outer_classname = "FooOuterClass";
 message Foo {
+    string message = 1;
 }
+EOF
 ~~~
 
 Generate the BUILD rules for protobuf:
 
 ~~~sh
-bazel run //:gazelle
+bazel run gazelle
 ~~~
 
 There isn't a Gazelle generator for java_proto_library yet, so add it manually:
@@ -96,6 +100,33 @@ There isn't a Gazelle generator for java_proto_library yet, so add it manually:
 ~~~sh
 buildozer 'new_load @protobuf//bazel:java_proto_library.bzl java_proto_library' src:__pkg__
 buildozer 'new java_proto_library foo_java_proto' src:__pkg__
-buildozer 'add deps :foo.proto' src:foo_java_proto
+buildozer 'add deps :foo_proto' src:foo_java_proto
+buildozer 'add deps :foo_java_proto' src:Demo
 ~~~
 
+Now overwrite `Demo.java` to use the generated `Foo` message:
+
+~~~sh
+>src/Demo.java cat <<EOF
+import build.aspect.examples.FooOuterClass;
+class Demo {
+    public static void main(String[] args) {
+        FooOuterClass.Foo foo = FooOuterClass.Foo.newBuilder()
+            .setMessage("Hello from Java Protobuf!")
+            .build();
+        System.out.println(foo);
+    }
+}
+EOF
+~~~
+
+Run the application again:
+
+~~~sh
+output="$(bazel run src:Demo)"
+
+[ "${output}" = "message: \"Hello from Java Protobuf!\"" ] || {
+    echo >&2 "Wanted output 'Hello from Java Protobuf' but got '${output}'"
+    exit 1
+}
+~~~
