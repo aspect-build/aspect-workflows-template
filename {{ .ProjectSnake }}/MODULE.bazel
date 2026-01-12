@@ -36,13 +36,14 @@ multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitoo
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 
-{{- if .Scaffold.proto }}
+{{ if .Scaffold.proto -}}
 #########################
 # Protobuf and gRPC
 bazel_dep(name = "protobuf", version = "33.3.bcr.1")
 bazel_dep(name = "protovalidate", version = "1.0.0")
 {{- if .Computed.java }}
 bazel_dep(name = "grpc-java", version = "1.75.0")
+bazel_dep(name = "rules_foreign_cc", version = "0.15.1", repo_name = None)
 {{- end }}
 
 {{- end }}
