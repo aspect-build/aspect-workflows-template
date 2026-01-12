@@ -1,6 +1,7 @@
 # Rust Bazel Starter
 
     # This is executable Markdown that's tested on CI.
+    # How is that possible? See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
     set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
