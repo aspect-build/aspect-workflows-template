@@ -84,6 +84,9 @@ features:
   - value: "{{ and .Scaffold.lint .Computed.shell }}"
     globs:
       - "*/.shellcheckrc"
+  - value: "{{ and .Scaffold.lint .Computed.ruby }}"
+    globs:
+      - "*/.rubocop.yml"
   - value: "{{ .Computed.javascript }}"
     globs:
       - "**/package.json"
@@ -117,7 +120,9 @@ features:
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
-      - "*/tools/java17.bazelrc"
+  - value: "{{ or .Computed.java .Computed.ruby }}"
+    globs:
+      - "*/tools/java21.bazelrc"
   - value: "{{ and .Scaffold.lint .Computed.java }}"
     globs:
       - "*/pmd.xml"
