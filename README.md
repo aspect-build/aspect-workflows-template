@@ -1,7 +1,6 @@
 # Scaffold for basic Aspect Workflows project
 
-## With Aspect CLI (Preferred)
-
+## With Aspect CLI
 Install the Aspect CLI: https://docs.aspect.build/cli/install
 
 Then add the `init` task with
