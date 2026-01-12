@@ -131,6 +131,9 @@ features:
   - value: "{{ .Computed.platforms }}"
     globs:
       - "*/tools/platforms/*"
+  - value: "{{ .Computed.shell }}"
+    globs:
+      - "*/.aspect/gazelle/shell.axl"
   - value: "{{ and .Scaffold.oci .Computed.python }}"
     globs:
       - "*/.aspect/gazelle/py3_image.axl"
