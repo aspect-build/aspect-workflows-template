@@ -47,3 +47,43 @@ output="$(bazel run hello_world)"
     exit 1
 }
 ~~~
+
+## Formatting
+
+We can format the code with rustfmt. Let's create some intentionally poorly formatted code:
+
+~~~sh
+cat >hello_world/src/main.rs <<EOF
+fn main(){
+println!("Hello from Rust");
+}
+EOF
+~~~
+
+Now format it:
+
+~~~sh
+aspect format
+~~~
+
+Let's verify the code was properly formatted:
+
+~~~sh
+cat hello_world/src/main.rs
+# -> fn main() {
+# ->     println!("Hello from Rust");
+# -> }
+~~~
+
+<!--
+~~~sh
+formatted=$(cat hello_world/src/main.rs)
+echo "${formatted}" | grep -q "^fn main() {$" && \
+echo "${formatted}" | grep -q "^    println!(\"Hello from Rust\");$" && \
+echo "${formatted}" | grep -q "^}$" || {
+    echo >&2 "Code was not properly formatted. Got:"
+    echo >&2 "${formatted}"
+    exit 1
+}
+~~~
+-->
