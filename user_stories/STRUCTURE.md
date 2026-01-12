@@ -22,7 +22,7 @@ All language user stories MUST include these sections:
 **Structure**:
 - Setup note about direnv
 - Create application code (simple "Hello World" style)
-- Package manager integration (if applicable)
+- Package manager integration with an example package
 - BUILD file generation
 - Run and verify output
 

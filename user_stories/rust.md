@@ -15,8 +15,12 @@ This repo includes:
 
 ## Try it out
 
-> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-> This ensures that tools we call in the following steps will be on the PATH.
+First, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+This ensures that tools we call in the following steps will be on the PATH.
+
+~~~sh
+direnv allow .
+~~~
 
 First we create a tiny Rust program
 
@@ -63,7 +67,7 @@ EOF
 Now format it:
 
 ~~~sh
-aspect format
+format
 ~~~
 
 Let's verify the code was properly formatted:
