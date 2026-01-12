@@ -15,8 +15,12 @@ This repo includes:
 
 ## Try it out
 
-> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-> This ensures that tools we call in the following steps will be on the PATH.
+First, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+This ensures that tools we call in the following steps will be on the PATH.
+
+~~~sh
+direnv allow .
+~~~
 
 Create a minimal Java application:
 
@@ -69,3 +73,29 @@ Summary:
 
 * warnings: 0
 </code>
+
+## Using protobuf and gRPC
+
+Let's introduce a small data schema and RPC message scheme.
+
+~~~sh
+>src/time_service.proto <<EOF
+syntax "proto3";
+message Foo {
+}
+~~~
+
+Generate the BUILD rules for protobuf:
+
+~~~sh
+bazel run //:gazelle
+~~~
+
+There isn't a Gazelle generator for java_proto_library yet, so add it manually:
+
+~~~sh
+buildozer 'new_load @protobuf//bazel:java_proto_library.bzl java_proto_library' src:__pkg__
+buildozer 'new java_proto_library foo_java_proto' src:__pkg__
+buildozer 'add deps :foo.proto' src:foo_java_proto
+~~~
+
