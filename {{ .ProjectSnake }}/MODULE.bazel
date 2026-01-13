@@ -5,7 +5,7 @@ bazel_dep(name = "platforms", version = "1.0.0")
 {{- end }}
 bazel_dep(name = "apple_support", version = "2.1.0")
 {{- if .Scaffold.lint }}
-bazel_dep(name = "aspect_rules_lint", version = "2.0.0-beta.1")
+bazel_dep(name = "aspect_rules_lint", version = "2.0.0-rc0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
@@ -219,6 +219,8 @@ http_archive(
 {{- end }}
 {{- if .Computed.kotlin }}
 bazel_dep(name = "rules_kotlin", version = "2.2.2")
+# Force a transitive resolution of rules_android to pick up Bazel 9 fixes
+bazel_dep(name = "rules_android", version = "0.7.0", repo_name = None)
 {{if .Scaffold.lint -}}
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 http_jar(
