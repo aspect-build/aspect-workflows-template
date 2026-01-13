@@ -4,6 +4,7 @@ This is in its own package because it has so many loading-time symbols,
 we don't want to trigger eager fetches of these for builds which aren't running linters.
 """
 
+# gazelle:exclude linters.bzl
 package(default_visibility = ["//:__subpackages__"])
 
 {{ if .Computed.javascript }}
@@ -25,7 +26,6 @@ java_binary(
 {{ if .Computed.cpp}}
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 
-# gazelle:exclude linters.bzl
 native_binary(
     name = "clang_tidy",
     src = select(
