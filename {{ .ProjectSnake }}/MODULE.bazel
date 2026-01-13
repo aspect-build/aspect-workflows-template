@@ -123,7 +123,7 @@ pip.parse(
 )
 use_repo(pip, "pip")
 {{- end }}
-{{- if .Computed.cpp }}
+{{- if or .Computed.cpp .Computed.apple }}
 bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "toolchains_llvm", version = "1.6.0")
 
@@ -188,6 +188,9 @@ bazel_dep(name = "apple_support", version = "2.1.0")
 bazel_dep(name = "rules_apple", version = "4.3.3")
 bazel_dep(name = "rules_swift", version = "3.4.1")
 bazel_dep(name = "rules_swift_package_manager", version = "1.11.1")
+
+apple_cc_configure = use_extension("@apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
+use_repo(apple_cc_configure, "local_config_apple_cc")
 
 {{- end }}
 {{- if or .Computed.java .Computed.kotlin .Computed.scala }}
