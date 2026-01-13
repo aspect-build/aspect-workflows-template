@@ -83,7 +83,22 @@ There isn't a Gazelle extension yet, so write a BUILD file by hand:
 
 ~~~sh
 >app/BUILD cat <<EOF
+load("@rules_apple//apple:ios.bzl", "ios_application")
+load("@rules_swift//swift:swift.bzl", "swift_library")
 
+swift_library(
+    name = "lib",
+    srcs = glob(["Sources/HelloApp/*.swift"]),
+)
+
+ios_application(
+    name = "iOSApp",
+    bundle_id = "bazel.starters.apple",
+    families = ["iphone", "ipad"],
+    infoplists = ["Info.plist"],
+    minimum_os_version = "17.0",
+    deps = [":lib"],
+)
 EOF
 ~~~
 
@@ -91,7 +106,7 @@ Run it to see the result:
 > (Note that Bundle will spam the stdout with install information, so we just want the last line)
 
 ~~~sh
-output=$(bazel run //app:hello | tail -1)
+output=$(bazel run //app:iOSApp | tail -1)
 ~~~
 
 Let's verify the application output matches expectation:
