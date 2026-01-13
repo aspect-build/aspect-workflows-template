@@ -41,6 +41,7 @@ questions:
         - Python
         - Go
         - Java
+        - Scala
         - Kotlin
         - C & C++
         - iOS / Swift and other Apple platforms
@@ -55,6 +56,10 @@ questions:
     prompt:
       confirm: Setup format and linting?
       description: "Installs https://github.com/aspect-build/rules_lint"
+  - name: proto
+    prompt:
+      confirm: Setup Protobuf and gRPC?
+      description: "Install protobuf and gRPC modules from Google"
   - name: stamp
     prompt:
       confirm: Setup version stamping?
@@ -127,6 +132,9 @@ features:
   - value: "{{ .Computed.platforms }}"
     globs:
       - "*/tools/platforms/*"
+  - value: "{{ .Computed.shell }}"
+    globs:
+      - "*/.aspect/gazelle/shell.axl"
   - value: "{{ and .Scaffold.oci .Computed.python }}"
     globs:
       - "*/.aspect/gazelle/py3_image.axl"
@@ -149,6 +157,7 @@ computed:
   python: "{{ has \"Python\" .Scaffold.langs }}"
   go: "{{ has \"Go\" .Scaffold.langs }}"
   java: "{{ has \"Java\" .Scaffold.langs }}"
+  scala: "{{ has \"Scala\" .Scaffold.langs }}"
   kotlin: "{{ has \"Kotlin\" .Scaffold.langs }}"
   cpp: "{{ has \"C & C++\" .Scaffold.langs }}"
   rust: "{{ has \"Rust\" .Scaffold.langs }}"
@@ -170,6 +179,7 @@ presets:
       - 'Rust'
       - 'Ruby'
       - 'Shell (Bash)'
+      - 'Scala'
     codegen: true
     stamp: true
     oci: true
@@ -194,6 +204,7 @@ presets:
     lint: true
   java:
     langs: ['Java']
+    proto: true
     lint: true
   kotlin:
     langs: ['Kotlin']
@@ -206,6 +217,9 @@ presets:
     lint: true
   ruby:
     langs: ['Ruby']
+    lint: true
+  scala:
+    langs: ['Scala']
     lint: true
   minimal:
     langs: []

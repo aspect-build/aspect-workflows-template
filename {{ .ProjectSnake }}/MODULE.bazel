@@ -4,19 +4,13 @@ bazel_dep(name = "bazel_lib", version = "3.0.0")
 bazel_dep(name = "platforms", version = "1.0.0")
 {{- end }}
 {{- if .Scaffold.lint }}
-bazel_dep(name = "aspect_rules_lint", version = "2.0.0-beta.1")
+bazel_dep(name = "aspect_rules_lint", version = "2.0.0-rc0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "rules_multitool", version = "1.11.1")
 bazel_dep(name = "bazel_env.bzl", version = "0.5.0")
 bazel_dep(name = "bazelrc-preset.bzl", version = "1.8.0")
-# Bazel 9: Ensure transitives don't depend on rules_nodejs prior to
-# https://github.com/bazel-contrib/rules_nodejs/commit/1fc6b6b763c4f79994edc9edab10399f7446d8be
-bazel_dep(name = "rules_nodejs", version = "6.6.2")
-{{- if or .Computed.java .Computed.kotlin }}
-bazel_dep(name = "rules_java", version = "9.3.0")
-{{- end }}
 
 # We have to take a dependency on rules_python in order to set bootstrap=script
 # for transitive dependencies, even if there are no Python rules used in this repo.
@@ -35,11 +29,25 @@ multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitoo
 multitool.hub(lockfile = "//tools:tools.lock.json")
 use_repo(multitool, "multitool")
 
-{{- if .Computed.go }}
-bazel_dep(name = "rules_go", version = "0.59.0")
+{{ if .Scaffold.proto -}}
+#########################
+# Protobuf and gRPC
+bazel_dep(name = "protobuf", version = "33.4")
+bazel_dep(name = "protovalidate", version = "1.0.0")
+{{- if .Computed.java }}
+bazel_dep(name = "grpc-java", version = "1.75.0")
+# Force later resolutions of some transitives to pick up Bazel 9 fixes
+bazel_dep(name = "rules_foreign_cc", version = "0.15.1", repo_name = None)
+bazel_dep(name = "bazel_jar_jar", version = "0.1.12", repo_name = None)
 
+{{- end }}
+
+{{- end }}
+{{- if .Computed.go }}
 #########################
 # Go
+bazel_dep(name = "rules_go", version = "0.59.0")
+
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 
 # Download an SDK for the host OS & architecture as well as common remote execution
@@ -60,6 +68,9 @@ use_repo(go_deps, "com_github_hay_kot_scaffold")
 bazel_dep(name = "rules_go", version = "0.59.0", repo_name = None)
 {{- end }}
 {{- if .Computed.javascript }}
+# Bazel 9: Ensure transitives don't depend on rules_nodejs prior to
+# https://github.com/bazel-contrib/rules_nodejs/commit/1fc6b6b763c4f79994edc9edab10399f7446d8be
+bazel_dep(name = "rules_nodejs", version = "6.6.2")
 bazel_dep(name = "aspect_rules_js", version = "2.8.3")
 bazel_dep(name = "aspect_rules_ts", version = "3.8.1")
 
@@ -179,18 +190,17 @@ bazel_dep(name = "rules_swift", version = "3.4.1")
 bazel_dep(name = "rules_swift_package_manager", version = "1.11.1")
 
 {{- end }}
+{{- if or .Computed.java .Computed.kotlin .Computed.scala }}
+#########################
+# Java and other JVM languages
+bazel_dep(name = "rules_java", version = "9.3.0")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+{{- end }}
 {{- if .Computed.java }}
 
-#########################
-# Java and other JVM languages:
-# https://github.com/bazelbuild/rules_jvm_external/blob/master/examples/bzlmod/MODULE.bazel
-# https://github.com/bazelbuild/rules_jvm_external#pinning-artifacts-and-integration-with-bazels-downloader
-
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 # In the Maven support variation, the dependencies are conveniently listed here
 # in the MODULE.bazel file.
-bazel_dep(name = "rules_jvm_external", version = "6.9")
-
-maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = ["io.grpc:grpc-all:1.51.1"],
     lock_file = "//:maven_install.json",
@@ -217,6 +227,8 @@ http_archive(
 {{- end }}
 {{- if .Computed.kotlin }}
 bazel_dep(name = "rules_kotlin", version = "2.2.2")
+# Force a transitive resolution of rules_android to pick up Bazel 9 fixes
+bazel_dep(name = "rules_android", version = "0.7.0", repo_name = None)
 {{if .Scaffold.lint -}}
 http_jar = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_jar")
 http_jar(
@@ -232,6 +244,22 @@ http_file(
     executable = True,
 )
 {{- end }}
+{{- end }}
+{{- if .Computed.scala }}
+bazel_dep(name = "rules_scala", version = "7.1.6")
+scala_config = use_extension(
+    "@rules_scala//scala/extensions:config.bzl",
+    "scala_config",
+)
+scala_config.settings(scala_version = "2.13.17")
+
+# See the `scala/extensions/deps.bzl` docstring for a high level description of
+# the tag classes exported by this module extension.
+scala_deps = use_extension(
+    "@rules_scala//scala/extensions:deps.bzl",
+    "scala_deps",
+)
+scala_deps.scala()
 {{- end }}
 
 {{- if .Scaffold.oci  }}

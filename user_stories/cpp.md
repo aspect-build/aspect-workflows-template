@@ -1,6 +1,7 @@
 # C/C++ Bazel Starter
 
     # This is executable Markdown that's tested on CI.
+    # How is that possible? See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
     set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
@@ -13,10 +14,14 @@ This repo includes:
 
 ## Try it out
 
-> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-> This ensures that tools we call in the following steps will be on the PATH.
+First, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+This ensures that tools we call in the following steps will be on the PATH.
 
-To start with, let’s get the simplest possible program to execute.
+~~~sh
+direnv allow .
+~~~
+
+To start with, let's get the simplest possible program to execute.
 
 Lets create an application that prints “hello world” to the standard out:
 

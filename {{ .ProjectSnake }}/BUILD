@@ -59,18 +59,22 @@ load("@gazelle//:def.bzl", "gazelle")
 # We prefer BUILD instead of BUILD.bazel
 # gazelle:build_file_name BUILD
 # gazelle:exclude githooks/*
+{{ if .Scaffold.proto -}}
+# Workaround https://github.com/bazel-contrib/bazel-gazelle/issues/2001
+# gazelle:map_kind proto_library proto_library @protobuf//bazel:proto_library.bzl
+{{- end }}
 gazelle(
     name = "gazelle",
     gazelle = "@multitool//tools/gazelle",
     env = {
         "ENABLE_LANGUAGES": ",".join([
             "starlark",
-            "proto",
-            {{- if .Computed.go }}"go",{{- end }}
-            {{- if .Computed.kotlin }}"kotlin",{{- end }}
-            {{- if .Computed.python }}"python",{{- end }}
-            {{- if .Computed.javascript }}"js",{{- end }}
-            {{- if .Computed.cpp }}"cc",{{- end }}
+            {{- if .Scaffold.proto }}"proto",{{ end }}
+            {{- if .Computed.go }}"go",{{ end }}
+            {{- if .Computed.kotlin }}"kotlin",{{ end }}
+            {{- if .Computed.python }}"python",{{ end }}
+            {{- if .Computed.javascript }}"js",{{ end }}
+            {{- if .Computed.cpp }}"cc",{{ end }}
         ]),
     }
 )
