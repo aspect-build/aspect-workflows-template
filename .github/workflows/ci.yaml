@@ -9,6 +9,7 @@ jobs:
         strategy:
             matrix:
                 scaffold-version:
+                    - v0.6.1
                     - v0.12.1
                 preset:
                     - cpp
