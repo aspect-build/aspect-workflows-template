@@ -177,6 +177,5 @@ init = task(
     implementation = _impl,
     args = {
         "output_dir": args.string(required = False),
-        "preset": args.string(required = False),
     },
 )
