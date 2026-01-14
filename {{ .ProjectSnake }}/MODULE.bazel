@@ -252,6 +252,15 @@ scala_deps = use_extension(
     "scala_deps",
 )
 scala_deps.scala()
+{{ if .Scaffold.proto -}}
+scala_deps.scala_proto(
+    default_gen_opts = [
+        "grpc",
+        "flat_package",
+        "scala3_sources",
+    ],
+)
+{{- end }}
 {{- end }}
 
 {{- if .Scaffold.oci  }}
