@@ -184,6 +184,7 @@ presets:
     codegen: true
     langs: ['Go']
     lint: true
+    proto: true
     oci: true
   js:
     langs: ['JavaScript & TypeScript']
