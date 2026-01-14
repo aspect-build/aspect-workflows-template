@@ -212,5 +212,6 @@ presets:
   scala:
     langs: ['Scala']
     lint: true
+    proto: true
   minimal:
     langs: []
