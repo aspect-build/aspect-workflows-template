@@ -118,6 +118,7 @@ features:
   - value: "{{ .Computed.java }}"
     globs:
       - "*/maven_install.json"
+      - "*/tools/java17.bazelrc"
   - value: "{{ and .Scaffold.lint .Computed.java }}"
     globs:
       - "*/pmd.xml"
