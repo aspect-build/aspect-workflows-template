@@ -70,3 +70,66 @@ echo "${output}" | grep -q "Hello, world" || {
 
 **TODO: Build an OCI container for the target platform**
 with bazel build //cmd/hello:image.load
+
+## Using protobuf and gRPC
+
+Let's introduce a small data schema.
+
+~~~sh
+>cowsay/foo.proto cat <<EOF
+syntax = "proto3";
+option go_package = "example.com/bazel-starters/go-example";
+message Foo {
+    string message = 1;
+}
+EOF
+~~~
+
+Overwrite `cowsay/cmd/hello/main.go` to use the generated `Foo` message:
+
+~~~sh
+>cowsay/cmd/hello/main.go cat <<EOF
+package main
+
+import (
+	"net/http"
+	"nmyk.io/cowsay"
+	example "example.com/bazel-starters/go-example/cowsay/foo_go_proto"
+)
+
+func main() {
+	http.HandleFunc("/", HelloServer)
+	http.ListenAndServe(":8080", nil)
+}
+
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+	foo := &example.Foo{
+		Message: "Hello from Go Protobuf!",
+	}
+	cowsay.Cow{}.Write(w, []byte(foo.Message), false)
+}
+EOF
+~~~
+
+Generate the BUILD rules for protobuf and update deps of the application:
+
+~~~sh
+bazel run gazelle
+~~~
+
+Run the application again:
+
+~~~sh
+bazel run cowsay/cmd/hello &
+# Wait for the server
+while ! nc -z localhost 8080; do   
+  sleep 0.5
+done
+
+output=$(curl localhost:8080)
+
+echo "${output}" | grep -q "Hello from Go Protobuf" || {
+    echo >&2 "Wanted output containing 'Hello from Go Protobuf' but got '${output}'"
+    exit 1
+}
+~~~
