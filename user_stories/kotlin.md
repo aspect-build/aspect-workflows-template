@@ -1,6 +1,7 @@
 # Kotlin Starter
 
     # This is executable Markdown that's tested on CI.
+    # How is that possible? See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
     set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
@@ -17,8 +18,12 @@ This repo includes:
 
 ## Try it out
 
-> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-> This ensures that tools we call in the following steps will be on the PATH.
+First, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
+This ensures that tools we call in the following steps will be on the PATH.
+
+~~~sh
+direnv allow .
+~~~
 
 First create some Kotlin source code:
 
@@ -69,4 +74,10 @@ output="$(bazel run src:app)"
     echo >&2 "Wanted output 'Hello from Kotlin' but got '${output}'"
     exit 1
 }
+~~~
+
+Run ktlint:
+
+~~~sh
+aspect lint
 ~~~

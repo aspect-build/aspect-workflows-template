@@ -55,9 +55,6 @@ bazel_env(
         "nodejs": "@nodejs_toolchains//:resolved_toolchain",
         "prettier": "//tools/format:prettier",
 {{ end }}
-{{ if .Computed.rust }}
-        "rust": "@rules_rust//rust/toolchain:current_rust_toolchain",
-{{ end }}
     },
     tools = {
         # Mapping from tool binary name ($PATH entry) to Bazel label
@@ -90,6 +87,11 @@ bazel_env(
 {{ end }}
 {{ if .Computed.python }}
         "python": "$(PYTHON3)",
+{{ end }}
+{{ if .Computed.ruby }}
+        "bundle": "@ruby//:bundle",
+        "gem": "@ruby//:gem",
+        "ruby": "@ruby",
 {{ end }}
     } | MULTITOOL_TOOLS,
 )

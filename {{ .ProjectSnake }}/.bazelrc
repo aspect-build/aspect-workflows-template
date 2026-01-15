@@ -3,6 +3,8 @@ try-import %workspace%/tools/java17.bazelrc
 
 ### YOUR PROJECT SPECIFIC OPTIONS GO HERE ###
 
+startup --quiet
+
 # Disable skymeld; see https://github.com/bazelbuild/bazel/issues/23743
 # fixes src/main/tools/process-wrapper-legacy.cc:80: "execvp(external/++toolchains+coreutils_linux_amd64/coreutils, ...)": No such file or directory
 common --noexperimental_merged_skyframe_analysis_execution
@@ -23,6 +25,11 @@ common --@aspect_rules_ts//ts:default_to_tsc_transpiler
 # NB: some tools run py_binary targets even if the user didn't select to add Python to their project
 common --@rules_python//python/config_settings:bootstrap_impl=script
 
+{{- if .Scaffold.proto }}
+common --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+# TODO: remove for Bazel 9 final
+common --incompatible_enable_proto_toolchain_resolution
+{{- end }}
 {{- if .Scaffold.stamp }}
 # To stamp release builds, run with
 # --config=release
@@ -31,26 +38,25 @@ common:release --stamp --workspace_status_command=./tools/workspace_status.sh
 
 {{- if .Scaffold.lint }}
 common --workspace_status_command=githooks/check-config.sh
-
 {{ if .Computed.shell -}}
 common:lint --aspects=//tools/lint:linters.bzl%shellcheck
-{{- end -}}
+{{- end }}
 {{ if .Computed.javascript -}}
 common:lint --aspects=//tools/lint:linters.bzl%eslint
-{{- end -}}
+{{- end }}
 {{ if .Computed.python -}}
 common:lint --aspects=//tools/lint:linters.bzl%ruff
 common:lint --aspects=//tools/lint:linters.bzl%ty
-{{- end -}}
+{{- end }}
 {{ if .Computed.cpp -}}
 common:lint --aspects=//tools/lint:linters.bzl%clang_tidy
-{{- end -}}
+{{- end }}
 {{ if .Computed.kotlin -}}
 common:lint --aspects=//tools/lint:linters.bzl%ktlint
-{{- end -}}
+{{- end }}
 {{ if .Computed.java -}}
 common:lint --aspects=//tools/lint:linters.bzl%pmd
-{{- end -}}
+{{- end }}
 {{- end }}
 # Load any settings & overrides specific to the current user from `.aspect/bazelrc/user.bazelrc`.
 # This file should appear in `.gitignore` so that settings are not shared with team members. This
