@@ -11,6 +11,7 @@ jobs:
                 scaffold-version:
                     - v0.12.1
                 preset:
+                    - apple
                     - cpp
                     - go
                     - java
@@ -19,8 +20,8 @@ jobs:
                     - minimal
                     - py
                     - kitchen-sink
-                    - rust
                     - ruby
+                    - rust
                     - shell
                     - scala
         runs-on: ubuntu-latest
