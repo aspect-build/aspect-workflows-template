@@ -105,7 +105,7 @@ use_repo(node, "nodejs_toolchains")
 #########################
 # Hermetic Python interpreter and pip dependencies
 bazel_dep(name = "rules_python_gazelle_plugin", version = "1.6.3")
-bazel_dep(name = "aspect_rules_py", version = "1.6.6")
+bazel_dep(name = "aspect_rules_py", version = "1.8.4")
 bazel_dep(name = "rules_uv", version = "0.89.2")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
