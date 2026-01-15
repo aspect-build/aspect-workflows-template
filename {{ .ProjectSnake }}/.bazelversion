@@ -1,6 +1,1 @@
-{{- if .Computed.python -}}
-8.5.0
-# TODO: upgrade to Bazel 9 when rules are fixed
-{{- else -}}
 9.*
-{{- end }}
