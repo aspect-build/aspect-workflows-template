@@ -16,7 +16,7 @@ bazel_dep(name = "bazelrc-preset.bzl", version = "1.8.0")
 # We have to take a dependency on rules_python in order to set bootstrap=script
 # for transitive dependencies, even if there are no Python rules used in this repo.
 # See .bazelrc
-bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_python", version = "1.8.0")
 bazel_dep(name = "gazelle", version = "0.47.0")
 {{- if .Computed.shell }}
 bazel_dep(name = "rules_shell", version = "0.6.1")
