@@ -27,7 +27,7 @@ use rand::Rng;
 fn main() {
     let num = rand::thread_rng().gen_range(1..=3);
     for _ in 0..num {
-        println!("Hello from Rust!");
+        println!("Hello from Rust");
     }
 }
 EOF
