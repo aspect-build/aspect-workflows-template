@@ -154,12 +154,29 @@ git_override(
 #########################
 # Support for Rust, see https://github.com/bazelbuild/rules_rust
 bazel_dep(name = "rules_rust", version = "0.68.1")
+bazel_dep(name = "rules_rs", version = "0.0.26")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
     edition = "2021",
     versions = ["1.75.0"],
 )
+
+crate = use_extension("@rules_rs//rs:extensions.bzl", "crate")
+
+crate.from_cargo(
+    name = "crates",
+    cargo_lock = "//:Cargo.lock",
+    cargo_toml = "//:Cargo.toml",
+    platform_triples = [
+        "aarch64-apple-darwin",
+        "aarch64-unknown-linux-gnu",
+        "x86_64-apple-darwin",
+        "x86_64-unknown-linux-gnu",
+    ],
+)
+
+use_repo(crate, "crates")
 {{- end }}
 {{- if .Computed.ruby }}
 

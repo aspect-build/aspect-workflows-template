@@ -22,29 +22,43 @@ This ensures that tools we call in the following steps will be on the PATH.
 direnv allow .
 ~~~
 
-First we create a tiny Rust program
+First we create a tiny Rust program with a third-party dependency:
 
 ~~~sh
-mkdir -p hello_world/src
+cargo new hello_world
 cat >hello_world/src/main.rs <<EOF
-fn main() { println!("Hello from Rust"); }
+use rand::Rng;
+
+fn main() {
+    let num = rand::thread_rng().gen_range(1..=3);
+    for _ in 0..num {
+        println!("Hello from Rust");
+    }
+}
 EOF
+~~~
+
+Add the dependency to Cargo.toml, and run `check` to update the Cargo.lock file that Bazel reads:
+
+~~~sh
+echo 'rand = "0.8"' >> hello_world/Cargo.toml
+cargo check
 ~~~
 
 We don't have any BUILD file generation for Rust yet,
 so you're forced to create it manually.
-
 ~~~sh
 touch hello_world/BUILD
 buildozer 'new_load @rules_rust//rust:defs.bzl rust_binary' hello_world:__pkg__
 buildozer 'new rust_binary hello_world' hello_world:__pkg__
 buildozer 'add srcs src/main.rs' hello_world:hello_world
+buildozer 'add deps @crates//:rand' hello_world:hello_world
 ~~~
 
 Now you can run the program and assert that it produces the expected output.
 
 ~~~sh
-output="$(bazel run hello_world)"
+output="$(bazel run hello_world | tail -1)"
 
 [ "${output}" = "Hello from Rust" ] || {
     echo >&2 "Wanted output 'Hello from Rust' but got '${output}'"
