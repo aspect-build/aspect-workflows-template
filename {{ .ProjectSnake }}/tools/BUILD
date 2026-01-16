@@ -80,6 +80,7 @@ bazel_env(
 {{ end }}
 {{ if .Computed.javascript }}
         "node": "$(NODE_PATH)",
+        "npm": "$(NPM_PATH)",
         "pnpm": "@pnpm",
 {{ if .Scaffold.codegen }}
         "yo": ":yo",
