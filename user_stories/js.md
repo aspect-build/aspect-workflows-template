@@ -15,8 +15,9 @@ This repo includes:
 
 ## Developer tools
 
-First, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-This ensures that tools we call in the following steps will be on the PATH.
+First, we recommend you let Bazel setup the developer environment by installing [direnv](https://direnv.net/) and then run <code>direnv allow</code> and follow any prompts.
+This ensures that tools we call in the following steps will be on the PATH, and be the right versions.
+Use the green Use This Template button in GitHub to get a clone of the repo.
 
 ~~~sh
 direnv allow .
@@ -56,7 +57,7 @@ Observe that the program already works outside Bazel:
 
 ~~~sh
 pnpm pkg set scripts.hello="node index.js"
-npm run hello
+pnpm run hello
 # -> Hello World!
 ~~~
 
