@@ -143,7 +143,7 @@ git_override(
 #########################
 # Support for Rust, see https://github.com/bazelbuild/rules_rust
 bazel_dep(name = "rules_rust", version = "0.68.1")
-bazel_dep(name = "rules_rs", version = "0.0.23")
+bazel_dep(name = "rules_rs", version = "0.0.26")
 
 rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
 rust.toolchain(
