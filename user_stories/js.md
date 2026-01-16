@@ -83,5 +83,10 @@ yo bazel-fastify-route
 ESLint is already setup in the repo. Bazel doesn't have a lint command, so we use the Aspect CLI:
 
 ~~~sh
-aspect lint
+output="$(aspect lint)"
+
+[ "${output}" = "eslint says hi!" ] || {
+    echo >&2 "Got '${output}'"
+    exit 1
+}
 ~~~
