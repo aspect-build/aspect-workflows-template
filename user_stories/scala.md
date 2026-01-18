@@ -52,3 +52,61 @@ output="$(bazel run src:Hello)"
     exit 1
 }
 ~~~
+
+## Using protobuf and gRPC
+
+Let's introduce a small data schema.
+
+~~~sh
+>src/foo.proto cat <<EOF
+syntax = "proto3";
+option java_package = "build.aspect.examples";
+option java_outer_classname = "FooOuterClass";
+message Foo {
+    string message = 1;
+}
+EOF
+~~~
+
+Generate the BUILD rules for protobuf:
+
+~~~sh
+bazel run gazelle
+~~~
+
+There isn't a Gazelle generator for scala_proto_library yet, so add it manually:
+
+~~~sh
+buildozer 'new_load @rules_scala//scala_proto:scala_proto.bzl scala_proto_library' src:__pkg__
+buildozer 'new scala_proto_library foo_scala_proto' src:__pkg__
+buildozer 'add deps :foo_proto' src:foo_scala_proto
+buildozer 'add deps :foo_scala_proto' src:Hello
+~~~
+
+Now overwrite `Hello.scala` to use the generated `Foo` message:
+
+~~~sh
+>src/Hello.scala cat <<EOF
+import build.aspect.examples.FooOuterClass
+
+object Hello {
+  def main(args: Array[String]): Unit = {
+    val foo = FooOuterClass.Foo.newBuilder()
+      .setMessage("Hello from Scala Protobuf!")
+      .build()
+    println(foo)
+  }
+}
+EOF
+~~~
+
+Run the application again:
+
+~~~sh
+output="$(bazel run src:Hello)"
+
+[ "${output}" = "message: \"Hello from Scala Protobuf!\"" ] || {
+    echo >&2 "Wanted output 'Hello from Scala Protobuf' but got '${output}'"
+    exit 1
+}
+~~~
