@@ -213,6 +213,7 @@ bazel_dep(name = "rules_swift_package_manager", version = "1.11.1")
 # Java and other JVM languages
 bazel_dep(name = "rules_java", version = "9.3.0")
 bazel_dep(name = "rules_jvm_external", version = "6.9")
+{{- end }}
 {{- if .Computed.java }}
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
