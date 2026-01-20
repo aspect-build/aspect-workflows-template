@@ -79,7 +79,7 @@ swift package add-dependency https://github.com/apple/swift-collections.git --ve
 cd ..
 ~~~
 
-There isn't a Gazelle extension yet, so write a BUILD file by hand:
+We haven't wired up https://github.com/cgrindel/swift_gazelle_plugin yet, so write a BUILD file by hand:
 
 ~~~sh
 >app/BUILD cat <<EOF
