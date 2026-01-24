@@ -145,6 +145,7 @@ features:
   - value: "{{ .Computed.rust }}"
     globs:
       - "*/Cargo.*"
+      - "*/.clippy.toml"
 
 computed:
   javascript: "{{ has \"JavaScript & TypeScript\" .Scaffold.langs }}"

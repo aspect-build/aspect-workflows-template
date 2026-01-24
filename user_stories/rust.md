@@ -9,7 +9,7 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `rustfmt`, using rules_lint
+- 🎨 `rustfmt` and `clippy` using rules_lint
 - ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 Cargo package manager integration
 
@@ -68,12 +68,13 @@ output="$(bazel run hello_world | tail -1)"
 
 ## Formatting
 
-We can format the code with rustfmt. Let's create some intentionally poorly formatted code:
+We can format the code with rustfmt. Let's create some intentionally poorly formatted code
+(the indentation is wrong) and also an auto-fixable `print_literal` warning from Clippy.
 
 ~~~sh
 cat >hello_world/src/main.rs <<EOF
 fn main(){
-println!("Hello from Rust");
+println!("{}", "Hello from Rust");
 }
 EOF
 ~~~
@@ -84,7 +85,13 @@ Now format it:
 format
 ~~~
 
-Let's verify the code was properly formatted:
+And run the linter in auto-fix mode:
+
+~~~sh
+aspect lint --fix
+~~~
+
+Let's verify the code was fixed:
 
 ~~~sh
 cat hello_world/src/main.rs
