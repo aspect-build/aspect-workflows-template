@@ -96,3 +96,13 @@ bazel_env(
 {{ end }}
     } | MULTITOOL_TOOLS,
 )
+
+{{ if and .Scaffold.proto .Computed.ruby }}
+load("@rules_ruby//ruby:defs.bzl", "rb_binary")
+
+rb_binary(
+    name = "grpc_tools_ruby_protoc_plugin",
+    main = "@bundle//bin:grpc_tools_ruby_protoc_plugin",
+    deps = ["@bundle"],
+)
+{{ end }}

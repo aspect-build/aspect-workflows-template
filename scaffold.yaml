@@ -209,6 +209,7 @@ presets:
   ruby:
     langs: ['Ruby']
     lint: true
+    proto: true
   scala:
     langs: ['Scala']
     lint: true
