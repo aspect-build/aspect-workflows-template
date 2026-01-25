@@ -24,7 +24,7 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 {{- end }}
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.7")
-bazel_dep(name = "tar.bzl", version = "0.7.0")
+bazel_dep(name = "tar.bzl", version = "0.8.1")
 {{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
