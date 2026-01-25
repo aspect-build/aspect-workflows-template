@@ -14,6 +14,11 @@ This repo includes:
 - 📚 PyPI package manager integration
 - 🎨 Type-checking with [ty](https://docs.astral.sh/ty/)
 
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'py' preset.
+> See https://docs.aspect.build/cli/overview
+
 ## Setup dev environment
 
 First, we recommend you setup a Bazel-based developer environment with direnv.

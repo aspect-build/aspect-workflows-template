@@ -16,6 +16,11 @@ This repo includes:
 [bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
 [bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'kotlin' preset.
+> See https://docs.aspect.build/cli/overview
+
 ## Setup dev environment
 
 First, we recommend you setup a Bazel-based developer environment with direnv.

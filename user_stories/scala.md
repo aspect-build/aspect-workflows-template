@@ -12,6 +12,11 @@ This repo includes:
 - ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 Maven package manager integration
 
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'scala' preset.
+> See https://docs.aspect.build/cli/overview
+
 ## Setup dev environment
 
 First, we recommend you setup a Bazel-based developer environment with direnv.

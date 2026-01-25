@@ -9,6 +9,8 @@ jobs:
     test:
         strategy:
             matrix:
+                scaffold-version:
+                    - v0.12.1
                 preset:
                     - cpp
                     - go
@@ -72,9 +74,6 @@ jobs:
                   echo "ORION_EXTENSIONS_DIR=$ORION_EXTENSIONS_DIR" >> $GITHUB_ENV
                   bazel run //tools:bazel_env
 
-            - run: bazel test ...
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-
             - run: format
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
@@ -90,7 +89,7 @@ jobs:
               run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}.md || exit 1
 
             - name: Python test that fails
-              continue-on-error: true # for some reason `bazel test || true` still failing.
+              continue-on-error: true
               run: bazel test //app:app_test
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"

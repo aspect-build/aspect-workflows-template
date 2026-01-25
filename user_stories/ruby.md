@@ -13,6 +13,11 @@ This repo includes:
 - 🎨 `rubocop` and `standard`, using rules_lint
 - ✅ Pre-commit hooks for automatic linting and formatting
 
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'ruby' preset.
+> See https://docs.aspect.build/cli/overview
+
 ## Setup dev environment
 
 First, we recommend you setup a Bazel-based developer environment with direnv.
@@ -27,7 +32,7 @@ so skipping `direnv` means you're responsible for installing them yourself.
 
 Write a simple Ruby application:
 
-```sh
+~~~sh
 mkdir app
 >app/hello.rb cat <<'EOF'
 # frozen_string_literal: true
@@ -35,7 +40,7 @@ mkdir app
 require 'faker'
 puts "Hello, #{Faker::Name.name} from Bazel + Ruby!"
 EOF
-```
+~~~
 
 Declare the dependency to the package manager:
 
@@ -47,7 +52,7 @@ bundle lock --add-checksums --normalize-platforms
 
 There isn't a Gazelle extension yet, so write a BUILD file by hand:
 
-```sh
+~~~sh
 >app/BUILD cat <<EOF
 load("@rules_ruby//ruby:defs.bzl", "rb_binary")
 
@@ -58,24 +63,24 @@ rb_binary(
     deps = ["@bundle"],
 )
 EOF
-```
+~~~
 
 Run it to see the result:
 
 > (Note that Bundle will spam the stdout with install information, so we just want the last line)
 
-```sh
+~~~sh
 output=$(bazel run //app:hello | tail -1)
-```
+~~~
 
 Let's verify the application output matches expectation:
 
-```sh
+~~~sh
 echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
     echo >&2 "Wanted output matching 'Hello, <name> from Bazel + Ruby!' but got '${output}'"
     exit 1
 }
-```
+~~~
 
 ## Linting
 

@@ -12,6 +12,10 @@ This repo includes:
 - 🎨 Formatting and Linting using rules_lint
 - ✅ Pre-commit hooks for automatic linting and formatting
 
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'kitchen-sink' preset.
+> See https://docs.aspect.build/cli/overview
 
 ## Setup dev environment
 
