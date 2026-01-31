@@ -6,7 +6,7 @@ bazel_dep(name = "platforms", version = "1.0.0")
 {{- end }}
 bazel_dep(name = "apple_support", version = "2.2.0")
 {{- if .Scaffold.lint }}
-bazel_dep(name = "aspect_rules_lint", version = "2.0.0-rc1")
+bazel_dep(name = "aspect_rules_lint", version = "2.0.0")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1.1")
 {{- end }}
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
@@ -24,7 +24,7 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 {{- end }}
 {{- if .Scaffold.oci }}
 bazel_dep(name = "rules_oci", version = "2.2.7")
-bazel_dep(name = "tar.bzl", version = "0.7.0")
+bazel_dep(name = "tar.bzl", version = "0.8.1")
 {{- end }}
 
 multitool = use_extension("@rules_multitool//multitool:extension.bzl", "multitool")
