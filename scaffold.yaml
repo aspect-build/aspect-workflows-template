@@ -95,6 +95,7 @@ features:
       - "*/*.config.cjs*"
       - "*/*.config.mjs*"
       - "*/.npmrc"
+      - "*/.nvmrc"
       - "**/packages/**"
       - "*/.aspect/gazelle/package-json*.axl"
   - value: "{{ .Computed.python }}"

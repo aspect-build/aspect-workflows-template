@@ -76,11 +76,14 @@ bazel_dep(name = "aspect_rules_ts", version = "3.8.3")
 
 #########################
 # JavaScript and pnpm package manager
-pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version_from_nvmrc = "//:.nvmrc")
+use_repo(node, "nodejs_toolchains")
 
-# Allows developers to run the same pnpm version that Bazel manages
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
 use_repo(pnpm, "pnpm")
-pnpm.pnpm(pnpm_version = "10.20.0")
+pnpm.pnpm(pnpm_version_from = "//:package.json")
+
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
     name = "npm",
@@ -89,17 +92,9 @@ npm.npm_translate_lock(
 )
 use_repo(npm, "npm")
 
-rules_ts_ext = use_extension(
-    "@aspect_rules_ts//ts:extensions.bzl",
-    "ext",
-    dev_dependency = True,
-)
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext")
 rules_ts_ext.deps()
 use_repo(rules_ts_ext, "npm_typescript")
-
-node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node", dev_dependency = True)
-node.toolchain(node_version = "22.21.1")
-use_repo(node, "nodejs_toolchains")
 {{- end}}
 {{- if .Computed.python }}
 
@@ -143,7 +138,7 @@ use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 register_toolchains("@llvm_toolchain//:all")
 
 # bazel run @hedron_compile_commands//:refresh_all
-bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+bazel_dep(name = "hedron_compile_commands")
 git_override(
     module_name = "hedron_compile_commands",
     commit = "abb61a688167623088f8768cc9264798df6a9d10",

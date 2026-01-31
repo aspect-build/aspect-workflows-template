@@ -1,6 +1,7 @@
 {
   "name": "{{ .ProjectKebab }}",
   "private": true,
+  "packageManager": "pnpm@10.20.0",
   "devDependencies": {
     "@eslint/js": "^9",
     "eslint": "^9",
