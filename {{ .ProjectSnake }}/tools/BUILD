@@ -13,6 +13,9 @@ included `.envrc` automates this for you.
 load("@bazelrc-preset.bzl", "bazelrc_preset")
 load("@bazel_env.bzl", "bazel_env")
 load("@multitool//:tools.bzl", MULTITOOL_TOOLS = "TOOLS")
+{{ if .Computed.go }}
+load("@gazelle//:go_tools.bzl", "GO_TOOLS")
+{{ end }}
 
 package(default_visibility = ["//visibility:public"])
 
@@ -70,9 +73,6 @@ bazel_env(
 {{ end }}
 {{ if .Computed.go }}
         "go": "@rules_go//go",
-{{ if .Scaffold.codegen }}
-        "scaffold": "@com_github_hay_kot_scaffold//:scaffold",
-{{ end }}
 {{ end }}
 {{ if .Computed.java }}
         "jar": "$(JAVABASE)/bin/jar",
@@ -94,7 +94,7 @@ bazel_env(
         "gem": "@ruby//:gem",
         "ruby": "@ruby",
 {{ end }}
-    } | MULTITOOL_TOOLS,
+    } | MULTITOOL_TOOLS {{ if .Computed.go }} | GO_TOOLS {{ end }},
 )
 
 {{ if and .Scaffold.proto .Computed.ruby }}
