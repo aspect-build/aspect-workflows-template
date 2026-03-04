@@ -93,6 +93,7 @@ bazel_env(
         "bundle": "@ruby//:bundle",
         "gem": "@ruby//:gem",
         "ruby": "@ruby",
+{{ end }}
     } {{ if .Computed.go }}| GO_TOOLS{{ end }},
 )
 
