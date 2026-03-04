@@ -93,7 +93,7 @@ bazel_env(
         "bundle": "@ruby//:bundle",
         "gem": "@ruby//:gem",
         "ruby": "@ruby",
-    } | TOOLS {{ if .Computed.go }} | GO_TOOLS {{ end }},
+    } {{ if .Computed.go }}| GO_TOOLS{{ end }},
 )
 
 {{ if and .Scaffold.proto .Computed.ruby }}
