@@ -1,0 +1,181 @@
+"init.axl - Provide a wizard to generate a new Bazel project using aspect-workflows-template"
+
+# NB: matches the version tested in the GitHub Actions CI workflow
+SCAFFOLD_VERSION = "0.12.1"
+TEMPLATE_URL = "https://github.com/aspect-build/aspect-workflows-template"
+
+# Platform-specific download URLs and SRI integrity hashes
+# Note: scaffold uses Darwin/Linux/Windows (capitalized) and x86_64 (not amd64)
+SCAFFOLD_BINARIES = {
+    ("darwin", "arm64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Darwin_arm64.tar.gz",
+        "integrity": "sha256-ywifPJwFJMX29tN2Iq82am22/EK1+YKhXCCUZTxrCuA=",
+    },
+    ("darwin", "x86_64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Darwin_x86_64.tar.gz",
+        "integrity": "sha256-1AxzqwBBwJO1G6XcuTPU/mzPKJtdSeOfR+ZXXD6QMy4=",
+    },
+    ("linux", "arm64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Linux_arm64.tar.gz",
+        "integrity": "sha256-wb7QZ6f+12L6ShfIRsssQ0LS3JfGKvH/SZkMO4U1e14=",
+    },
+    ("linux", "aarch64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Linux_arm64.tar.gz",
+        "integrity": "sha256-wb7QZ6f+12L6ShfIRsssQ0LS3JfGKvH/SZkMO4U1e14=",
+    },
+    ("linux", "x86_64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Linux_x86_64.tar.gz",
+        "integrity": "sha256-zKPmgZYgqal6KXmH0JwJ4Gnfkg1x7VP57omGvCSYJLA=",
+    },
+    ("windows", "arm64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Windows_arm64.zip",
+        "integrity": "sha256-LhcwbF2FYHGHhUd6OdJu/Stn3WvDArRmCsVmJg9SBy8=",
+    },
+    ("windows", "x86_64"): {
+        "url": "https://github.com/hay-kot/scaffold/releases/download/v{version}/scaffold_Windows_x86_64.zip",
+        "integrity": "sha256-W/Yje7Fgu5Ea4vmz64HhPL+LWqMpUYOl7yxHkIRvPw8=",
+    },
+}
+
+def _log(ctx, message):
+    if ctx.std.env.var("VERBOSE"):
+        ctx.std.io.stderr.write(message + "\n")
+
+def _detect_platform(ctx):
+    """Detect OS and architecture using uname."""
+    # Get OS
+    os_child = ctx.std.process.command("uname").arg("-s").stdout("piped").stderr("piped").spawn()
+    os_output = os_child.stdout().read_to_string().strip()
+    os_child.wait()
+
+    # Get Architecture
+    arch_child = ctx.std.process.command("uname").arg("-m").stdout("piped").stderr("piped").spawn()
+    arch = arch_child.stdout().read_to_string().strip().lower()
+    arch_child.wait()
+
+    # Normalize OS name
+    os_name = os_output.lower()
+    if "darwin" in os_name:
+        os_name = "darwin"
+    elif "linux" in os_name:
+        os_name = "linux"
+    elif "mingw" in os_name or "msys" in os_name or "cygwin" in os_name:
+        os_name = "windows"
+
+    return (os_name, arch)
+
+def _get_scaffold_binary_info(os_name, arch):
+    """Get the scaffold download URL and integrity for the platform."""
+    key = (os_name, arch)
+    if key not in SCAFFOLD_BINARIES:
+        fail("Unsupported platform: {} {}. Supported platforms: darwin/linux/windows with arm64/x86_64".format(os_name, arch))
+    info = SCAFFOLD_BINARIES[key]
+    return {
+        "url": info["url"].replace("{version}", SCAFFOLD_VERSION),
+        "integrity": info["integrity"],
+    }
+
+def _download_and_extract_scaffold(ctx, url, integrity, dest_dir):
+    """Download and extract scaffold binary with integrity verification."""
+    is_zip = url.endswith(".zip")
+    archive_name = "scaffold.zip" if is_zip else "scaffold.tar.gz"
+    archive_path = dest_dir + "/" + archive_name
+
+    # Download the archive with integrity check
+    _log(ctx, "Downloading scaffold from: " + url)
+    ctx.http().download(
+        url = url, output = archive_path, mode = 0o644, 
+        # FIXME: Integrity check is not supported yet
+        # integrity = integrity
+    ).block()
+
+    # Extract the archive
+    if is_zip:
+        # Windows: use tar (available in Windows 10+)
+        extract_child = ctx.std.process.command("tar").args(["-xf", archive_path, "-C", dest_dir]).spawn()
+        extract_status = extract_child.wait()
+    else:
+        # Unix: use tar for tar.gz
+        extract_child = ctx.std.process.command("tar").args(["-xzf", archive_path, "-C", dest_dir]).spawn()
+        extract_status = extract_child.wait()
+
+    if not extract_status:
+        fail("Failed to extract scaffold archive")
+
+    # Clean up archive
+    ctx.std.fs.remove_file(archive_path)
+
+    # Return path to scaffold binary
+    binary_name = "scaffold.exe" if is_zip else "scaffold"
+    return dest_dir + "/" + binary_name
+
+def _impl(ctx):
+    """Implementation of init task."""
+    # Detect platform
+    os_name, arch = _detect_platform(ctx)
+    _log(ctx, "Detected platform: {} {}".format(os_name, arch))
+
+    # Create temp directory for scaffold binary
+    temp_dir = ctx.std.env.temp_dir() + "/aspect-scaffold-" + SCAFFOLD_VERSION
+    if not ctx.std.fs.exists(temp_dir):
+        ctx.std.fs.create_dir_all(temp_dir)
+
+    # Check if scaffold already exists (cached)
+    binary_name = "scaffold.exe" if os_name == "windows" else "scaffold"
+    scaffold_bin = temp_dir + "/" + binary_name
+
+    if not ctx.std.fs.exists(scaffold_bin):
+        # Download and extract scaffold
+        binary_info = _get_scaffold_binary_info(os_name, arch)
+        scaffold_bin = _download_and_extract_scaffold(ctx, binary_info["url"], binary_info["integrity"], temp_dir)
+
+        # Make executable (Unix only)
+        if os_name != "windows":
+            chmod_child = ctx.std.process.command("chmod").args(["+x", scaffold_bin]).spawn()
+            chmod_child.wait()
+    else:
+        _log(ctx, "Using cached scaffold binary at " + scaffold_bin)
+
+    # Build scaffold command arguments
+    scaffold_args = ["new", TEMPLATE_URL]
+
+    # Add output directory if specified
+    if ctx.args.output_dir:
+        scaffold_args.extend(["--output-dir", ctx.args.output_dir])
+
+    # Run scaffold with inherited stdio for interactive prompts
+    _log(ctx, "Running scaffold...")
+    cmd = ctx.std.process.command(scaffold_bin)
+    cmd.args(scaffold_args)
+
+    # Set working directory if output_dir is specified
+    if ctx.args.output_dir:
+        # Ensure parent directory exists
+        parent_dir = ctx.args.output_dir
+        if "/" in parent_dir:
+            parent_dir = "/".join(parent_dir.split("/")[:-1])
+            if parent_dir and not ctx.std.fs.exists(parent_dir):
+                ctx.std.fs.create_dir_all(parent_dir)
+
+    # Inherit stdio for interactive mode
+    cmd.stdin("inherit")
+    cmd.stdout("inherit")
+    cmd.stderr("inherit")
+
+    child = cmd.spawn()
+    status = child.wait()
+
+    if not status:
+        fail("Scaffold failed with exit code: {}".format(status.code()))
+
+    _log(ctx, "Project initialized successfully!")
+    return 0
+
+init = task(
+    name = "init",
+    description = "Initialize a new Bazel project using the Aspect Workflows Template",
+    implementation = _impl,
+    args = {
+        "output_dir": args.string(required = False),
+    },
+)

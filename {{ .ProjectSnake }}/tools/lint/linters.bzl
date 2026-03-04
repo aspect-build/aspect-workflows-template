@@ -20,6 +20,12 @@ load("@aspect_rules_lint//lint:ty.bzl", "lint_ty_aspect")
 {{ if .Computed.shell }}
 load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 {{ end -}}
+{{ if .Computed.rust -}}
+load("@aspect_rules_lint//lint:clippy.bzl", "lint_clippy_aspect")
+{{ end -}}
+{{ if .Computed.ruby -}}
+load("@aspect_rules_lint//lint:rubocop.bzl", "lint_rubocop_aspect")
+{{ end -}}
 
 {{ if .Computed.cpp -}}
 clang_tidy = lint_clang_tidy_aspect(
@@ -80,4 +86,15 @@ shellcheck = lint_shellcheck_aspect(
 )
 
 shellcheck_test = lint_test(aspect = shellcheck)
+{{ end -}}
+{{ if .Computed.rust -}}
+clippy = lint_clippy_aspect(
+    config = Label("//:.clippy.toml"),
+)
+{{ end -}}
+{{ if .Computed.ruby -}}
+rubocop = lint_rubocop_aspect(
+    binary = Label("@bundle//bin:rubocop"),
+    configs = [Label("//:.rubocop.yml")],
+)
 {{ end -}}

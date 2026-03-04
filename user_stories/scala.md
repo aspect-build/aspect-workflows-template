@@ -1,4 +1,4 @@
-# Shell Bazel Starter
+# Scala Bazel Starter
 
     # This is executable Markdown that's tested on CI.
     # How is that possible? See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
@@ -9,12 +9,12 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `shfmt` and `shellcheck`, using rules_lint
 - ✅ Pre-commit hooks for automatic linting and formatting
+- 📚 Maven package manager integration
 
 > [!NOTE]
 > You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'shell' preset.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'scala' preset.
 > See https://docs.aspect.build/cli/overview
 
 ## Setup dev environment
@@ -29,34 +29,38 @@ so skipping `direnv` means you're responsible for installing them yourself.
 
 ## Try it out
 
-Write a simple Bash executable:
+Create a minimal Scala application:
 
 ~~~sh
->hello.sh cat <<'EOF'
-#!/usr/bin/env bash
-echo "Hello from Bash"
+mkdir src
+>src/Hello.scala cat <<EOF
+object Hello {
+  def main(args: Array[String]): Unit = {
+    println("Hello from Scala")
+  }
+}
 EOF
-chmod u+x hello.sh
 ~~~
 
-We should be able to generate BUILD files, see .aspect/gazelle/shell.axl for the logic used
+We didn't wire up the BUILD file generator for Scala yet
+(https://github.com/stackb/scala-gazelle)
+so we'll add this manually:
 
 ~~~sh
-bazel run gazelle || true
+touch src/BUILD
+buildozer 'new_load @rules_scala//scala:scala.bzl scala_binary' src:__pkg__
+buildozer 'new scala_binary Hello' src:__pkg__
+buildozer 'add srcs Hello.scala' src:Hello
+buildozer 'set main_class Hello' src:Hello
 ~~~
 
-Now we verify that running the Bash program produces the expected output.
+Now the application should run, and we can verify it produced the expected output:
 
 ~~~sh
-output="$(bazel run :hello)"
-[ "${output}" = "Hello from Bash" ] || {
-    echo >&2 "Wanted output 'Hello from Bash' but got '${output}'"
+output="$(bazel run src:Hello)"
+
+[ "${output}" = "Hello from Scala" ] || {
+    echo >&2 "Wanted output 'Hello from Scala' but got '${output}'"
     exit 1
 }
-~~~
-
-Run shellcheck on the code:
-
-~~~sh
-aspect lint
 ~~~

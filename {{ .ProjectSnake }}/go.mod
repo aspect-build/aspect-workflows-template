@@ -2,9 +2,10 @@ module example.com/{{.ProjectSnake}}
 
 go 1.24.1
 
-toolchain go1.24.6
+toolchain go1.25.6
 
 require github.com/hay-kot/scaffold v0.10.3
+tool github.com/hay-kot/scaffold
 
 require (
 	dario.cat/mergo v1.0.2 // indirect

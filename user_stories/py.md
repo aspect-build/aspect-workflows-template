@@ -1,6 +1,7 @@
 # Python Bazel Starter
 
     # This is executable Markdown that's tested on CI.
+    # How is that possible? See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
     set -o errexit -o nounset -o xtrace
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
@@ -13,10 +14,22 @@ This repo includes:
 - 📚 PyPI package manager integration
 - 🎨 Type-checking with [ty](https://docs.astral.sh/ty/)
 
-## Try it out
+> [!NOTE]
+> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
+> <code>init</code> is an alternative to this starter repo, which was generated using the 'py' preset.
+> See https://docs.aspect.build/cli/overview
 
-> Before following these instructions, setup the developer environment by running <code>direnv allow</code> and follow any prompts.
-> This ensures that tools we call in the following steps will be on the PATH.
+## Setup dev environment
+
+First, we recommend you setup a Bazel-based developer environment with direnv.
+
+1. install https://direnv.net/docs/installation.html
+1. run <code>direnv allow</code> and follow the prompts to <code>bazel run //tools:bazel_env</code>
+
+This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
+so skipping `direnv` means you're responsible for installing them yourself.
+
+## Try it out
 
 Create a simple application with an external package dependency:
 
@@ -120,4 +133,10 @@ We can use the `uv` lock file.
 
 ~~~sh
 uv lock
+~~~
+
+And run ruff and ty for linting:
+
+~~~sh
+aspect lint
 ~~~

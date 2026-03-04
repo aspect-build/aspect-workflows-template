@@ -1,3 +1,4 @@
+name: CI
 on:
     push:
         branches: [main]
@@ -9,7 +10,7 @@ jobs:
         strategy:
             matrix:
                 scaffold-version:
-                    - v0.6.1
+                    - v0.12.1
                 preset:
                     - cpp
                     - go
@@ -18,34 +19,30 @@ jobs:
                     - js
                     - minimal
                     - py
-                    # FIXME(alexeagle): why failing?
-                    # - kitchen-sink
-                    # - rust
+                    - kitchen-sink
+                    - rust
+                    - ruby
                     - shell
+                    - scala
+                include:
+                  - scaffold-version: v0.6.1
+                    preset: kitchen-sink
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
             - name: Install Bazel
-              uses: bazel-contrib/setup-bazel@0.16.0
+              uses: bazel-contrib/setup-bazel@0.18.0
               with:
                 bazelisk-cache: true
                 repository-cache: true
+                bazelrc: |
+                  common --announce_rc --color=yes --curses=yes
+                  common --show_progress_rate_limit=60 --show_timestamps
             - name: Install scaffold
               uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
               with:
                 repo: hay-kot/scaffold
-                tag: ${{ matrix.scaffold-version }}
-            - name: Install Aspect CLI
-              uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
-              with:
-                repo: aspect-build/aspect-cli
-                tag: v2025.46.20
-                asset-name: aspect-cli
-                rename-to: aspect
-                platform: unknown-linux
-                arch: x86_64
-                chmod: 0755
-                extension-matching: disable
+                tag: v0.12.1
             - name: Install direnv
               run: |
                     sudo apt-get install -y direnv
@@ -77,9 +74,6 @@ jobs:
                   echo "ORION_EXTENSIONS_DIR=$ORION_EXTENSIONS_DIR" >> $GITHUB_ENV
                   bazel run //tools:bazel_env
 
-            - run: bazel test ...
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-
             - run: format
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset != 'minimal' }}"
@@ -95,7 +89,7 @@ jobs:
               run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}.md || exit 1
 
             - name: Python test that fails
-              continue-on-error: true # for some reason `bazel test || true` still failing.
+              continue-on-error: true
               run: bazel test //app:app_test
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
@@ -104,11 +98,6 @@ jobs:
               working-directory: "${{ steps.scaffold.outputs.dir }}"
               if: "${{ matrix.preset == 'py' }}"
               run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
-
-            - run: aspect lint ...
-              # FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
-              if: "${{ matrix.preset != 'minimal' && matrix.preset != 'go' && matrix.preset != 'cpp' }}"
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
 
     # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges
     # on "all matrix jobs were successful".

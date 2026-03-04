@@ -11,3 +11,6 @@ node_modules/
 {{ if .Computed.python }}
 *.venv/
 {{ end }}
+{{ if .Computed.ruby}}
+vendor/bundle/
+{{ end }}

@@ -13,6 +13,9 @@ included `.envrc` automates this for you.
 load("@bazelrc-preset.bzl", "bazelrc_preset")
 load("@bazel_env.bzl", "bazel_env")
 load("@tools.bzl", "TOOLS")
+{{ if .Computed.go }}
+load("@gazelle//:go_tools.bzl", "GO_TOOLS")
+{{ end }}
 
 package(default_visibility = ["//visibility:public"])
 
@@ -55,9 +58,6 @@ bazel_env(
         "nodejs": "@nodejs_toolchains//:resolved_toolchain",
         "prettier": "//tools/format:prettier",
 {{ end }}
-{{ if .Computed.rust }}
-        "rust": "@rules_rust//rust/toolchain:current_rust_toolchain",
-{{ end }}
     },
     tools = TOOLS | {
         # Mapping from tool binary name ($PATH entry) to Bazel label
@@ -73,9 +73,6 @@ bazel_env(
 {{ end }}
 {{ if .Computed.go }}
         "go": "@rules_go//go",
-{{ if .Scaffold.codegen }}
-        "scaffold": "@com_github_hay_kot_scaffold//:scaffold",
-{{ end }}
 {{ end }}
 {{ if .Computed.java }}
         "jar": "$(JAVABASE)/bin/jar",
@@ -83,6 +80,7 @@ bazel_env(
 {{ end }}
 {{ if .Computed.javascript }}
         "node": "$(NODE_PATH)",
+        "npm": "$(NPM_PATH)",
         "pnpm": "@pnpm",
 {{ if .Scaffold.codegen }}
         "yo": ":yo",
@@ -91,5 +89,19 @@ bazel_env(
 {{ if .Computed.python }}
         "python": "$(PYTHON3)",
 {{ end }}
-    },
+{{ if .Computed.ruby }}
+        "bundle": "@ruby//:bundle",
+        "gem": "@ruby//:gem",
+        "ruby": "@ruby",
+    } | TOOLS {{ if .Computed.go }} | GO_TOOLS {{ end }},
 )
+
+{{ if and .Scaffold.proto .Computed.ruby }}
+load("@rules_ruby//ruby:defs.bzl", "rb_binary")
+
+rb_binary(
+    name = "grpc_tools_ruby_protoc_plugin",
+    main = "@bundle//bin:grpc_tools_ruby_protoc_plugin",
+    deps = ["@bundle"],
+)
+{{ end }}
