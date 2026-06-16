@@ -1,0 +1,46 @@
+# Tag a new release of the template.
+#
+# Computes a `v<year>.<week>.<patch>` version from the most recent weekly tag
+# (see weekly_tag.yaml) and the commits since it, pushes that tag, and hands off
+# to publish_release.yaml. Doing this in CI avoids releasing with local state.
+name: Tag a Release
+on:
+  # Tag manually through the GitHub UI, e.g. after landing a fix downstream
+  # users are waiting for.
+  workflow_dispatch:
+
+jobs:
+  tag:
+    permissions:
+      contents: write # allow create tag
+    runs-on: ubuntu-latest
+    outputs:
+      new-tag: ${{ steps.push_tag.outputs.new-tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Need full history to find the prior weekly tag with `git describe`.
+          fetch-depth: 0
+      - id: push_tag
+        run: |
+          # major.minor = most recent weekly tag (<year>.<week>); patch = commits
+          # since it. The two --match globs cover single- and double-digit weeks.
+          version=$(git describe --tags --long \
+              --match="2[0-9][0-9][0-9].[1-9]" \
+              --match="2[0-9][0-9][0-9].[1-5][0-9]" | sed -e 's/-/./;s/-g.*//')
+          tag="v${version}"
+          curl --fail --request POST \
+              --url "https://api.github.com/repos/${{ github.repository }}/git/refs" \
+              --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              --data @- << EOF
+          {
+              "ref": "refs/tags/${tag}",
+              "sha": "${{ github.sha }}"
+          }
+          EOF
+          echo "new-tag=${tag}" >> "$GITHUB_OUTPUT"
+  release:
+    needs: tag
+    uses: ./.github/workflows/publish_release.yaml
+    with:
+      tag_name: ${{ needs.tag.outputs.new-tag }}
