@@ -5,10 +5,11 @@ name: Publish starter repos
 # "Use this template" / Fork / clone experience. Runs on release tags and
 # manual dispatch.
 #
-# Auth: a GitHub App installed on the aspect-starters org. The App needs only
-# `Contents: write` for steady-state publishing (the repos already exist and
-# are already flagged as template repositories). Store the App's id and private
-# key as repo secrets:
+# Auth: a GitHub App installed on the aspect-starters org. For steady-state
+# publishing the App needs `Contents: write` (push the rendered tree) AND
+# `Workflows: write` (the rendered tree includes .github/workflows/ci.yaml;
+# GitHub rejects pushing workflow files via an App token that lacks this).
+# Store the App's id and private key as repo secrets:
 #   - secrets.STARTERS_APP_ID
 #   - secrets.STARTERS_APP_PRIVATE_KEY
 # Also requires secrets.ASPECT_API_TOKEN to install the Aspect CLI.

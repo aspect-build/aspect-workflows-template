@@ -106,15 +106,10 @@ jobs:
       # Skip lint for presets with no wired rules_lint linter:
       #  - minimal/go/scala: rules_lint ships no linter for the language
       #  - rust: clippy lives in the aspect_rules_lint_rust module, which isn't
-      #    published (no BCR entry / release archive) so it can't be wired from
-      #    a BCR-only template yet. rustfmt formatting still runs (see below).
-      #  - ruby: rules_lint 2.6.0's sarif_parser lacks a rubocop case (fixed in
-      #    2.7.0, not yet on BCR) so `aspect lint` exits 1 despite 0 offenses
-      #  - kitchen-sink: includes rust+ruby, so its single lint pass hits both
-      # Re-enable rust once aspect_rules_lint_rust publishes; ruby/kitchen-sink
-      # once the rubocop sarif fix lands on BCR.
+      #    published to BCR yet, so it can't be wired from a BCR-only template.
+      #    rustfmt formatting still runs (see below). Re-enable once it publishes.
       - name: Lint
-        if: ${{ !contains(fromJSON('["minimal","go","scala","rust","ruby","kitchen-sink"]'), matrix.preset) }}
+        if: ${{ !contains(fromJSON('["minimal","go","scala","rust"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect lint --task-key lint-${{ matrix.preset }} -- //...
 
