@@ -1,0 +1,46 @@
+"""Developer + CI tasks for the template repo itself.
+
+`aspect render-preset --preset <name> --out <dir>` renders a single preset from
+the local `template/` tree using the shared renderer + this repo's
+`template-config.json`. This is the same renderer `aspect init` uses, so testing
+here proves the template renders. It's also what the CI matrix and the
+`aspect-starters` publish job invoke.
+"""
+
+load("./render.axl", "load_config", "preset_flags", "render")
+
+def _impl(ctx):
+    repo_dir = ctx.std.env.current_dir()
+    config = load_config(ctx, repo_dir)
+
+    preset = ctx.args.preset
+    out = ctx.args.out
+    name = ctx.args.name
+
+    flags = dict(preset_flags(config, preset))
+    # Mirror `aspect init`'s --license: defaults to "none"; the aspect-starters
+    # publish job passes --license=Apache-2.0 to include it.
+    flags["license"] = ctx.args.license != "none"
+    template_dir = repo_dir + "/template"
+
+    if ctx.std.fs.exists(out):
+        ctx.std.fs.remove_dir_all(out)
+    ctx.std.fs.create_dir_all(out)
+
+    written = render(ctx, config, template_dir, out, name, flags)
+    ctx.std.io.stdout.write("rendered preset {!r} -> {} ({} files)\n".format(preset, out, len(written)))
+    return 0
+
+# NB: --preset has no static `values=` list because the valid presets are read
+# at runtime from template-config.json (preset_flags fails on an unknown name).
+render_preset = task(
+    name = "render-preset",
+    summary = "Render one template preset into an output directory",
+    implementation = _impl,
+    args = {
+        "preset": args.string(required = True, description = "Preset to render (see template-config.json)"),
+        "out": args.string(required = True, description = "Output directory (cleared if it exists)"),
+        "name": args.string(default = "my_project", description = "Project name (snake_case)"),
+        "license": args.string(default = "none", values = ["Apache-2.0", "none"], description = "License to scaffold; defaults to 'none'. Pass 'Apache-2.0' to include it."),
+    },
+)

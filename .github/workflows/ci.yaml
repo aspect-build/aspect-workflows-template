@@ -1,121 +1,149 @@
 name: CI
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
 
-jobs:        
-    test:
-        strategy:
-            matrix:
-                scaffold-version:
-                    - v0.12.1
-                preset:
-                    - cpp
-                    - go
-                    - java
-                    - kotlin
-                    - js
-                    - minimal
-                    - py
-                    - kitchen-sink
-                    - rust
-                    - ruby
-                    - shell
-                    - scala
-                include:
-                  - scaffold-version: v0.6.1
-                    preset: kitchen-sink
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v6
-            - name: Install Bazel
-              uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
-              with:
-                bazelisk-cache: true
-                repository-cache: true
-                bazelrc: |
-                  common --announce_rc --color=yes --curses=yes
-                  common --show_progress_rate_limit=60 --show_timestamps
-            - name: Install scaffold
-              uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
-              with:
-                repo: hay-kot/scaffold
-                tag: v0.12.1
-            - name: Install direnv
-              run: |
-                    sudo apt-get install -y direnv
-                    eval "$(direnv hook bash)"
-            - name: setting to always run hooks
-              if: "${{ matrix.preset != 'minimal' }}"
-              run: echo "SCAFFOLD_SETTINGS_RUN_HOOKS=always" >> "$GITHUB_ENV"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
-            - name: Scaffold new app
-              id: scaffold
-              run: |
-                scaffold new --preset=${{ matrix.preset }} --no-prompt $GITHUB_WORKSPACE
-                cd scaffold_test*
-                git init
-                git add .
-                git config user.email "noreply@aspect.build"
-                git config user.name "No One"
-                git commit -a -m "initial commit"
-                git show
-                echo "dir=$PWD" >> $GITHUB_OUTPUT
+permissions:
+  id-token: write
 
-            - name: setup direnv
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              run: |
-                  direnv allow .
-                  eval "$(direnv export bash)"
-                  # GHA steps run as non-interactive shells so they don't source the .bashrc
-                  echo "PATH=$PATH" >> $GITHUB_ENV
-                  echo "ORION_EXTENSIONS_DIR=$ORION_EXTENSIONS_DIR" >> $GITHUB_ENV
-                  bazel run //tools:bazel_env
+jobs:
+  # Render every preset from the local template tree (via the shared renderer the
+  # `aspect init` command also uses) and prove the generated workspace is valid:
+  # repin lockfiles, then build/test, and lint/format for lint-enabled presets.
+  # This gates template changes BEFORE they land on main.
+  preset:
+    strategy:
+      fail-fast: false
+      matrix:
+        preset:
+          - minimal
+          - shell
+          - go
+          - js
+          - py
+          - java
+          - kotlin
+          - cpp
+          - rust
+          - ruby
+          - scala
+          - kitchen-sink
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
 
-            - run: format
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset != 'minimal' }}"
+      - name: Install Aspect CLI
+        uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ secrets.ASPECT_API_TOKEN }}
 
-            - name: format made no changes
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              run: git diff --exit-code
+      - name: Render + post-scaffold (repin, format, git init)
+        run: |
+          aspect render-preset --preset='${{ matrix.preset }}' --out="$RUNNER_TEMP/out" --name=my_project
+          echo "WS=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
+          cd "$RUNNER_TEMP/out"
+          # Post-scaffold, in order (mirrors `aspect init`'s post-scaffold):
+          # 1. repin — the template ships placeholder lockfiles; regenerate them.
+          if [ -x ./tools/repin ]; then ./tools/repin; fi
+          bazel mod deps --lockfile_mode=update || true
+          # 2. git init FIRST — `aspect format`/`gazelle` need a git working tree
+          #    to enumerate/apply changes (and it matches a real user's repo).
+          git init -q
+          git add -A
+          git -c user.email=ci@aspect.build -c user.name=CI commit -q -m "rendered ${{ matrix.preset }}"
+          # 3. normalize formatting (jinja rendering leaves stray blank lines /
+          #    non-canonical spacing). buildifier for Starlark; aspect format for
+          #    sources. Done after git init so the formatters can see the files,
+          #    and after repin so regenerated files are covered. Amend the commit
+          #    so the check jobs see a fully-normalized tree.
+          #
+          #    `aspect format` publishes a status check whenever it runs on CI
+          #    (keyed by --task-key, shared with the "Format" gate below so they
+          #    update one check, not two). Run it only for presets that have a
+          #    source formatter — minimal/scala/ruby have none, so `aspect format`
+          #    would fail to build //tools/format and publish a failing check;
+          #    buildifier alone covers their (Starlark-only) trees.
+          bazel run --run_in_cwd @buildifier_prebuilt//buildifier -- -r . || true
+          case "${{ matrix.preset }}" in
+            minimal|scala|ruby) ;;
+            *) aspect format --task-key format-${{ matrix.preset }} --scope=all || true ;;
+          esac
+          git add -A
+          git -c user.email=ci@aspect.build -c user.name=CI commit -q --amend --no-edit || true
 
-            - name: User Stories
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              # see https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49#running-the-script
-              shell: sh
-              run: $GITHUB_WORKSPACE/user_stories/${{ matrix.preset}}.md || exit 1
+      # Statically validate the generated GitHub Actions workflow itself
+      # (syntax, expressions, permissions). GitHub can't run a rendered workflow
+      # as a nested CI run, so actionlint is how we gate the YAML pre-merge; the
+      # aspect-starters publish job is the live end-to-end run post-merge.
+      - name: Lint generated workflows (actionlint)
+        working-directory: ${{ env.WS }}
+        env:
+          ACTIONLINT_VERSION: 1.7.7
+        run: |
+          curl -fsSL -o actionlint.tar.gz \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          tar -xzf actionlint.tar.gz actionlint
+          ./actionlint -color .github/workflows/*.yaml
 
-            - name: Python test that fails
-              continue-on-error: true
-              run: bazel test //app:app_test
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' }}"
+      # No separate build step: `aspect test` builds everything it needs.
+      - name: Test
+        working-directory: ${{ env.WS }}
+        run: aspect test --task-key test-${{ matrix.preset }} -- //...
 
-            - name: Check failure is expected
-              working-directory: "${{ steps.scaffold.outputs.dir }}"
-              if: "${{ matrix.preset == 'py' }}"
-              run: grep "FAILED app/app_test.py::test_bad - assert 1 == 2" $(bazel info bazel-testlogs)/app/app_test/test.log
+      # buildifier always runs (Starlark formatting; only needs buildifier_prebuilt).
+      # NB: --scope=all — these tasks run in the rendered project ($WS), but the
+      # task's PR-diff detection would otherwise key off THIS (template) repo's
+      # changed files (the jinja .tmpl sources, which aren't valid Starlark).
+      - name: Buildifier
+        working-directory: ${{ env.WS }}
+        run: aspect buildifier --task-key buildifier-${{ matrix.preset }} --scope=all
 
-    # For branch protection settings, this job provides a "stable" name that can be used to gate PR merges
-    # on "all matrix jobs were successful".
-    conclusion:
-      needs: test
-      runs-on: ubuntu-latest
-      if: always()
-      steps:
-        - uses: technote-space/workflow-conclusion-action@45ce8e0eb155657ab8ccf346ade734257fd196a5 # v3.0.3
+      # Skip lint for presets with no wired rules_lint linter:
+      #  - minimal/go/scala: rules_lint ships no linter for the language
+      #  - rust: clippy lives in the aspect_rules_lint_rust module, which isn't
+      #    published (no BCR entry / release archive) so it can't be wired from
+      #    a BCR-only template yet. rustfmt formatting still runs (see below).
+      #  - ruby: rules_lint 2.6.0's sarif_parser lacks a rubocop case (fixed in
+      #    2.7.0, not yet on BCR) so `aspect lint` exits 1 despite 0 offenses
+      #  - kitchen-sink: includes rust+ruby, so its single lint pass hits both
+      # Re-enable rust once aspect_rules_lint_rust publishes; ruby/kitchen-sink
+      # once the rubocop sarif fix lands on BCR.
+      - name: Lint
+        if: ${{ !contains(fromJSON('["minimal","go","scala","rust","ruby","kitchen-sink"]'), matrix.preset) }}
+        working-directory: ${{ env.WS }}
+        run: aspect lint --task-key lint-${{ matrix.preset }} -- //...
 
-        # Note: possible conclusion values:
-        # https://github.com/technote-space/workflow-conclusion-action/blob/main/src/constant.ts
-        - name: report success
-          if: ${{ env.WORKFLOW_CONCLUSION == 'success' }}
-          working-directory: /tmp
-          run: echo ${{ env.WORKFLOW_CONCLUSION }} && exit 0
+      # `format` runs for every preset with a wired source formatter (rust gets
+      # rustfmt, go gofmt, etc.). Skipped only where none exists: scala/ruby have
+      # no formatter yet, and minimal has no languages (buildifier covers its
+      # Starlark in the step above).
+      - name: Format (no changes expected)
+        if: ${{ !contains(fromJSON('["minimal","scala","ruby"]'), matrix.preset) }}
+        working-directory: ${{ env.WS }}
+        run: aspect format --task-key format-${{ matrix.preset }} --scope=all
 
-        - name: report failure
-          if: ${{ env.WORKFLOW_CONCLUSION == 'failure' }}
-          working-directory: /tmp
-          run: echo ${{ env.WORKFLOW_CONCLUSION }} && exit 1
+      # Execute the preset's user story — an executable-Markdown tutorial that
+      # builds/tests/extends the generated project. Run with `sh` (the ~~~ alias
+      # trick needs POSIX-sh alias expansion; bash non-interactive won't expand
+      # it). See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
+      - name: User story
+        working-directory: ${{ env.WS }}
+        run: sh "$GITHUB_WORKSPACE/user_stories/${{ matrix.preset }}.md"
+
+  # Stable name for branch protection: "all matrix legs passed".
+  conclusion:
+    needs: preset
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Report
+        run: |
+          if [ "${{ contains(needs.preset.result, 'failure') || needs.preset.result == 'failure' }}" = "true" ]; then
+            echo "one or more presets failed" && exit 1
+          fi
+          echo "all presets passed"

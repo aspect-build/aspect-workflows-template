@@ -1,0 +1,32 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+{%- if oci %}
+load("//bazel/oci:go_image.bzl", "go_image")
+{%- endif %}
+
+go_library(
+    name = "hello_lib",
+    srcs = ["hello.go"],
+    importpath = "example.com/{{ project_snake }}/hello/go",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "hello",
+    embed = [":hello_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "hello_test",
+    srcs = ["hello_test.go"],
+    embed = [":hello_lib"],
+)
+{% if oci %}
+
+# OCI image for the sample binary. `go_image` also defines `:image_push`
+# (tagged "deliverable"), which `aspect delivery` builds + pushes.
+go_image(
+    name = "image",
+    binary = ":hello",
+)
+{% endif %}

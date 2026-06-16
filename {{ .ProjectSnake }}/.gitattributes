@@ -1,7 +1,0 @@
-# List generated files
-# - prevents GitHub from showing deltas during code review
-# - informs the rules_lint formatter not to apply formatting rules
-{{- if .Computed.java }}
-maven_install.json     linguist-generated=true
-{{- end }}
-githooks/pre-commit    rules-lint-ignored=true

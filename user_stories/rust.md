@@ -9,14 +9,16 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `rustfmt` and `clippy` using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
+- 🎨 `rustfmt` formatting, using rules_lint
 - 📚 Cargo package manager integration
 
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
+
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'rust' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `rust` preset. You can create your own with
+> `aspect init --preset rust`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -28,95 +30,51 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-First we create a tiny Rust program with a third-party dependency:
+The starter ships a tiny `hello/rust` package. Build it, test it, and run it:
 
 ~~~sh
-cargo new hello_world
-cat >hello_world/src/main.rs <<EOF
-use rand::Rng;
+aspect build --task-key build-rust-story //hello/rust:hello
+aspect test --task-key test-rust-story //hello/rust:hello_test
+output=$(bazel run //hello/rust:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
+    exit 1
+}
+~~~
 
+## Add your own code
+
+Rust has no BUILD file generator in this starter, so create a new package with a
+hand-written `BUILD` following the same `rust_binary` pattern as the sample:
+
+~~~sh
+mkdir -p src/greet
+>src/greet/main.rs cat <<'EOF'
 fn main() {
-    let num = rand::thread_rng().gen_range(1..=3);
-    for _ in 0..num {
-        println!("Hello from Rust");
-    }
+    println!("Greetings from Bazel");
 }
+EOF
+>src/greet/BUILD cat <<'EOF'
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+rust_binary(
+    name = "greet",
+    srcs = ["main.rs"],
+    edition = "2021",
+    visibility = ["//visibility:public"],
+)
 EOF
 ~~~
 
-Add the dependency to Cargo.toml, and run `check` to update the Cargo.lock file that Bazel reads:
+Build and run the new command:
 
 ~~~sh
-echo 'rand = "0.8"' >> hello_world/Cargo.toml
-cargo check
-~~~
-
-We don't have any BUILD file generation for Rust yet,
-so you're forced to create it manually.
-~~~sh
-touch hello_world/BUILD
-buildozer 'new_load @rules_rust//rust:defs.bzl rust_binary' hello_world:__pkg__
-buildozer 'new rust_binary hello_world' hello_world:__pkg__
-buildozer 'add srcs src/main.rs' hello_world:hello_world
-buildozer 'add deps @crates//:rand' hello_world:hello_world
-~~~
-
-Now you can run the program and assert that it produces the expected output.
-
-~~~sh
-output="$(bazel run hello_world | tail -1)"
-
-[ "${output}" = "Hello from Rust" ] || {
-    echo >&2 "Wanted output 'Hello from Rust' but got '${output}'"
+aspect build --task-key build-rust-greet //src/greet:greet
+output=$(bazel run //src/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
     exit 1
 }
 ~~~
-
-## Formatting
-
-We can format the code with rustfmt. Let's create some intentionally poorly formatted code
-(the indentation is wrong) and also an auto-fixable `print_literal` warning from Clippy.
-
-~~~sh
-cat >hello_world/src/main.rs <<EOF
-fn main(){
-println!("{}", "Hello from Rust");
-}
-EOF
-~~~
-
-Now format it:
-
-~~~sh
-format
-~~~
-
-And run the linter in auto-fix mode:
-
-~~~sh
-aspect lint --fix
-~~~
-
-Let's verify the code was fixed:
-
-~~~sh
-cat hello_world/src/main.rs
-# -> fn main() {
-# ->     println!("Hello from Rust");
-# -> }
-~~~
-
-<!--
-~~~sh
-formatted=$(cat hello_world/src/main.rs)
-echo "${formatted}" | grep -q "^fn main() {$" && \
-echo "${formatted}" | grep -q "^    println!(\"Hello from Rust\");$" && \
-echo "${formatted}" | grep -q "^}$" || {
-    echo >&2 "Code was not properly formatted. Got:"
-    echo >&2 "${formatted}"
-    exit 1
-}
-~~~
--->

@@ -1,0 +1,15 @@
+# Claude Code session memory / notes — never committed.
+.claude/
+
+# Bazel output symlinks (if anyone runs bazel at the repo root).
+/bazel-*
+
+# Local render/test scratch (e.g. `aspect render-preset --out ...`).
+/out/
+/_out/
+
+# OS / editor cruft.
+.DS_Store
+*.swp
+.idea/
+*~

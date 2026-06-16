@@ -1,0 +1,85 @@
+name: CI
+
+# Runs the Aspect CLI tasks on ephemeral GitHub-hosted runners. Each task is its
+# own job so results show up as separate status checks. The Aspect CLI version is
+# pinned by .aspect/version.axl; `setup-aspect` installs it and wires the GitHub
+# Actions cache. See https://aspect.build/docs/cli/tasks-ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  # Required by the Aspect CLI artifact upload feature.
+  id-token: write
+
+concurrency:
+  group: ${{ '{{' }} github.workflow {{ '}}' }}-${{ '{{' }} github.head_ref || github.run_id {{ '}}' }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      - run: aspect test --task-key test -- //...
+
+  gazelle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      - run: aspect gazelle --task-key gazelle
+
+  buildifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      - run: aspect buildifier --task-key buildifier
+{% if go or python or javascript or cpp or kotlin or rust or shell or java %}
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      - run: aspect format --task-key format
+{% endif %}
+{% if lint %}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      - run: aspect lint --task-key lint -- //...
+{% endif %}
+{% if oci or stamp %}
+
+  delivery:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
+      # Selective delivery (change detection) requires the Aspect Workflows
+      # backend; on plain ephemeral runners deliver unconditionally.
+      - run: aspect delivery --task-key delivery --track-state=false --mode=always
+{% endif %}

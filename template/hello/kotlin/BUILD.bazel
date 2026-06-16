@@ -1,0 +1,25 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library", "kt_jvm_test")
+
+kt_jvm_library(
+    name = "hello_lib",
+    srcs = ["Hello.kt"],
+    visibility = ["//visibility:private"],
+)
+
+kt_jvm_binary(
+    name = "hello",
+    main_class = "hello.HelloKt",
+    runtime_deps = [":hello_lib"],
+    visibility = ["//visibility:public"],
+)
+
+kt_jvm_test(
+    name = "hello_test",
+    srcs = ["HelloTest.kt"],
+    test_class = "hello.HelloTest",
+    deps = [
+        ":hello_lib",
+        "@junit_junit//jar",
+        "@org_hamcrest_hamcrest_core//jar",
+    ],
+)

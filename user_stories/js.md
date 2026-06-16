@@ -9,14 +9,15 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `prettier` and `eslint`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
-- 📚 PNPM package manager integration
+- 📚 pnpm package manager integration
+
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'js' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `js` preset. You can create your own with
+> `aspect init --preset js`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -28,67 +29,81 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-The Bazel-managed version of pnpm is on the PATH thanks to direnv:
+The starter ships a tiny `hello/js` package. Build it, test it, and run it:
 
 ~~~sh
-which pnpm
-# -> bazel-out/bazel_env-opt/bin/tools/bazel_env/bin/pnpm
-pnpm list
+aspect build --task-key build-js-story //hello/js:hello
+aspect test --task-key test-js-story //hello/js:hello_test
+output=$(bazel run //hello/js:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
+    exit 1
+}
 ~~~
 
-## Node.js program
+## Add your own code
 
-The repo already contains a pnpm workspace.
-Let's add a new package to it, which will use the `chalk` npm dependency.
-
-~~~sh
-mkdir -p packages/hello
-cd packages/hello
-pnpm init
-pnpm pkg set type=module
-pnpm add chalk
-~~~
-
-Now create a tiny Node.js program:
+Create a new package with a `main`. TypeScript packages need a `tsconfig.json`,
+so create one alongside the source:
 
 ~~~sh
->index.js cat <<EOF
-import chalk from 'chalk';
-console.log(chalk.green('Hello World!'));
+mkdir -p cmd/greet
+>cmd/greet/main.ts cat <<'EOF'
+console.log("Greetings from Bazel");
+EOF
+>cmd/greet/tsconfig.json cat <<'EOF'
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "strict": true
+  }
+}
 EOF
 ~~~
 
-Observe that the program already works outside Bazel:
+Now write a `BUILD.bazel`. A `ts_config` points at the `tsconfig.json`, a
+`ts_project` compiles the TypeScript, and a `js_binary` runs the compiled
+output (mirroring `hello/js/BUILD.bazel`):
 
 ~~~sh
-pnpm pkg set scripts.hello="node index.js"
-pnpm run hello
-# -> Hello World!
+>cmd/greet/BUILD.bazel cat <<'EOF'
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+)
+
+ts_project(
+    name = "greet",
+    srcs = ["main.ts"],
+    declaration = True,
+    transpiler = swc,
+    tsconfig = ":tsconfig",
+)
+
+js_binary(
+    name = "main",
+    data = [":greet"],
+    entry_point = "main.js",
+)
+EOF
 ~~~
 
-Running our program under Bazel is easy, we just need `BUILD` files, which can be generated with the Gazelle tool.
+Build and run the new command:
 
 ~~~sh
-bazel run //:gazelle
-bazel run //packages/hello
-# -> Hello World!
-~~~
-
-## Code generation
-
-We can use Yeoman to scaffold out a library and add its dependencies:
-
-~~~sh
-pnpm add -w generator-bazel-fastify-route
-yo bazel-fastify-route
-~~~
-
-## Linting
-
-ESLint is already setup in the repo. Bazel doesn't have a lint command, so we use the Aspect CLI:
-
-~~~sh
-aspect lint
+aspect build --task-key build-js-greet //cmd/greet:main
+output=$(bazel run //cmd/greet:main)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
+    exit 1
+}
 ~~~

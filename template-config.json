@@ -1,0 +1,496 @@
+{
+  "flags": [
+    "javascript",
+    "python",
+    "go",
+    "java",
+    "scala",
+    "kotlin",
+    "cpp",
+    "rust",
+    "ruby",
+    "shell",
+    "lint",
+    "license",
+    "proto",
+    "stamp",
+    "oci"
+  ],
+  "presets": {
+    "minimal": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": false,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "shell": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": true,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "go": {
+      "javascript": false,
+      "python": false,
+      "go": true,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": true,
+      "platforms": true,
+      "license": true
+    },
+    "js": {
+      "javascript": true,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "py": {
+      "javascript": false,
+      "python": true,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "java": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": true,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": true,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "kotlin": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": true,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "cpp": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": true,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "rust": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": true,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "ruby": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": false,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": true,
+      "shell": false,
+      "lint": true,
+      "proto": true,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "scala": {
+      "javascript": false,
+      "python": false,
+      "go": false,
+      "java": false,
+      "scala": true,
+      "kotlin": false,
+      "cpp": false,
+      "rust": false,
+      "ruby": false,
+      "shell": false,
+      "lint": true,
+      "proto": false,
+      "stamp": false,
+      "oci": false,
+      "platforms": false,
+      "license": true
+    },
+    "kitchen-sink": {
+      "javascript": true,
+      "python": true,
+      "go": true,
+      "java": true,
+      "scala": true,
+      "kotlin": true,
+      "cpp": true,
+      "rust": true,
+      "ruby": true,
+      "shell": true,
+      "lint": true,
+      "proto": true,
+      "stamp": true,
+      "oci": true,
+      "platforms": true,
+      "license": true
+    }
+  },
+  "rules": [
+    {
+      "any": [
+        "java",
+        "kotlin",
+        "scala"
+      ],
+      "globs": [
+        "bazel/java17.bazelrc"
+      ]
+    },
+    {
+      "flag": "license",
+      "globs": [
+        "LICENSE"
+      ]
+    },
+    {
+      "flag": "lint",
+      "globs": [
+        "tools/format/**",
+        "tools/lint/**"
+      ]
+    },
+    {
+      "all": [
+        "lint",
+        "javascript"
+      ],
+      "globs": [
+        "prettier.config.cjs",
+        "eslint.config.mjs"
+      ]
+    },
+    {
+      "flag": "stamp",
+      "globs": [
+        "bazel/workspace_status.sh",
+        ".github/workflows/weekly_tag.yaml"
+      ]
+    },
+    {
+      "all": [
+        "lint",
+        "shell"
+      ],
+      "globs": [
+        ".shellcheckrc"
+      ]
+    },
+    {
+      "all": [
+        "lint",
+        "ruby"
+      ],
+      "globs": [
+        ".rubocop.yml"
+      ]
+    },
+    {
+      "flag": "javascript",
+      "globs": [
+        "package.json",
+        "tools/package.json",
+        "pnpm-*.yaml",
+        "*.config.cjs",
+        "*.config.mjs",
+        ".npmrc",
+        ".nvmrc",
+        "packages/**",
+        ".aspect/gazelle/package-json*.axl"
+      ]
+    },
+    {
+      "flag": "python",
+      "globs": [
+        "pyproject.toml",
+        "uv.lock",
+        "tools/pytest/**"
+      ]
+    },
+    {
+      "flag": "go",
+      "globs": [
+        "go.mod",
+        "go.sum",
+        "tools/tools.go"
+      ]
+    },
+    {
+      "flag": "kotlin",
+      "globs": [
+        "ktlint-baseline.xml",
+        ".editorconfig"
+      ]
+    },
+    {
+      "flag": "ruby",
+      "globs": [
+        "Gemfile",
+        "Gemfile.lock",
+        ".ruby-version"
+      ]
+    },
+    {
+      "flag": "java",
+      "globs": [
+        "maven_install.json"
+      ]
+    },
+    {
+      "all": [
+        "lint",
+        "java"
+      ],
+      "globs": [
+        "pmd.xml"
+      ]
+    },
+    {
+      "flag": "cpp",
+      "globs": [
+        ".clang-tidy"
+      ]
+    },
+    {
+      "flag": "oci",
+      "globs": [
+        "bazel/oci/BUILD.bazel"
+      ]
+    },
+    {
+      "flag": "platforms",
+      "globs": [
+        "bazel/platforms/**"
+      ]
+    },
+    {
+      "flag": "shell",
+      "globs": [
+        ".aspect/gazelle/shell.axl"
+      ]
+    },
+    {
+      "all": [
+        "oci",
+        "python"
+      ],
+      "globs": [
+        "bazel/oci/py3_image.bzl"
+      ]
+    },
+    {
+      "all": [
+        "oci",
+        "go"
+      ],
+      "globs": [
+        ".aspect/gazelle/go_image.axl",
+        "bazel/oci/go_image.bzl"
+      ]
+    },
+    {
+      "flag": "rust",
+      "globs": [
+        "Cargo.*",
+        ".clippy.toml"
+      ]
+    },
+    {
+      "flag": "go",
+      "globs": [
+        "hello/go/**"
+      ]
+    },
+    {
+      "flag": "python",
+      "globs": [
+        "hello/py/**"
+      ]
+    },
+    {
+      "flag": "javascript",
+      "globs": [
+        "hello/js/**"
+      ]
+    },
+    {
+      "flag": "java",
+      "globs": [
+        "hello/java/**"
+      ]
+    },
+    {
+      "flag": "kotlin",
+      "globs": [
+        "hello/kotlin/**"
+      ]
+    },
+    {
+      "flag": "scala",
+      "globs": [
+        "hello/scala/**"
+      ]
+    },
+    {
+      "flag": "cpp",
+      "globs": [
+        "hello/cpp/**"
+      ]
+    },
+    {
+      "flag": "rust",
+      "globs": [
+        "hello/rust/**"
+      ]
+    },
+    {
+      "flag": "ruby",
+      "globs": [
+        "hello/ruby/**"
+      ]
+    },
+    {
+      "flag": "shell",
+      "globs": [
+        "hello/shell/**"
+      ]
+    }
+  ],
+  "no_render": [
+    "LICENSE",
+    "Cargo.lock",
+    "Gemfile.lock",
+    "go.sum",
+    "pnpm-lock.yaml",
+    "maven_install.json",
+    "tools/tools.lock.json",
+    "bazel/preset.bazelrc",
+    ".github/workflows/weekly_tag.yaml",
+    "hello/kotlin/*.kt",
+    "hello/scala/*.scala",
+    "hello/ruby/*.rb",
+    "hello/py/*.py",
+    "hello/js/*.ts",
+    "hello/js/tsconfig.json",
+    "hello/java/*.java",
+    "hello/go/*.go",
+    "hello/cpp/*.cc",
+    "hello/cpp/*.h",
+    "hello/rust/*.rs",
+    "hello/shell/*.sh"
+  ],
+  "executable": [
+    "tools/repin",
+    "bazel/workspace_status.sh",
+    "hello/shell/hello.sh",
+    "hello/shell/hello_test.sh"
+  ]
+}

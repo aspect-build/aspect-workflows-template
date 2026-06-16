@@ -1,0 +1,5 @@
+{% if shell or (oci and python) or (oci and go) %}
+# Expose the Orion gazelle extensions (.axl) so //tools/gazelle can reference
+# them via aspect_gazelle(extensions = [...]).
+exports_files(glob(["*.axl"]))
+{% endif %}

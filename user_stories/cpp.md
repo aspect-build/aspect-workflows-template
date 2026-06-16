@@ -10,12 +10,14 @@ This repo includes:
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 - 🎨 `clang-format` and `clang-tidy`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
+
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'cpp' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `cpp` preset. You can create your own with
+> `aspect init --preset cpp`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -27,127 +29,53 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-To start with, let's get the simplest possible program to execute.
-
-Lets create an application that prints “hello world” to the standard out:
+The starter ships a tiny `hello/cpp` package. Build it, test it, and run it:
 
 ~~~sh
-mkdir src
->src/hello.c cat <<EOF
-#include <stdio.h>
-
-int main(int argc, char const *argv[])
-{
-    printf("hello world!");
-    return 0;
-}
-EOF
-~~~
-
-Next run the BUILD file generator to produce a <code>cc_binary</code> target:
-
-~~~sh
-bazel run gazelle
-~~~
-
-You can now run the program to see the output.
-
-~~~sh
-bazel run src:hello
-~~~
-
-## Add a dependency
-
-Many libraries already have <code>BUILD</code> files in the Bazel Central Registry (BCR).
-For example, we can search for the <code>libmagic</code>, and find that it’s there:
-
-https://registry.bazel.build/modules/libmagic
-
-
-To install it, just add to <code>MODULE.bazel</code>
-
-~~~sh
-echo 'bazel_dep(name = "libmagic", version = "5.46.bcr.4")' >> MODULE.bazel
-~~~
-
-Let's add another program <code>src/magic.c</code> that depends on libmagic:
-
-~~~sh
->src/magic.c cat <<EOF
-#include <stdio.h>
-#include <stdlib.h>
-#include <magic.h>
-
-int main(int argc, char *argv[]) {
-    // Check if filename is provided
-    if (argc != (int)2) {
-        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
-        return 1;
-    }
-
-    // Initialize magic handle
-    magic_t magic = magic_open(MAGIC_MIME_TYPE);
-    if (magic == NULL) {
-        fprintf(stderr, "Failed to initialize libmagic\n");
-        return 1;
-    }
-
-    // Load magic database
-    if (magic_load(magic, NULL) != 0) {
-        fprintf(stderr, "Cannot load magic database: %s\n", magic_error(magic));
-        magic_close(magic);
-        return 1;
-    }
-
-    // Get MIME type
-    const char *mime_type = magic_file(magic, argv[1]);
-    if (mime_type == NULL) {
-        fprintf(stderr, "Error determining MIME type: %s\n", magic_error(magic));
-        magic_close(magic);
-        return 1;
-    }
-
-    // Print result
-    printf("MIME type: %s\n", mime_type);
-
-    // Cleanup
-    magic_close(magic);
-    return 0;
-}
-EOF
-~~~
-
-Now re-generate the BUILD file:
-
-~~~sh
-bazel run gazelle
-~~~
-
-If we run the program now, we find that it fails with
-<code>Cannot load magic database: Size of '/usr/share/file/magic.mgc' 7273344 is not a multiple of 432</code>
-this is because it has a runtime dependency on locating a file it expects to be part of the operating system
-distribution.
-
-We can set the 'MAGIC' environment variable to a Bazel-managed path instead:
-
-~~~sh
-buildozer 'add data @libmagic//:magic.mgc' src:magic
-buildozer 'dict_set env MAGIC:"$(rootpath\ @libmagic//:magic.mgc)"' src:magic
-~~~
-
-Now running the program produces expected output:
-
-~~~sh
-output=$(bazel run src:magic $PWD/BUILD)
-[ "$output" = "MIME type: text/plain" ] || {
-    echo >&2 "Wanted output 'MIME type: text/plain' but got '${output}'"
+aspect build --task-key build-cpp-story //hello/cpp:main
+aspect test --task-key test-cpp-story //hello/cpp:hello_test
+output=$(bazel run //hello/cpp:main)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
     exit 1
 }
 ~~~
 
-## Linting
+## Add your own code
 
-> FIXME(alexeagle): https://github.com/aspect-build/rules_lint/issues/703 for cpp
-> aspect lint
+C/C++ has no BUILD file generator in this starter, so create a new package with a
+hand-written `BUILD` following the same `cc_binary` pattern as the sample:
+
+~~~sh
+mkdir -p src/greet
+>src/greet/main.cc cat <<'EOF'
+#include <iostream>
+
+int main() {
+  std::cout << "Greetings from Bazel" << '\n';
+  return 0;
+}
+EOF
+>src/greet/BUILD cat <<'EOF'
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "greet",
+    srcs = ["main.cc"],
+    visibility = ["//visibility:public"],
+)
+EOF
+~~~
+
+Build and run the new command:
+
+~~~sh
+aspect build --task-key build-cpp-greet //src/greet:greet
+output=$(bazel run //src/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
+    exit 1
+}
+~~~

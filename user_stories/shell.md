@@ -10,12 +10,14 @@ This repo includes:
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 - 🎨 `shfmt` and `shellcheck`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
+
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'shell' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `shell` preset. You can create your own with
+> `aspect init --preset shell`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -27,36 +29,54 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-Write a simple Bash executable:
-
-~~~sh
->hello.sh cat <<'EOF'
-#!/usr/bin/env bash
-echo "Hello from Bash"
-EOF
-chmod u+x hello.sh
-~~~
-
-We should be able to generate BUILD files, see .aspect/gazelle/shell.axl for the logic used
+The starter ships a tiny `hello/shell` package. Build it, test it, and run it:
 
 ~~~sh
-bazel run gazelle || true
-~~~
-
-Now we verify that running the Bash program produces the expected output.
-
-~~~sh
-output="$(bazel run :hello)"
-[ "${output}" = "Hello from Bash" ] || {
-    echo >&2 "Wanted output 'Hello from Bash' but got '${output}'"
+aspect build --task-key build-shell-story //hello/shell:hello
+aspect test --task-key test-shell-story //hello/shell:hello_test
+output=$(bazel run //hello/shell:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
     exit 1
 }
 ~~~
 
-Run shellcheck on the code:
+## Add your own code
+
+Write a simple Bash executable (remember the `#!` shebang and the executable bit):
 
 ~~~sh
-aspect lint
+mkdir -p cmd/greet
+>cmd/greet/greet.sh cat <<'EOF'
+#!/usr/bin/env bash
+echo "Greetings from Bazel"
+EOF
+chmod u+x cmd/greet/greet.sh
+~~~
+
+Declare a `sh_binary` for it in a `BUILD` file, using the rules from
+`@rules_shell` (the same pattern as the shipped `hello/shell/BUILD`):
+
+~~~sh
+>cmd/greet/BUILD cat <<'EOF'
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+sh_binary(
+    name = "greet",
+    srcs = ["greet.sh"],
+)
+EOF
+~~~
+
+Build and run the new command:
+
+~~~sh
+aspect build --task-key build-shell-greet //cmd/greet:greet
+output=$(bazel run //cmd/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
+    exit 1
+}
 ~~~

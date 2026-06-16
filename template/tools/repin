@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# After adding or upgrading a third-party dependency, run this script to
+# regenerate the language lockfiles. Also run once after `aspect init` to
+# materialize the placeholder lockfiles the template ships with.
+set -o errexit -o nounset -o pipefail
+
+cd "$(dirname "$0")/.."
+
+# Regenerate the curated bazelrc preset (bazelrc-preset.bzl). Keeps
+# bazel/preset.bazelrc in sync so //bazel:preset.update_test passes.
+bazel run //bazel:preset.update
+{%- if python %}
+
+# Python: regenerate uv.lock from pyproject.toml (uv reads pyproject + lock).
+bazel run @uv -- lock
+{%- endif %}
+{%- if javascript %}
+
+# JavaScript: refresh pnpm-lock.yaml from package.json (lockfile only).
+bazel run -- @pnpm --dir="$PWD" install --lockfile-only
+{%- endif %}
+{%- if java %}
+
+# Java: re-pin Maven artifacts into maven_install.json.
+bazel run @unpinned_maven//:pin
+{%- endif %}
+{%- if ruby %}
+
+# Ruby: Gemfile.lock must be regenerated with a Ruby matching .ruby-version.
+# rules_ruby has no in-tree relock target, so use a container (or a local Ruby):
+#   docker run --rm -v "$PWD":/w -w /w ruby:$(cat .ruby-version) \
+#     bundle lock --add-platform ruby x86_64-linux aarch64-linux \
+#       aarch64-linux-musl x86_64-linux-musl arm64-darwin x86_64-darwin
+echo "ruby: regenerate Gemfile.lock with 'bundle lock' (see comment in tools/repin)"
+{%- endif %}
+
+# Accept any resulting MODULE.bazel.lock changes.
+bazel mod deps --lockfile_mode=update

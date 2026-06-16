@@ -1,9 +1,0 @@
-source "https://rubygems.org"
-{{- if .Scaffold.proto }}
-gem 'google-protobuf'
-gem 'grpc'
-gem 'grpc-tools'
-{{- end }}
-{{ if .Scaffold.lint }}
-gem "rubocop"
-{{- end }}

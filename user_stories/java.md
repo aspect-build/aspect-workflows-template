@@ -9,14 +9,15 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- 🎨 `google-java-format` and `pmd`/`checkstyle`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 Maven package manager integration
 
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
+
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'java' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `java` preset. You can create your own with
+> `aspect init --preset java`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -28,113 +29,61 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-Create a minimal Java application:
-
-~~~sh
-mkdir src
->src/Demo.java cat <<EOF
-class Demo {
-    public static void main(String[] args) {
-        System.out.println("Hello from Java");
-    }
-}
-EOF
-~~~
-
-We didn't wire up the BUILD file generator for Java yet, so users
-are forced to write this manually.
+The starter ships a tiny `hello/java` package. Build it, test it, and run it:
 
 ~~~sh
-touch src/BUILD
-buildozer 'new_load @rules_java//java:java_binary.bzl java_binary' src:__pkg__
-buildozer 'new java_binary Demo' src:__pkg__
-buildozer 'add srcs Demo.java' src:Demo
-~~~
-
-Now the application should run, and we can verify it produced the expected output:
-
-~~~sh
-output="$(bazel run src:Demo)"
-
-[ "${output}" = "Hello from Java" ] || {
-    echo >&2 "Wanted output 'Hello from Java' but got '${output}'"
+aspect build --task-key build-java-story //hello/java:hello
+aspect test --task-key test-java-story //hello/java:hello_test
+output=$(bazel run //hello/java:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
     exit 1
 }
 ~~~
 
-### Linting
+## Add your own code
 
-Run <code>aspect lint</code>, a task in Aspect CLI.
-This is configured to run PMD by default, though you could run other tools.
-
-~~~sh
-aspect lint //...
-~~~
-
-<code>
-INFO: Build completed successfully, 3 total actions
-Lint results for //src:Demo:
-
-Summary:
-
-* warnings: 0
-</code>
-
-## Using protobuf and gRPC
-
-Let's introduce a small data schema.
+Create a new package with a `main`:
 
 ~~~sh
->src/foo.proto cat <<EOF
-syntax = "proto3";
-option java_package = "build.aspect.examples";
-option java_outer_classname = "FooOuterClass";
-message Foo {
-    string message = 1;
+mkdir -p cmd/greet
+>cmd/greet/Main.java cat <<'EOF'
+package greet;
+
+/** Prints a friendly greeting. */
+public final class Main {
+  private Main() {}
+
+  public static void main(String[] args) {
+    System.out.println("Greetings from Bazel");
+  }
 }
 EOF
 ~~~
 
-Generate the BUILD rules for protobuf:
+The Java preset doesn't run Gazelle, so write the `BUILD` file by hand:
 
 ~~~sh
-bazel run gazelle
-~~~
+>cmd/greet/BUILD cat <<'EOF'
+load("@rules_java//java:defs.bzl", "java_binary")
 
-There isn't a Gazelle generator for java_proto_library yet, so add it manually:
-
-~~~sh
-buildozer 'new_load @protobuf//bazel:java_proto_library.bzl java_proto_library' src:__pkg__
-buildozer 'new java_proto_library foo_java_proto' src:__pkg__
-buildozer 'add deps :foo_proto' src:foo_java_proto
-buildozer 'add deps :foo_java_proto' src:Demo
-~~~
-
-Now overwrite `Demo.java` to use the generated `Foo` message:
-
-~~~sh
->src/Demo.java cat <<EOF
-import build.aspect.examples.FooOuterClass;
-class Demo {
-    public static void main(String[] args) {
-        FooOuterClass.Foo foo = FooOuterClass.Foo.newBuilder()
-            .setMessage("Hello from Java Protobuf!")
-            .build();
-        System.out.println(foo);
-    }
-}
+java_binary(
+    name = "greet",
+    srcs = ["Main.java"],
+    main_class = "greet.Main",
+)
 EOF
 ~~~
 
-Run the application again:
+Build and run the new command:
 
 ~~~sh
-output="$(bazel run src:Demo)"
-
-[ "${output}" = "message: \"Hello from Java Protobuf!\"" ] || {
-    echo >&2 "Wanted output 'Hello from Java Protobuf' but got '${output}'"
+aspect build --task-key build-java-greet //cmd/greet:greet
+output=$(bazel run //cmd/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
     exit 1
 }
 ~~~

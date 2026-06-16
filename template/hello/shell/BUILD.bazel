@@ -1,0 +1,14 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+sh_binary(
+    name = "hello",
+    srcs = ["hello.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "hello_test",
+    srcs = ["hello_test.sh"],
+    data = ["hello.sh"],
+)

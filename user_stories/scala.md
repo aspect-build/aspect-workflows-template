@@ -9,13 +9,15 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 Maven package manager integration
 
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
+
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'scala' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `scala` preset. You can create your own with
+> `aspect init --preset scala`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -27,40 +29,52 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-Create a minimal Scala application:
+The starter ships a tiny `hello/scala` package. Build it, test it, and run it:
 
 ~~~sh
-mkdir src
->src/Hello.scala cat <<EOF
-object Hello {
-  def main(args: Array[String]): Unit = {
-    println("Hello from Scala")
-  }
+aspect build --task-key build-scala-story //hello/scala:hello
+aspect test --task-key test-scala-story //hello/scala:hello_test
+output=$(bazel run //hello/scala:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
+    exit 1
 }
+~~~
+
+## Add your own code
+
+Scala has no BUILD file generator in this starter, so create a new package with a
+hand-written `BUILD` following the same `scala_*` pattern as the sample:
+
+~~~sh
+mkdir -p src/greet
+>src/greet/Greet.scala cat <<'EOF'
+object Greet {
+  def main(args: Array[String]): Unit =
+    println("Greetings from Bazel")
+}
+EOF
+>src/greet/BUILD cat <<'EOF'
+load("@rules_scala//scala:scala.bzl", "scala_binary")
+
+scala_binary(
+    name = "greet",
+    srcs = ["Greet.scala"],
+    main_class = "Greet",
+    visibility = ["//visibility:public"],
+)
 EOF
 ~~~
 
-We didn't wire up the BUILD file generator for Scala yet
-(https://github.com/stackb/scala-gazelle)
-so we'll add this manually:
+Build and run the new command:
 
 ~~~sh
-touch src/BUILD
-buildozer 'new_load @rules_scala//scala:scala.bzl scala_binary' src:__pkg__
-buildozer 'new scala_binary Hello' src:__pkg__
-buildozer 'add srcs Hello.scala' src:Hello
-buildozer 'set main_class Hello' src:Hello
-~~~
-
-Now the application should run, and we can verify it produced the expected output:
-
-~~~sh
-output="$(bazel run src:Hello)"
-
-[ "${output}" = "Hello from Scala" ] || {
-    echo >&2 "Wanted output 'Hello from Scala' but got '${output}'"
+aspect build --task-key build-scala-greet //src/greet:greet
+output=$(bazel run //src/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
     exit 1
 }
 ~~~

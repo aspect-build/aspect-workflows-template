@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+{%- if python %}
+  "configurations": [
+    {
+      "name": "Python: Attach",
+      "type": "python",
+      "request": "attach",
+      "port": 5678,
+      "host": "localhost"
+    }
+  ]
+{%- else %}
+  "configurations": []
+{%- endif %}
+}

@@ -1,0 +1,15 @@
+"""Bazel configuration: toolchains, platforms, bazelrc preset, workspace status.
+
+(Runnable developer tooling — format, lint, gazelle — lives under //tools.)
+"""
+
+load("@bazelrc-preset.bzl", "bazelrc_preset")
+
+package(default_visibility = ["//visibility:public"])
+
+# Generates bazel/preset.bazelrc (imported by //.bazelrc). Regenerate with
+# `bazel run //bazel:preset.update`.
+bazelrc_preset(
+    name = "preset",
+    doc_link_template = "https://registry.build/flag/bazel?filter={flag}",
+)
