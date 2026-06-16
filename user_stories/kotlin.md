@@ -10,16 +10,15 @@ This repo includes:
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 - 🎨 `ktfmt` and `ktlint`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 Maven package manager integration
 
 [bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
 [bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'kotlin' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `kotlin` preset. You can create your own with
+> `aspect init --preset kotlin`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -31,61 +30,53 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-First create some Kotlin source code:
-
-~~~sh
-mkdir src
->src/Demo.kt cat <<EOF
-package app
-
-class Demo {
-  companion object {
-    @JvmStatic
-    fun main(args: Array<String>) {
-      println("Hello from Kotlin")
-    }
-  }
-}
-EOF
-~~~
-
-Then run the BUILD file generation:
+The starter ships a tiny `hello/kotlin` package. Build it, test it, and run it:
 
 ~~~sh
-bazel run gazelle
-~~~
-
-You can check ktlint at this point:
-
-~~~sh
-aspect lint //src:all
-~~~
-
-This doesn't include Java support yet, so we need to run a couple commands
-to manually create the java_binary target:
-
-~~~sh
-buildozer 'new_load @rules_java//java:java_binary.bzl java_binary' src:__pkg__
-buildozer 'new java_binary app' src:__pkg__
-buildozer 'set main_class app.Demo' src:app
-buildozer 'add runtime_deps :src' src:app
-~~~
-
-Now we can verify that the application runs and produces the expected output:
-
-~~~sh
-output="$(bazel run src:app)"
-
-[ "${output}" = "Hello from Kotlin" ] || {
-    echo >&2 "Wanted output 'Hello from Kotlin' but got '${output}'"
+aspect build --task-key build-kotlin-story //hello/kotlin:hello
+aspect test --task-key test-kotlin-story //hello/kotlin:hello_test
+output=$(bazel run //hello/kotlin:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
     exit 1
 }
 ~~~
 
-Run ktlint:
+## Add your own code
+
+Kotlin has no BUILD file generator in this starter, so create a new package with a
+hand-written `BUILD` following the same `kt_jvm_*` pattern as the sample:
 
 ~~~sh
-aspect lint
+mkdir -p src/greet
+>src/greet/Greet.kt cat <<'EOF'
+package greet
+
+fun main() {
+  println("Greetings from Bazel")
+}
+EOF
+>src/greet/BUILD cat <<'EOF'
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+
+kt_jvm_binary(
+    name = "greet",
+    srcs = ["Greet.kt"],
+    main_class = "greet.GreetKt",
+    visibility = ["//visibility:public"],
+)
+EOF
+~~~
+
+Build and run the new command:
+
+~~~sh
+aspect build --task-key build-kotlin-greet //src/greet:greet
+output=$(bazel run //src/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
+    exit 1
+}
 ~~~

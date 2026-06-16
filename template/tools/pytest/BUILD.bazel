@@ -1,0 +1,1 @@
+# Empty package so the //tools/pytest:defs.bzl label is loadable.

@@ -1,0 +1,44 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_test")
+load("@aspect_rules_swc//swc:defs.bzl", "swc")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+
+ts_project(
+    name = "js",
+    srcs = [
+        "greet.ts",
+        "hello.ts",
+    ],
+    declaration = True,
+    # SWC transpiles to JS (fast); tsc still type-checks and emits .d.ts.
+    transpiler = swc,
+    tsconfig = ":tsconfig",
+)
+
+ts_project(
+    name = "js_tests",
+    testonly = True,
+    srcs = ["greet.test.ts"],
+    declaration = True,
+    transpiler = swc,
+    tsconfig = ":tsconfig",
+    deps = [":js"],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.json",
+    visibility = [":__subpackages__"],
+)
+
+js_binary(
+    name = "hello",
+    data = [":js"],
+    entry_point = "hello.js",
+    visibility = ["//visibility:public"],
+)
+
+js_test(
+    name = "hello_test",
+    data = [":js_tests"],
+    entry_point = "greet.test.js",
+)

@@ -1,0 +1,105 @@
+name: Publish starter repos
+
+# Renders every preset from this repo and force-pushes each to its own
+# template repository under github.com/aspect-starters, giving users a
+# "Use this template" / Fork / clone experience. Runs on release tags and
+# manual dispatch.
+#
+# Auth: a GitHub App installed on the aspect-starters org. The App needs only
+# `Contents: write` for steady-state publishing (the repos already exist and
+# are already flagged as template repositories). Store the App's id and private
+# key as repo secrets:
+#   - secrets.STARTERS_APP_ID
+#   - secrets.STARTERS_APP_PRIVATE_KEY
+# Also requires secrets.ASPECT_API_TOKEN to install the Aspect CLI.
+#
+# (Bootstrapping a brand-new preset repo or toggling is_template needs
+# `Administration: write`; those steps below are best-effort and are skipped
+# without that permission, since all current repos are already provisioned.)
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Render + commit locally but do not push"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    strategy:
+      fail-fast: false
+      matrix:
+        preset:
+          - minimal
+          - shell
+          - go
+          - js
+          - py
+          - java
+          - kotlin
+          - cpp
+          - rust
+          - ruby
+          - scala
+          - kitchen-sink
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # Mint a short-lived token for the aspect-starters org from the GitHub App.
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.STARTERS_APP_ID }}
+          private-key: ${{ secrets.STARTERS_APP_PRIVATE_KEY }}
+          owner: aspect-starters
+          repositories: ${{ matrix.preset }}
+
+      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+        with:
+          aspect-api-token: ${{ secrets.ASPECT_API_TOKEN }}
+
+      - name: Render preset
+        run: |
+          # aspect-starters repos ship Apache-2.0; `aspect init` defaults to none.
+          aspect render-preset --preset='${{ matrix.preset }}' --out="$RUNNER_TEMP/out" --name=my_project --license=Apache-2.0
+          echo "WS=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
+
+      - name: Repin lockfiles
+        working-directory: ${{ env.WS }}
+        run: |
+          if [ -x ./tools/repin ]; then ./tools/repin || true; fi
+
+      - name: Commit rendered tree
+        working-directory: ${{ env.WS }}
+        run: |
+          git init -q
+          git checkout -q -b main
+          git config user.email "marvin@aspect.build"
+          git config user.name "Marvin, the Aspect bot"
+          git add -A
+          git commit -q -m "Generated from aspect-workflows-template ${{ github.ref_name }}"
+
+      - name: Ensure template repository (best-effort; needs Administration:write)
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          repo="aspect-starters/${{ matrix.preset }}"
+          gh api -X PATCH "repos/$repo" -f is_template=true >/dev/null 2>&1 \
+            || echo "note: could not set is_template (already set, or token lacks Administration:write) — continuing"
+
+      - name: Force-push to aspect-starters/${{ matrix.preset }}
+        if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
+        working-directory: ${{ env.WS }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          repo="aspect-starters/${{ matrix.preset }}"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${repo}.git"
+          git push --force origin main

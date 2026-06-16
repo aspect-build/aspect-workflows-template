@@ -10,8 +10,17 @@ This repo includes:
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 
-We can verify that the templated Bazel repository works with no languages selected:
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
+
+> [!NOTE]
+> This project was generated from the `minimal` preset. You can create your own with
+> `aspect init --preset minimal`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
+
+The `minimal` preset ships no languages, so there's no `hello/` sample.
+We can still verify that the templated Bazel repository builds with an empty workspace:
 
 ~~~sh
-bazel build ...
+bazel build //...
 ~~~

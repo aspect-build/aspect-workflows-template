@@ -1,0 +1,21 @@
+# User-specific settings file for this repo. May contain secrets such as API tokens.
+.env
+
+# Per-user Bazel settings (try-import'ed last in .bazelrc); not shared.
+user.bazelrc
+
+# Claude Code session memory / notes.
+.claude/
+
+# Symlinks created by Bazel into the output tree
+/bazel-*
+
+{% if javascript %}
+node_modules/
+{% endif %}
+{% if python %}
+*.venv/
+{% endif %}
+{% if ruby %}
+vendor/bundle/
+{% endif %}

@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+{% if proto %}
+gem 'google-protobuf'
+gem 'grpc'
+gem 'grpc-tools'
+{% endif %}
+{% if lint %}
+gem "rubocop"
+{% endif %}

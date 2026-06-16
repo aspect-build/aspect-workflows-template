@@ -6,17 +6,18 @@
     alias ~~~=":<<'~~~sh'";:<<'~~~sh'
 
 This repo includes:
-
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 - 🎨 `rubocop` and `standard`, using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
+
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'ruby' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `ruby` preset. You can create your own with
+> `aspect init --preset ruby`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -28,166 +29,55 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
+
+The starter ships a tiny `hello/ruby` package. Build it, test it, and run it:
+
+~~~sh
+aspect build --task-key build-ruby-story //hello/ruby:hello
+aspect test --task-key test-ruby-story //hello/ruby:hello_test
+output=$(bazel run //hello/ruby:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
+    exit 1
+}
+~~~
+
+## Add your own code
 
 Write a simple Ruby application:
 
 ~~~sh
-mkdir app
->app/hello.rb cat <<'EOF'
+mkdir -p app
+>app/greet.rb cat <<'EOF'
 # frozen_string_literal: true
 
-require 'faker'
-puts "Hello, #{Faker::Name.name} from Bazel + Ruby!"
+puts 'Greetings from Bazel + Ruby!'
 EOF
 ~~~
 
-Declare the dependency to the package manager:
+There isn't a Gazelle extension for Ruby yet, so write a `BUILD` file by hand
+using the `rb_binary` and `rb_test` rules from `@rules_ruby`:
 
 ~~~sh
-bundle config set path 'vendor/bundle'
-bundle add faker
-bundle lock --add-checksums --normalize-platforms
-~~~
-
-There isn't a Gazelle extension yet, so write a BUILD file by hand:
-
-~~~sh
->app/BUILD cat <<EOF
+>app/BUILD cat <<'EOF'
 load("@rules_ruby//ruby:defs.bzl", "rb_binary")
 
 rb_binary(
-    name = "hello",
-    srcs = ["hello.rb"],
-    main = "hello.rb",
-    deps = ["@bundle"],
+    name = "greet",
+    srcs = ["greet.rb"],
+    main = "greet.rb",
 )
 EOF
 ~~~
 
-Run it to see the result:
-
-> (Note that Bundle will spam the stdout with install information, so we just want the last line)
+Build and run it to see the result:
 
 ~~~sh
-output=$(bazel run //app:hello | tail -1)
-~~~
-
-Let's verify the application output matches expectation:
-
-~~~sh
-echo "${output}" | grep -qE "^Hello, .+ from Bazel \\+ Ruby!$" || {
-    echo >&2 "Wanted output matching 'Hello, <name> from Bazel + Ruby!' but got '${output}'"
+aspect build --task-key build-ruby-greet //app:greet
+output=$(bazel run //app:greet)
+echo "${output}" | grep -q "Greetings from Bazel + Ruby!" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel + Ruby!' but got '${output}'"
     exit 1
 }
 ~~~
-
-## Linting
-
-We can lint the code with rubocop, by running the Aspect CLI:
-
-~~~sh
-aspect lint
-~~~
-
-## Proto & gRPC
-
-Create the message and service definition:
-
-~~~sh
-mkdir proto
->proto/foo.proto cat <<EOF
-syntax = "proto3";
-
-package foo;
-import "google/protobuf/empty.proto";
-
-service FooService {
-  rpc GetFoo(GetFooRequest) returns (GetFooResponse);
-}
-
-message GetFooRequest {
-  google.protobuf.Empty empty = 1;
-}
-
-message GetFooResponse {
-  string name = 1;
-}
-EOF
-~~~
-
-And create the BUILD file:
-
-~~~sh
-bazel run gazelle
-~~~
-
-Update the application code to start a server:
-
-~~~sh
->app/hello.rb cat <<'EOF'
-# TODO: is there a ruby runfiles helper?
-runfiles_dir = ENV["RUNFILES_DIR"]
-if runfiles_dir
-  main_root = File.join(runfiles_dir, "_main")
-  $LOAD_PATH.unshift(main_root) if Dir.exist?(main_root) && !$LOAD_PATH.include?(main_root)
-end
-
-require "grpc"
-require "proto/foo_pb"
-require "proto/foo_services_pb"
-
-class FooServer < Foo::FooService::Service
-  def get_foo(_req, _call)
-    Foo::GetFooResponse.new(name: "Hello from Bazel + Ruby gRPC server!")
-  end
-end
-
-server = GRPC::RpcServer.new
-server.add_http2_port("0.0.0.0:50051", :this_port_is_insecure)
-server.handle(FooServer.new)
-puts "gRPC server listening on 0.0.0.0:50051"
-server.run_till_terminated
-EOF
-~~~
-
-Declare a dependency on the `proto_library` target:
-
-~~~sh
-buildozer "add deps //proto:foo_proto" app:hello
-~~~
-
-Finally run it, verify the gRPC service responds, then shut it down:
-
-~~~sh
-cleanup() {
-    kill $server_pid 2>/dev/null
-    wait $server_pid 2>/dev/null || true
-}
-trap cleanup EXIT
-
-bazel run app:hello &
-server_pid=$!
-
-# Wait for the gRPC server to be ready (timeout after 30 seconds)
-for i in $(seq 1 6); do
-    if response=$(buf curl --schema proto --protocol grpc --http2-prior-knowledge \
-        -d '{"empty":{}}' \
-        http://localhost:50051/foo.FooService/GetFoo 2>/dev/null); then
-        echo "Server responded: $response"
-        break
-    fi
-    if [ $i -eq 6 ]; then
-        echo >&2 "Timed out waiting for server to start"
-        exit 1
-    fi
-    sleep 5
-done
-
-# Verify the response
-echo "$response" | grep -q "Hello from Bazel + Ruby gRPC server!" || {
-    echo >&2 "Unexpected response: $response"
-    exit 1
-}
-~~~
-```

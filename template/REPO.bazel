@@ -1,0 +1,13 @@
+"""Global repository settings.
+
+See https://bazel.build/rules/lib/globals/repo
+"""
+ignore_directories([
+    {% if javascript %}
+    "**/node_modules",
+    {% endif %}
+    {% if python %}
+    "**/.pytest_cache",
+    "**/__pycache__",
+    {% endif %}
+])

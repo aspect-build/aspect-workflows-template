@@ -1,0 +1,29 @@
+load("@aspect_gazelle_prebuilt//:def.bzl", "aspect_gazelle")
+
+# The default target for `aspect gazelle`. Uses the prebuilt aspect gazelle
+# binary, so no Go toolchain is needed to generate BUILD files. Languages and
+# Orion extensions are enabled to match the languages selected for this project.
+aspect_gazelle(
+    name = "gazelle",
+    languages = [
+        # Always on: keeps proto + visibility metadata in sync.
+        "proto",
+        "visibility_extension",
+        {% if go %}"go",{% endif %}
+        {% if javascript %}"js",{% endif %}
+        {% if cpp %}"cc",{% endif %}
+        {% if kotlin %}"kotlin",{% endif %}
+    ],
+    {% if shell or (oci and go) %}
+    # Aspect Orion extensions (Starlark BUILD generators) shipped in .aspect/gazelle.
+    extensions = [
+        {% if shell %}"//.aspect/gazelle:shell.axl",{% endif %}
+        {% if oci and go %}"//.aspect/gazelle:go_image.axl",{% endif %}
+    ],
+    {% endif %}
+    {% if go %}
+    # Required when the "go" language is enabled, or gazelle's Go resolver makes
+    # network calls for every unknown import and appears to hang.
+    repo_config = "@bazel_gazelle_go_repository_config//:WORKSPACE",
+    {% endif %}
+)

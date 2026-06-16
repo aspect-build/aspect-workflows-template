@@ -9,13 +9,15 @@ This repo includes:
 - 🧱 Latest version of Bazel and dependencies
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
-- ✅ Pre-commit hooks for automatic linting and formatting
 - 📚 go.mod package integration
 
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
+
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'go' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `go` preset. You can create your own with
+> `aspect init --preset go`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -27,54 +29,52 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-First, run scaffold which is on the PATH thanks to direnv.
-This creates a new command in the repo.
-
-~~~sh
-scaffold new https://github.com/alexeagle/cowsay-go-scaffold Project=cowsay
-~~~
-
-Next, create or update the go.mod file, including the nmyk.io/cowsay dependency pinning.
-This uses the Bazel-managed go SDK.
+The starter ships a tiny `hello/go` package. Build it, test it, and run it:
 
 ~~~sh
-go mod tidy
-~~~
-
-Now we generate BUILD files:
-
-~~~sh
-bazel run gazelle
-~~~
-
-We can see that the app builds now:
-
-~~~sh
-bazel build cowsay/cmd/hello
-~~~
-
-Let's run the application, starting a server in the background.
-
-~~~sh
-bazel run cowsay/cmd/hello &
-# Wait for the server
-while ! nc -z localhost 8080; do   
-  sleep 0.5
-done
-~~~
-
-Finally we can hit that server to verify the application output matches expectation:
-
-~~~sh
-output=$(curl localhost:8080)
-
-echo "${output}" | grep -q "Hello, world" || {
-    echo >&2 "Wanted output containing 'Hello, world' but got '${output}'"
+aspect build --task-key build-go-story //hello/go:hello
+aspect test --task-key test-go-story //hello/go:hello_test
+output=$(bazel run //hello/go:hello)
+echo "${output}" | grep -q "Hello, world!" || {
+    echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
     exit 1
 }
 ~~~
 
-**TODO: Build an OCI container for the target platform**
-with bazel build //cmd/hello:image.load
+## Add your own code
+
+Create a new package with a `main`:
+
+~~~sh
+mkdir -p cmd/greet
+>cmd/greet/main.go cat <<'EOF'
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Greetings from Bazel")
+}
+EOF
+~~~
+
+Generate the `BUILD` file for it with Gazelle (scoped to the new directory).
+`aspect gazelle` verifies BUILD files are up to date (and fails CI if not); pass
+`--check-only=false` — or run the underlying target directly — to write them:
+
+~~~sh
+bazel run //tools/gazelle:gazelle -- cmd/greet
+~~~
+
+Build and run the new command:
+
+~~~sh
+aspect build --task-key build-go-greet //cmd/greet:greet
+output=$(bazel run //cmd/greet:greet)
+echo "${output}" | grep -q "Greetings from Bazel" || {
+    echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
+    exit 1
+}
+~~~

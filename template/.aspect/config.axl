@@ -1,0 +1,82 @@
+"""Aspect CLI configuration for this workspace.
+
+See https://aspect.build/docs/cli for the full reference. This file customizes
+the built-in Aspect CLI tasks (build, test, lint, format, ...). It is loaded by
+`aspect` on every invocation.
+"""
+
+load("@aspect//feature/artifacts.axl", "ArtifactUpload")
+load("@aspect//format.axl", "format")
+load("@aspect//traits.axl", "BazelTrait")
+
+# Format Starlark files with buildifier. Depends only on buildifier_prebuilt, so
+# it's available in every project (independent of the lint feature).
+# `buildifier -r .` walks the tree when the format task would otherwise pass
+# zero files (e.g. `--scope=all`).
+buildifier = format.alias(
+    defaults = {
+        "formatter_target": "@buildifier_prebuilt//buildifier",
+        "formatter_args_for_tree_walk": ["-r", "."],
+        "run_in": "cwd",
+        "include_patterns": [
+            "**/BUILD.bazel",
+            "**/MODULE.bazel",
+            "**/*.bzl",
+            "**/*.star",
+            "**/*.axl",
+        ],
+    },
+    summary = "Format Starlark files using buildifier.",
+)
+
+def config(ctx: ConfigContext):
+    is_ci = bool(ctx.std.env.var("CI"))
+
+    if is_ci:
+        ctx.traits[BazelTrait].extra_flags.extend([
+            "--config=ci",
+        ])
+
+    # Enable artifact uploads for testlogs, profile, and BEP.
+    # upload_test_logs="failed" — the logs from passing tests are noise;
+    # failing/flaky tests' logs are the ones anyone would actually open.
+    ctx.features[ArtifactUpload].args.upload_test_logs = "failed"
+    ctx.features[ArtifactUpload].args.upload_profile = True
+    ctx.features[ArtifactUpload].args.upload_bep = True
+
+    # Register the buildifier alias as a real CLI command (`aspect buildifier`).
+    ctx.tasks.add(buildifier)
+    {% if lint and (shell or javascript or python or cpp or kotlin or java or ruby) %}
+
+    # Wire the built-in `aspect lint` task to the rules_lint aspects for the
+    # languages enabled in this project.
+    #
+    # Only languages with a wired rules_lint linter appear here. go/scala have
+    # none; rust's clippy lives in the unpublished aspect_rules_lint_rust module
+    # (formatting via rustfmt still works through the `format` task).
+    ctx.tasks["lint"].args.aspects = [
+        {% if shell %}"//tools/lint:linters.bzl%shellcheck",{% endif %}
+        {% if javascript %}"//tools/lint:linters.bzl%eslint",{% endif %}
+        {% if python %}"//tools/lint:linters.bzl%ruff",{% endif %}
+        {% if python %}"//tools/lint:linters.bzl%ty",{% endif %}
+        {% if cpp %}"//tools/lint:linters.bzl%clang_tidy",{% endif %}
+        {% if kotlin %}"//tools/lint:linters.bzl%ktlint",{% endif %}
+        {% if java %}"//tools/lint:linters.bzl%pmd",{% endif %}
+        {% if ruby %}"//tools/lint:linters.bzl%rubocop",{% endif %}
+    ]
+    {% endif %}
+    {% if oci %}
+
+    # `aspect delivery` builds + pushes the deliverable targets. Tag deliverables
+    # (e.g. an oci_push) with `deliverable` and the query picks them up.
+    ctx.tasks["delivery"].args.query = "attr(tags, deliverable, //...)"
+    {% endif %}
+    {% if stamp %}
+
+    # Stamp the release-mode delivery build with version info
+    # (workspace_status.sh) via the `release` bazelrc config. release_bazel_flags
+    # apply only to the actual release build, not the change-detection query.
+    ctx.tasks["delivery"].args.release_bazel_flags = [
+        "--config=release",
+    ]
+    {% endif %}

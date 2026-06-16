@@ -1,0 +1,6 @@
+# Pin the Aspect CLI version for this workspace. The `aspect` launcher reads
+# this file and downloads + runs exactly this version, so every developer and
+# CI runner uses the same CLI. Bump it to upgrade.
+#
+# See https://aspect.build/docs/cli/install#pinning-a-version
+version("2026.24.15")

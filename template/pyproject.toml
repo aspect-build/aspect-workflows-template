@@ -1,0 +1,35 @@
+[project]
+name = "{{ project_snake }}"
+classifiers = ["Private :: Do Not Upload"]
+version = "0"
+# Matches the hermetic interpreter registered in MODULE.bazel (python_interpreters).
+requires-python = ">=3.12"
+
+# Runtime dependencies. Pinned transitively by uv into uv.lock — avoid version
+# matching clauses (`==`) here; only constrain when a range is incompatible.
+# https://packaging.python.org/en/latest/specifications/version-specifiers/#version-matching
+dependencies = [
+]
+
+# Dependency groups map to uv "venvs" (see aspect_rules_py//uv). The `default`
+# group is selected by `.bazelrc`'s `--@pypi//venv=default` and carries the dev
+# and test tooling. setuptools + build are required by uv for sdist builds.
+[dependency-groups]
+default = [
+    "build",
+    "pytest",
+    "setuptools",
+]
+
+# See https://docs.astral.sh/ruff/configuration/
+[tool.ruff]
+
+# See https://docs.astral.sh/ty/reference/configuration/
+[tool.ty.rules]
+
+# See https://docs.pytest.org/en/stable/reference/reference.html#ini-options-ref
+[tool.pytest.ini_options]
+# The hello/py sample imports its modules via the full repo-root package path
+# (e.g. `hello.py.greet`). Namespace-package handling lets pytest collect those
+# modules without an __init__.py in every directory.
+consider_namespace_packages = true

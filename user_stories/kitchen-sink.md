@@ -10,12 +10,14 @@ This repo includes:
 - 📦 Curated bazelrc flags via [bazelrc-preset.bzl]
 - 🧰 Developer environment setup with [bazel_env.bzl]
 - 🎨 Formatting and Linting using rules_lint
-- ✅ Pre-commit hooks for automatic linting and formatting
+
+[bazelrc-preset.bzl]: https://github.com/bazel-contrib/bazelrc-preset.bzl
+[bazel_env.bzl]: https://github.com/buildbuddy-io/bazel_env.bzl
 
 > [!NOTE]
-> You can customize languages and features with the interactive wizard in the <code>aspect init</code> command.
-> <code>init</code> is an alternative to this starter repo, which was generated using the 'kitchen-sink' preset.
-> See https://docs.aspect.build/cli/overview
+> This project was generated from the `kitchen-sink` preset. You can create your own with
+> `aspect init --preset kitchen-sink`, or start from this repo with GitHub's
+> "Use this template" button. See https://aspect.build/docs/cli/overview
 
 ## Setup dev environment
 
@@ -27,11 +29,30 @@ First, we recommend you setup a Bazel-based developer environment with direnv.
 This isn't strictly required, but the commands which follow assume that needed tools are on the PATH,
 so skipping `direnv` means you're responsible for installing them yourself.
 
-## Try it out
+## Build and test the sample
 
-Many commands are available on the PATH thanks to direnv:
+The `kitchen-sink` preset enables every supported language, and ships a tiny
+`hello/<lang>` package for each one. Prove the whole polyglot repo builds and
+tests green:
 
 ~~~sh
-copier --help
-yq --help
+aspect build --task-key build-kitchen-sink-story //...
+aspect test --task-key test-kitchen-sink-story //...
 ~~~
+
+## Run a couple of the samples
+
+Each `hello/<lang>:hello` binary prints the same greeting. Run a few of them:
+
+~~~sh
+for lang in shell go ruby; do
+    output=$(bazel run //hello/${lang}:hello)
+    echo "${output}" | grep -q "Hello, world!" || {
+        echo >&2 "hello/${lang}: wanted 'Hello, world!' but got '${output}'"
+        exit 1
+    }
+done
+~~~
+
+From here, see the per-language user stories (`go.md`, `ruby.md`, `shell.md`, …)
+for how to add your own code in each language.
