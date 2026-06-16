@@ -41,6 +41,10 @@ jobs:
           echo "new-tag=${tag}" >> "$GITHUB_OUTPUT"
   release:
     needs: tag
+    # A reusable-workflow call can't be granted more than the caller's own
+    # permissions, so mirror publish_release.yaml's `contents: write` here.
+    permissions:
+      contents: write
     uses: ./.github/workflows/publish_release.yaml
     with:
       tag_name: ${{ needs.tag.outputs.new-tag }}
