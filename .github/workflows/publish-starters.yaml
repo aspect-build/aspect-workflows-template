@@ -18,10 +18,15 @@ name: Publish starter repos
 # `Administration: write`; those steps below are best-effort and are skipped
 # without that permission, since all current repos are already provisioned.)
 on:
+  # Sync on every release tag (see tag.yaml / publish_release.yaml).
   push:
     tags: ["v*"]
   workflow_dispatch:
     inputs:
+      ref:
+        description: "Commit, tag, or branch of this repo to render from (default: this workflow's ref)"
+        type: string
+        default: ""
       dry_run:
         description: "Render + commit locally but do not push"
         type: boolean
@@ -50,7 +55,11 @@ jobs:
           - kitchen-sink
     runs-on: ubuntu-latest
     steps:
+      # On a release-tag push, checkout defaults to that tag. On manual dispatch,
+      # render from the requested ref (or this workflow's ref when unset).
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
 
       # Mint a short-lived token for the aspect-starters org from the GitHub App.
       - uses: actions/create-github-app-token@v2

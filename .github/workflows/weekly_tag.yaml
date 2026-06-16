@@ -1,0 +1,34 @@
+# Tag HEAD `<iso-year>.<iso-week>` at the start of each week, e.g. 2026.24.
+# `tag.yaml` turns the most recent weekly tag into a `v<year>.<week>.<patch>`
+# release version via `git describe`.
+# Follows https://aspect.build/blog/versioning-releases-from-a-monorepo
+name: Weekly Tag
+on:
+  schedule:
+    # Mondays at 5am UTC / midnight EST
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+# Creating the tag ref requires write access to repo contents.
+permissions:
+  contents: write
+
+jobs:
+  tagger:
+    runs-on: ubuntu-latest
+    steps:
+      # `%G.%-V` = ISO week-year + ISO week, with no leading zero on the week so
+      # the tag matches `git describe --match` globs. ISO week-year (%G), not
+      # calendar year (%Y): e.g. Dec 29, 2025 belongs to ISO week 1 of 2026, so
+      # the tag must be 2026.1, not 2025.1.
+      - name: Tag HEAD with <year>.<week>
+        run: |
+          curl --fail --request POST \
+              --url "https://api.github.com/repos/${{ github.repository }}/git/refs" \
+              --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              --data @- << EOF
+          {
+              "ref": "refs/tags/$(date +%G.%-V)",
+              "sha": "${{ github.sha }}"
+          }
+          EOF
