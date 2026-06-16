@@ -21,7 +21,7 @@ bazel_dep(name = "gazelle", version = "0.51.3")
 # NB: 2.7.0's sarif_parser toolchain is missing the linux_amd64 platform key
 # (breaks lint/format on Linux CI: "key sarif_parser-linux_amd64 not found").
 # Stay on 2.6.0 until that's fixed upstream.
-bazel_dep(name = "aspect_rules_lint", version = "2.6.0")
+bazel_dep(name = "aspect_rules_lint", version = "2.7.1")
 # bazel_skylib's native_binary backs //tools/lint's linter wrappers.
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 {% endif %}
