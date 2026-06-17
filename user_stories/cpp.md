@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/cpp` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-cpp-story //hello/cpp:main
-aspect test --task-key test-cpp-story //hello/cpp:hello_test
+aspect build --task-key build-cpp-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/cpp:main
+aspect test --task-key test-cpp-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/cpp:hello_test
 output=$(bazel run //hello/cpp:main)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -72,7 +72,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-cpp-greet //src/greet:greet
+aspect build --task-key build-cpp-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //src/greet:greet
 output=$(bazel run //src/greet:greet)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"

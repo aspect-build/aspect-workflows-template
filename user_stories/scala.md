@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/scala` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-scala-story //hello/scala:hello
-aspect test --task-key test-scala-story //hello/scala:hello_test
+aspect build --task-key build-scala-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/scala:hello
+aspect test --task-key test-scala-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/scala:hello_test
 output=$(bazel run //hello/scala:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -71,7 +71,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-scala-greet //src/greet:greet
+aspect build --task-key build-scala-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //src/greet:greet
 output=$(bazel run //src/greet:greet)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"

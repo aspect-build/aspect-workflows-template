@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/js` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-js-story //hello/js:hello
-aspect test --task-key test-js-story //hello/js:hello_test
+aspect build --task-key build-js-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/js:hello
+aspect test --task-key test-js-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/js:hello_test
 output=$(bazel run //hello/js:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -100,7 +100,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-js-greet //cmd/greet:main
+aspect build --task-key build-js-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:main
 output=$(bazel run //cmd/greet:main)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"
