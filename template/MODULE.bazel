@@ -62,6 +62,11 @@ bazel_dep(name = "aspect_rules_py", version = "2.0.0-alpha.3")
 {% endif %}
 {% if cpp %}
 bazel_dep(name = "rules_cc", version = "0.2.19")
+{% endif %}
+{% if cpp or (rust and lint) %}
+# Hermetic C++ toolchain. Also needed by rust+lint: it links rules_rust's
+# process_wrapper, overriding the broken minimal LLVM aspect_rules_lint_rust
+# registers (see the llvm.toolchain() block below).
 bazel_dep(name = "toolchains_llvm", version = "1.8.0")
 {% endif %}
 {% if rust %}
@@ -69,6 +74,11 @@ bazel_dep(name = "toolchains_llvm", version = "1.8.0")
 # AND generates the @rules_rust repo (rules + toolchains) via its rules_rust
 # facade extension below. No direct rules_rust bazel_dep needed.
 bazel_dep(name = "rules_rs", version = "0.0.90")
+{% if lint %}
+# Clippy lint aspect for rust_{binary,library,test}; reads clippy from the
+# configured Rust toolchain. Wired into `aspect lint` via //tools/lint.
+bazel_dep(name = "aspect_rules_lint_rust", version = "0.0.2")
+{% endif %}
 {% endif %}
 {% if ruby %}
 bazel_dep(name = "rules_ruby", version = "0.27.0")
@@ -173,10 +183,14 @@ use_repo(uv, "pypi")
 
 register_toolchains("@uv//:all")
 {% endif %}
-{% if cpp %}
+{% if cpp or (rust and lint) %}
 
 #########################
 # Hermetic C++ toolchain, to relieve the dependency on a locally installed CC etc.
+# Also required by the rust+lint preset: aspect_rules_lint_rust registers a
+# minimal LLVM C++ toolchain (@llvm//toolchain:all) that can't link rules_rust's
+# process_wrapper on Linux ("unable to find library -lgcc_s"). Registering this
+# fuller toolchain from the root module takes priority and fixes that link.
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
     # NB: llvm doesn't release for all platforms on every patch release
@@ -189,6 +203,8 @@ llvm.toolchain(
 use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
 
 register_toolchains("@llvm_toolchain//:all")
+{% endif %}
+{% if cpp %}
 
 # bazel run @hedron_compile_commands//:refresh_all
 bazel_dep(name = "hedron_compile_commands")
@@ -210,7 +226,15 @@ use_repo(rules_rust, "rules_rust")
 toolchains = use_extension("@rules_rs//rs/toolchains:module_extension.bzl", "toolchains")
 toolchains.toolchain(
     edition = "2021",
+{% if lint %}
+    # Must match aspect_rules_lint_rust's pinned toolchain version: both
+    # contribute a `toolchains.toolchain()` tag to the same
+    # `default_rust_toolchains` repo, and rules_rs fails the build on a version
+    # mismatch ("conflicting tag configurations").
+    version = "1.92.0",
+{% else %}
     version = "1.90.0",
+{% endif %}
 )
 use_repo(toolchains, "default_rust_toolchains")
 

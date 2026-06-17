@@ -106,10 +106,9 @@ jobs:
 
       # Lint runs only for presets with a wired rules_lint aspect (matches the
       # stamped CI's lint-job gating and .aspect/config.axl's aspects list).
-      # go/scala have no linter; rust's clippy lives in the unpublished
-      # aspect_rules_lint_rust module.
+      # go/scala have no linter; rust lints via clippy (aspect_rules_lint_rust).
       - name: Lint
-        if: ${{ !contains(fromJSON('["minimal","go","scala","rust"]'), matrix.preset) }}
+        if: ${{ !contains(fromJSON('["minimal","go","scala"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect lint --task-key lint-${{ matrix.preset }} -- //...
 
