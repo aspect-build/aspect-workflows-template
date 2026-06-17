@@ -7,6 +7,11 @@ load("@bazelrc-preset.bzl", "bazelrc_preset")
 
 package(default_visibility = ["//visibility:public"])
 
+# workspace_status.sh is a stamping command (--workspace_status_command), not a
+# runnable target — keep gazelle's shell extension from generating an sh_binary
+# for it.
+# gazelle:exclude workspace_status.sh
+
 # Generates bazel/preset.bazelrc (imported by //.bazelrc). Regenerate with
 # `bazel run //bazel:preset.update`.
 bazelrc_preset(
