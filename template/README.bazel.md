@@ -152,8 +152,8 @@ Build with stamping via `aspect build --config=release //...`.
 
 ## Delivering container images
 
-Targets tagged `deliverable` (e.g. the `:image_push` from the `hello/` sample's `go_image`) are
-built and pushed by `aspect delivery`. The deliverable query and release flags are configured in
+`oci_push` targets (e.g. the `:image_push` from the `hello/` sample's `go_image`) are built and
+pushed by `aspect delivery`. The delivery query and release flags are configured in
 `.aspect/config.axl`; point each `oci_push`'s `repository` at your registry (the sample uses the
 anonymous, ephemeral `ttl.sh`).
 

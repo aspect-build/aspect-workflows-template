@@ -56,7 +56,10 @@ jobs:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect format --task-key format
 {% endif %}
-{% if lint %}
+{# Only presets with a wired rules_lint aspect get a lint job (matches the
+   aspects list in .aspect/config.axl). go/scala have no linter; rust's clippy
+   lives in the unpublished aspect_rules_lint_rust module. #}
+{% if lint and (shell or javascript or python or cpp or kotlin or java or ruby) %}
 
   lint:
     runs-on: ubuntu-latest

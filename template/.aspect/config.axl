@@ -67,15 +67,18 @@ def config(ctx: ConfigContext):
     {% endif %}
     {% if oci %}
 
-    # `aspect delivery` builds + pushes the deliverable targets. Tag deliverables
-    # (e.g. an oci_push) with `deliverable` and the query picks them up.
-    ctx.tasks["delivery"].args.query = "attr(tags, deliverable, //...)"
+    # `aspect delivery` builds + pushes the deliverable targets. Query by rule
+    # kind rather than the `deliverable` tag: rules_oci's oci_push macro leaks
+    # the tag onto a non-runnable `_write_file` companion (`:image_push_write_tags`),
+    # so a tag-based query would try to deliver that too. Matching `oci_push rule`
+    # selects only the runnable push targets.
+    ctx.tasks["delivery"].args.query = 'kind("oci_push rule", //...)'
     {% endif %}
     {% if stamp %}
 
-    # Stamp the release-mode delivery build with version info
-    # (workspace_status.sh) via the `release` bazelrc config. release_bazel_flags
-    # apply only to the actual release build, not the change-detection query.
+    # Stamp the release-mode delivery build via the `release` bazelrc config
+    # (--stamp + workspace_status.sh). Applies only to the actual release build,
+    # not the change-detection query.
     ctx.tasks["delivery"].args.release_bazel_flags = [
         "--config=release",
     ]
