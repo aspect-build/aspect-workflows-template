@@ -18,7 +18,9 @@ name: Publish starter repos
 # `Administration: write`; those steps below are best-effort and are skipped
 # without that permission, since all current repos are already provisioned.)
 on:
-  # Sync on every release tag (see tag.yaml / publish_release.yaml).
+  # Releases sync via tag.yaml's `sync-starters` job (an explicit dispatch),
+  # because GitHub suppresses ref events from the GITHUB_TOKEN-pushed release
+  # tag. This `push: tags` trigger is the fallback for a tag pushed by hand.
   push:
     tags: ["v*"]
   workflow_dispatch:

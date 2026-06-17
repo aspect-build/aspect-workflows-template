@@ -48,3 +48,24 @@ jobs:
     uses: ./.github/workflows/publish_release.yaml
     with:
       tag_name: ${{ needs.tag.outputs.new-tag }}
+
+  # Sync the aspect-starters repos from the just-released tag. We dispatch
+  # explicitly rather than relying on publish-starters' `push: tags` trigger:
+  # the tag above is pushed with GITHUB_TOKEN, and GitHub suppresses workflow
+  # events from GITHUB_TOKEN-created refs (loop protection), so that trigger
+  # never fires for our releases.
+  sync-starters:
+    needs: [tag, release]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # dispatch another workflow
+    steps:
+      - name: Dispatch publish-starters
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run publish-starters.yaml \
+            --repo "${{ github.repository }}" \
+            --ref "${{ needs.tag.outputs.new-tag }}" \
+            --field "ref=${{ needs.tag.outputs.new-tag }}" \
+            --field "dry_run=false"
