@@ -3,4 +3,4 @@
 # CI runner uses the same CLI. Bump it to upgrade.
 #
 # See https://aspect.build/docs/cli/install#pinning-a-version
-version("2026.25.8")
+version("2026.25.10")
