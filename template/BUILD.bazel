@@ -46,6 +46,9 @@ exports_files([
 {% if shell %}
     ".shellcheckrc",
 {% endif %}
+{% if rust %}
+    ".clippy.toml",
+{% endif %}
 ], visibility = ["//:__subpackages__"])
 {% endif %}
 {% if go %}

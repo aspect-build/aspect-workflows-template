@@ -46,14 +46,14 @@ def config(ctx: ConfigContext):
 
     # Register the buildifier alias as a real CLI command (`aspect buildifier`).
     ctx.tasks.add(buildifier)
-    {% if lint and (shell or javascript or python or cpp or kotlin or java or ruby) %}
+    {% if lint and (shell or javascript or python or cpp or kotlin or java or ruby or rust) %}
 
     # Wire the built-in `aspect lint` task to the rules_lint aspects for the
     # languages enabled in this project.
     #
     # Only languages with a wired rules_lint linter appear here. go/scala have
-    # none; rust's clippy lives in the unpublished aspect_rules_lint_rust module
-    # (formatting via rustfmt still works through the `format` task).
+    # none; rust's clippy aspect comes from aspect_rules_lint_rust (rustfmt
+    # formatting additionally runs through the `format` task).
     ctx.tasks["lint"].args.aspects = [
         {% if shell %}"//tools/lint:linters.bzl%shellcheck",{% endif %}
         {% if javascript %}"//tools/lint:linters.bzl%eslint",{% endif %}
@@ -63,6 +63,7 @@ def config(ctx: ConfigContext):
         {% if kotlin %}"//tools/lint:linters.bzl%ktlint",{% endif %}
         {% if java %}"//tools/lint:linters.bzl%pmd",{% endif %}
         {% if ruby %}"//tools/lint:linters.bzl%rubocop",{% endif %}
+        {% if rust %}"//tools/lint:linters.bzl%clippy",{% endif %}
     ]
     {% endif %}
     {% if oci %}

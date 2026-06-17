@@ -23,6 +23,9 @@ load("@aspect_rules_lint//lint:shellcheck.bzl", "lint_shellcheck_aspect")
 {% if ruby %}
 load("@aspect_rules_lint//lint:rubocop.bzl", "lint_rubocop_aspect")
 {% endif %}
+{% if rust %}
+load("@aspect_rules_lint_rust//:clippy.bzl", "lint_clippy_aspect")
+{% endif %}
 
 {% if cpp %}
 clang_tidy = lint_clang_tidy_aspect(
@@ -88,5 +91,14 @@ shellcheck_test = lint_test(aspect = shellcheck)
 rubocop = lint_rubocop_aspect(
     binary = Label("@bundle//bin:rubocop"),
     configs = [Label("//:.rubocop.yml")],
+)
+{% endif %}
+{% if rust %}
+# Clippy reads its binary from the configured Rust toolchain (no binary= needed).
+# -Dwarnings promotes warnings to errors so they surface as lint violations.
+# Tag a target `noclippy` to exclude it.
+clippy = lint_clippy_aspect(
+    config = Label("//:.clippy.toml"),
+    clippy_flags = ["-Dwarnings"],
 )
 {% endif %}
