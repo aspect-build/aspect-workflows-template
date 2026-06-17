@@ -3,8 +3,9 @@
 # There is nothing to build — the template is plain source that `aspect init`
 # fetches at runtime — so this just creates the release with an auto-generated
 # changelog. `aspect init` resolves the repo's latest release as its default
-# template source, and pushing the `v*` tag also triggers publish-starters.yaml
-# to sync the rendered presets to the aspect-starters org.
+# template source. The aspect-starters sync is dispatched explicitly by
+# tag.yaml's `sync-starters` job (the tag is pushed with GITHUB_TOKEN, whose
+# ref events GitHub suppresses, so a `push: tags` trigger wouldn't fire).
 name: Publish Release
 
 on:
