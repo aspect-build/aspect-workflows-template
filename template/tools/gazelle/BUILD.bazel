@@ -12,7 +12,10 @@ aspect_gazelle(
         {% if go %}"go",{% endif %}
         {% if javascript %}"js",{% endif %}
         {% if cpp %}"cc",{% endif %}
-        {% if kotlin %}"kotlin",{% endif %}
+        # Kotlin (like Java/Scala) ships hand-written BUILD files — its sample
+        # uses kt_jvm_* + JUnit jars gazelle can't resolve, and the kotlin
+        # extension generates kt_jvm_library targets that collide with the
+        # hand-written ones (incl. //tools/gazelle). So gazelle skips Kotlin.
     ],
     {% if shell or (oci and go) %}
     # Aspect Orion extensions (Starlark BUILD generators) shipped in .aspect/gazelle.

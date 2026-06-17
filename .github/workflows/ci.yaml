@@ -42,33 +42,26 @@ jobs:
         with:
           aspect-api-token: ${{ secrets.ASPECT_API_TOKEN }}
 
-      - name: Render + post-scaffold (repin, format, git init)
+      # Render + post-scaffold EXACTLY as the aspect-starters publish job does
+      # (publish-starters.yaml), so the tree the check steps below see is
+      # byte-for-byte what a published starter ships. The check steps then run
+      # the SAME tasks the stamped CI (template/.github/workflows/ci.yaml) runs
+      # downstream — so a green run here means the starter repos are green too.
+      - name: Render + post-scaffold (repin, normalize)
         run: |
           aspect render-preset --preset='${{ matrix.preset }}' --out="$RUNNER_TEMP/out" --name=my_project
           echo "WS=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
           cd "$RUNNER_TEMP/out"
-          # Post-scaffold, in order (mirrors `aspect init`'s post-scaffold):
-          # 1. repin — the template ships placeholder lockfiles; regenerate them.
+          # repin — the template ships placeholder lockfiles; regenerate them.
           if [ -x ./tools/repin ]; then ./tools/repin; fi
           bazel mod deps --lockfile_mode=update || true
-          # 2. git init FIRST — `aspect format`/`gazelle` need a git working tree
-          #    to enumerate/apply changes (and it matches a real user's repo).
+          # git init FIRST — gazelle/format need a git tree to enumerate + apply.
           git init -q
           git add -A
           git -c user.email=ci@aspect.build -c user.name=CI commit -q -m "rendered ${{ matrix.preset }}"
-          # 3. normalize formatting (jinja rendering leaves stray blank lines /
-          #    non-canonical spacing). buildifier for Starlark; aspect format for
-          #    sources. Done after git init so the formatters can see the files,
-          #    and after repin so regenerated files are covered. Amend the commit
-          #    so the check jobs see a fully-normalized tree.
-          #
-          #    `aspect format` publishes a status check whenever it runs on CI
-          #    (keyed by --task-key, shared with the "Format" gate below so they
-          #    update one check, not two). Run it only for presets that have a
-          #    source formatter — minimal/scala/ruby have none, so `aspect format`
-          #    would fail to build //tools/format and publish a failing check;
-          #    buildifier alone covers their (Starlark-only) trees.
+          # Normalize (buildifier + gazelle + format), mirroring the publish job.
           bazel run --run_in_cwd @buildifier_prebuilt//buildifier -- -r . || true
+          aspect gazelle --task-key gazelle-${{ matrix.preset }} --check-only=false || true
           case "${{ matrix.preset }}" in
             minimal|scala|ruby) ;;
             *) aspect format --task-key format-${{ matrix.preset }} --scope=all || true ;;
@@ -95,32 +88,44 @@ jobs:
         working-directory: ${{ env.WS }}
         run: aspect test --task-key test-${{ matrix.preset }} -- //...
 
-      # buildifier always runs (Starlark formatting; only needs buildifier_prebuilt).
-      # NB: --scope=all — these tasks run in the rendered project ($WS), but the
-      # task's PR-diff detection would otherwise key off THIS (template) repo's
-      # changed files (the jinja .tmpl sources, which aren't valid Starlark).
+      # The steps below run the SAME tasks the generated project's CI
+      # (template/.github/workflows/ci.yaml) runs, with the same per-preset
+      # gating, so this matrix is a faithful proxy for the starter repos. All
+      # use --scope=all: these run in the rendered project ($WS), but a task's
+      # PR-diff detection would otherwise key off THIS repo's changed files.
+
+      # buildifier always runs (Starlark; only needs buildifier_prebuilt).
       - name: Buildifier
         working-directory: ${{ env.WS }}
         run: aspect buildifier --task-key buildifier-${{ matrix.preset }} --scope=all
 
-      # Skip lint for presets with no wired rules_lint linter:
-      #  - minimal/go/scala: rules_lint ships no linter for the language
-      #  - rust: clippy lives in the aspect_rules_lint_rust module, which isn't
-      #    published to BCR yet, so it can't be wired from a BCR-only template.
-      #    rustfmt formatting still runs (see below). Re-enable once it publishes.
+      # gazelle runs for every preset (the stamped CI always has a gazelle job).
+      - name: Gazelle (no changes expected)
+        working-directory: ${{ env.WS }}
+        run: aspect gazelle --task-key gazelle-check-${{ matrix.preset }}
+
+      # Lint runs only for presets with a wired rules_lint aspect (matches the
+      # stamped CI's lint-job gating and .aspect/config.axl's aspects list).
+      # go/scala have no linter; rust's clippy lives in the unpublished
+      # aspect_rules_lint_rust module.
       - name: Lint
         if: ${{ !contains(fromJSON('["minimal","go","scala","rust"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect lint --task-key lint-${{ matrix.preset }} -- //...
 
-      # `format` runs for every preset with a wired source formatter (rust gets
-      # rustfmt, go gofmt, etc.). Skipped only where none exists: scala/ruby have
-      # no formatter yet, and minimal has no languages (buildifier covers its
-      # Starlark in the step above).
+      # format runs for every preset with a wired source formatter. scala/ruby
+      # have none; minimal has no languages (buildifier covers its Starlark).
       - name: Format (no changes expected)
         if: ${{ !contains(fromJSON('["minimal","scala","ruby"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect format --task-key format-${{ matrix.preset }} --scope=all
+
+      # delivery runs for presets whose stamped CI has a delivery job (oci/stamp).
+      # --track-state=false --mode=always mirrors the stamped delivery job.
+      - name: Delivery
+        if: ${{ contains(fromJSON('["go","kitchen-sink"]'), matrix.preset) }}
+        working-directory: ${{ env.WS }}
+        run: aspect delivery --task-key delivery-${{ matrix.preset }} --track-state=false --mode=always
 
       # Execute the preset's user story — an executable-Markdown tutorial that
       # builds/tests/extends the generated project. Run with `sh` (the ~~~ alias

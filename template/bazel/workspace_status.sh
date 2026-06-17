@@ -10,10 +10,17 @@ readonly git_commit
 # - patch = commits since the week's tag (1), +build = short commit (201b9a8).
 # The two --match globs cover single- and double-digit week tags (2025.1-2025.59).
 # Follows https://aspect.build/blog/versioning-releases-from-a-monorepo
-monorepo_version=$(
-	git describe --tags --long --match="2[0-9][0-9][0-9].[1-9]" --match="2[0-9][0-9][0-9].[1-5][0-9]" |
-		sed -e 's/-/./;s/-g/+/'
-)
+#
+# Falls back to 0.0.0+<sha> when no weekly tag is reachable (a freshly scaffolded
+# project, or any history without a `<year>.<week>` tag) so stamping/delivery
+# still work — `git describe` would otherwise exit non-zero and fail the build.
+if monorepo_version=$(
+	git describe --tags --long --match="2[0-9][0-9][0-9].[1-9]" --match="2[0-9][0-9][0-9].[1-5][0-9]" 2>/dev/null
+); then
+	monorepo_version=$(sed -e 's/-/./;s/-g/+/' <<<"$monorepo_version")
+else
+	monorepo_version="0.0.0+${git_commit:0:8}"
+fi
 
 # A short variant of the monorepo version that drops the +build metadata. For example, 2025.34.0.
 monorepo_short_version=$(sed 's/+.*//' <<<"$monorepo_version")

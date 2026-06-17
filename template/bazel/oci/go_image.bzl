@@ -38,9 +38,9 @@ def go_image(name, binary, base = "@distroless_base"):
         ],
     )
 
-    # Deliverable: `aspect delivery` builds + pushes targets tagged "deliverable"
-    # (see the query in .aspect/config.axl). ttl.sh is an anonymous, ephemeral
-    # registry — fine for a demo; point `repository` at your real registry.
+    # Deliverable: `aspect delivery` builds + pushes every `oci_push` (its query
+    # matches the rule kind — see .aspect/config.axl). ttl.sh is an anonymous,
+    # ephemeral registry — fine for a demo; point `repository` at your registry.
     oci_push(
         name = name + "_push",
         image = name + "_platform",
@@ -48,5 +48,4 @@ def go_image(name, binary, base = "@distroless_base"):
             "latest",
         ],
         repository = "ttl.sh/" + native.package_name(),
-        tags = ["deliverable"],
     )

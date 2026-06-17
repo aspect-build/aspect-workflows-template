@@ -80,20 +80,35 @@ jobs:
           aspect render-preset --preset='${{ matrix.preset }}' --out="$RUNNER_TEMP/out" --name=my_project --license=Apache-2.0
           echo "WS=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
 
-      - name: Repin lockfiles
+      - name: Post-scaffold (repin, normalize formatting, commit)
         working-directory: ${{ env.WS }}
         run: |
+          # Mirror the template repo's own post-scaffold CI step so the published
+          # starter is byte-for-byte what that CI validates — otherwise the
+          # downstream repo's buildifier/gazelle/format jobs fail on the raw
+          # render (jinja block-stripping leaves stray blank lines, etc.).
+          #
+          # repin — the template ships placeholder lockfiles; regenerate them.
           if [ -x ./tools/repin ]; then ./tools/repin || true; fi
-
-      - name: Commit rendered tree
-        working-directory: ${{ env.WS }}
-        run: |
+          bazel mod deps --lockfile_mode=update || true
+          # git init FIRST — gazelle/format need a git tree to enumerate + apply.
           git init -q
           git checkout -q -b main
           git config user.email "marvin@aspect.build"
           git config user.name "Marvin, the Aspect bot"
           git add -A
           git commit -q -m "Generated from aspect-workflows-template ${{ github.ref_name }}"
+          # Normalize: buildifier for Starlark, gazelle for BUILD files, aspect
+          # format for sources (skip presets with no source formatter). --scope=all
+          # since there's no base ref to diff against. Then amend the commit.
+          bazel run --run_in_cwd @buildifier_prebuilt//buildifier -- -r . || true
+          aspect gazelle --task-key publish-gazelle --check-only=false || true
+          case "${{ matrix.preset }}" in
+            minimal|scala|ruby) ;;
+            *) aspect format --task-key publish-format --scope=all || true ;;
+          esac
+          git add -A
+          git commit -q --amend --no-edit
 
       - name: Ensure template repository (best-effort; needs Administration:write)
         if: ${{ github.event_name == 'push' || inputs.dry_run == false }}
