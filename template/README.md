@@ -1,4 +1,21 @@
-# Bazel workflows
+{%- set ns = namespace(count = 0, label = "") -%}
+{%- if go %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Go" %}{% endif -%}
+{%- if python %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Python" %}{% endif -%}
+{%- if javascript %}{% set ns.count = ns.count + 1 %}{% set ns.label = "JavaScript & TypeScript" %}{% endif -%}
+{%- if java %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Java" %}{% endif -%}
+{%- if kotlin %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Kotlin" %}{% endif -%}
+{%- if scala %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Scala" %}{% endif -%}
+{%- if cpp %}{% set ns.count = ns.count + 1 %}{% set ns.label = "C & C++" %}{% endif -%}
+{%- if rust %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Rust" %}{% endif -%}
+{%- if ruby %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Ruby" %}{% endif -%}
+{%- if shell %}{% set ns.count = ns.count + 1 %}{% set ns.label = "Shell" %}{% endif -%}
+{%- if ns.count == 0 -%}
+# Aspect Bazel Starter
+{%- elif ns.count == 1 -%}
+# Aspect Bazel Starter for {{ ns.label }}
+{%- else -%}
+# Aspect Bazel Polyglot Starter
+{%- endif %}
 
 This repository uses [Aspect Workflows](https://aspect.build) to provide an excellent Bazel developer experience.
 It was generated from the Aspect Workflows template — create your own with `aspect init`
