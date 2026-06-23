@@ -131,8 +131,15 @@ jobs:
       # Lint runs only for presets with a wired rules_lint aspect (matches the
       # stamped CI's lint-job gating and .aspect/config.axl's aspects list).
       # go/scala have no linter; rust lints via clippy (aspect_rules_lint_rust).
+      #
+      # The clang-tidy aspect (cpp, and cpp-in-kitchen-sink) is skipped on macOS:
+      # rules_lint's _update_flag strips absolute `-isystem` paths as if they were
+      # MSVC `/flags`, so the macOS SDK libc++ include is dropped and clang-tidy
+      # can't find <string>/<iostream>. Build/test/format still run on macOS for
+      # cpp. Re-enable once https://github.com/aspect-build/rules_lint/issues/924
+      # ships (PR #779).
       - name: Lint
-        if: ${{ !contains(fromJSON('["minimal","go","scala"]'), matrix.preset) }}
+        if: ${{ !contains(fromJSON('["minimal","go","scala"]'), matrix.preset) && !(matrix.os == 'macos-latest' && contains(fromJSON('["cpp","kitchen-sink"]'), matrix.preset)) }}
         working-directory: ${{ env.WS }}
         run: aspect lint --task:name lint-${{ matrix.preset }}-${{ matrix.os }} -- //...
 
