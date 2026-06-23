@@ -33,7 +33,12 @@ jobs:
           - ruby
           - scala
           - kitchen-sink
-    runs-on: ubuntu-latest
+        # macOS runners are billed at 10x Linux on GHA, so only exercise them
+        # on main pushes (where Apple-Silicon-only breakage like the
+        # distroless linux/arm64/v8 manifest bug would otherwise slip through);
+        # PRs stay Linux-only.
+        os: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') && fromJSON('["ubuntu-latest","macos-latest"]') || fromJSON('["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
 
@@ -78,8 +83,16 @@ jobs:
         env:
           ACTIONLINT_VERSION: 1.7.7
         run: |
+          case "$(uname -s)" in
+            Darwin) os=darwin ;;
+            *)      os=linux ;;
+          esac
+          case "$(uname -m)" in
+            arm64|aarch64) arch=arm64 ;;
+            *)             arch=amd64 ;;
+          esac
           curl -fsSL -o actionlint.tar.gz \
-            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_${os}_${arch}.tar.gz"
           tar -xzf actionlint.tar.gz actionlint
           ./actionlint -color .github/workflows/*.yaml
 
