@@ -34,7 +34,7 @@ def _impl(ctx):
 # NB: --preset has no static `values=` list because the valid presets are read
 # at runtime from template-config.json (preset_flags fails on an unknown name).
 render_preset = task(
-    name = "render-preset",
+    kind = "render-preset",
     summary = "Render one template preset into an output directory",
     implementation = _impl,
     args = {

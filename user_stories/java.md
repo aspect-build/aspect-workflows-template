@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/java` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-java-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/java:hello
-aspect test --task-key test-java-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/java:hello_test
+aspect build --task:name build-java-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/java:hello
+aspect test --task:name test-java-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/java:hello_test
 output=$(bazel run //hello/java:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -80,7 +80,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-java-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:greet
+aspect build --task:name build-java-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:greet
 output=$(bazel run //cmd/greet:greet)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"

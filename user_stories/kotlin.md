@@ -35,8 +35,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/kotlin` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-kotlin-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/kotlin:hello
-aspect test --task-key test-kotlin-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/kotlin:hello_test
+aspect build --task:name build-kotlin-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/kotlin:hello
+aspect test --task:name test-kotlin-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/kotlin:hello_test
 output=$(bazel run //hello/kotlin:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -73,7 +73,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-kotlin-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //src/greet:greet
+aspect build --task:name build-kotlin-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //src/greet:greet
 output=$(bazel run //src/greet:greet)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"

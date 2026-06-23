@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/shell` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-shell-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/shell:hello
-aspect test --task-key test-shell-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/shell:hello_test
+aspect build --task:name build-shell-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/shell:hello
+aspect test --task:name test-shell-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/shell:hello_test
 output=$(bazel run //hello/shell:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -73,7 +73,7 @@ EOF
 Build and run the new command:
 
 ~~~sh
-aspect build --task-key build-shell-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:greet
+aspect build --task:name build-shell-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:greet
 output=$(bazel run //cmd/greet:greet)
 echo "${output}" | grep -q "Greetings from Bazel" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel' but got '${output}'"

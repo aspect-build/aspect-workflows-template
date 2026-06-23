@@ -104,10 +104,10 @@ jobs:
           # format for sources (skip presets with no source formatter). --scope=all
           # since there's no base ref to diff against. Then amend the commit.
           bazel run --run_in_cwd @buildifier_prebuilt//buildifier -- -r . || true
-          aspect gazelle --task-key publish-gazelle --check-only=false || true
+          aspect gazelle --task:name publish-gazelle --check-only=false || true
           case "${{ matrix.preset }}" in
             minimal|scala|ruby) ;;
-            *) aspect format --task-key publish-format --scope=all || true ;;
+            *) aspect format --task:name publish-format --scope=all || true ;;
           esac
           git add -A
           git commit -q --amend --no-edit

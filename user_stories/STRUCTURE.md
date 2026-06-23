@@ -73,7 +73,7 @@ The two non-language presets differ:
   ```
 - **`aspect` vs `bazel`** — use `aspect build`/`aspect test` for the task-driven
   commands; `bazel run` is fine for running a binary and capturing its output.
-- **`--task-key` on `aspect test`** — pass `--task-key test-<preset>-story` so the
+- **`--task:name` on `aspect test`** — pass `--task:name test-<preset>-story` so the
   story's test run gets a distinct task identity from the CI `test` task it shares
   a workspace with (otherwise their state tracking collides). One key per story.
 - **BUILD generation** — run `aspect gazelle` for languages that support it; for
