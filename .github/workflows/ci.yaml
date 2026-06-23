@@ -10,6 +10,17 @@ concurrency:
 
 permissions:
   id-token: write
+  contents: read
+
+# The aspect-launcher and bazelisk resolve their versions via the GitHub
+# releases API. Unauthenticated that API is capped at 60 req/hr by source IP,
+# which the macOS legs blow through on a cold cache (all presets stampede the
+# API at once on the first-ever macOS run) → "403 API rate limit exceeded".
+# Authenticate those calls with the job token to get the 5000 req/hr limit.
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BAZELISK_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   # Render every preset from the local template tree (via the shared renderer the
