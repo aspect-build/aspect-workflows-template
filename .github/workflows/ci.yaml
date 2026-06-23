@@ -77,10 +77,10 @@ jobs:
           git -c user.email=ci@aspect.build -c user.name=CI commit -q -m "rendered ${{ matrix.preset }}"
           # Normalize (buildifier + gazelle + format), mirroring the publish job.
           bazel run --run_in_cwd @buildifier_prebuilt//buildifier -- -r . || true
-          aspect gazelle --task:name gazelle-${{ matrix.preset }}-${{ matrix.os }} --check-only=false || true
+          aspect gazelle --task:name gazelle-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --check-only=false || true
           case "${{ matrix.preset }}" in
             minimal|scala|ruby) ;;
-            *) aspect format --task:name format-${{ matrix.preset }}-${{ matrix.os }} --scope=all || true ;;
+            *) aspect format --task:name format-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --scope=all || true ;;
           esac
           git add -A
           git -c user.email=ci@aspect.build -c user.name=CI commit -q --amend --no-edit || true
@@ -110,7 +110,7 @@ jobs:
       # No separate build step: `aspect test` builds everything it needs.
       - name: Test
         working-directory: ${{ env.WS }}
-        run: aspect test --task:name test-${{ matrix.preset }}-${{ matrix.os }} -- //...
+        run: aspect test --task:name test-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false -- //...
 
       # The steps below run the SAME tasks the generated project's CI
       # (template/.github/workflows/ci.yaml) runs, with the same per-preset
@@ -121,12 +121,12 @@ jobs:
       # buildifier always runs (Starlark; only needs buildifier_prebuilt).
       - name: Buildifier
         working-directory: ${{ env.WS }}
-        run: aspect buildifier --task:name buildifier-${{ matrix.preset }}-${{ matrix.os }} --scope=all
+        run: aspect buildifier --task:name buildifier-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --scope=all
 
       # gazelle runs for every preset (the stamped CI always has a gazelle job).
       - name: Gazelle (no changes expected)
         working-directory: ${{ env.WS }}
-        run: aspect gazelle --task:name gazelle-check-${{ matrix.preset }}-${{ matrix.os }}
+        run: aspect gazelle --task:name gazelle-check-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false
 
       # Lint runs only for presets with a wired rules_lint aspect (matches the
       # stamped CI's lint-job gating and .aspect/config.axl's aspects list).
@@ -141,21 +141,21 @@ jobs:
       - name: Lint
         if: ${{ !contains(fromJSON('["minimal","go","scala"]'), matrix.preset) && !(matrix.os == 'macos-latest' && contains(fromJSON('["cpp","kitchen-sink"]'), matrix.preset)) }}
         working-directory: ${{ env.WS }}
-        run: aspect lint --task:name lint-${{ matrix.preset }}-${{ matrix.os }} -- //...
+        run: aspect lint --task:name lint-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false -- //...
 
       # format runs for every preset with a wired source formatter. scala/ruby
       # have none; minimal has no languages (buildifier covers its Starlark).
       - name: Format (no changes expected)
         if: ${{ !contains(fromJSON('["minimal","scala","ruby"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
-        run: aspect format --task:name format-${{ matrix.preset }}-${{ matrix.os }} --scope=all
+        run: aspect format --task:name format-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --scope=all
 
       # delivery runs for presets whose stamped CI has a delivery job (oci/stamp).
       # --track-state=false --mode=always mirrors the stamped delivery job.
       - name: Delivery
         if: ${{ contains(fromJSON('["go","kitchen-sink"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
-        run: aspect delivery --task:name delivery-${{ matrix.preset }}-${{ matrix.os }} --track-state=false --mode=always
+        run: aspect delivery --task:name delivery-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --track-state=false --mode=always
 
       # Execute the preset's user story — an executable-Markdown tutorial that
       # builds/tests/extends the generated project. Run with `sh` (the ~~~ alias
