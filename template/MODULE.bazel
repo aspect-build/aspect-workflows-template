@@ -60,8 +60,13 @@ bazel_dep(name = "aspect_rules_swc", version = "2.7.2")
 {% if python %}
 bazel_dep(name = "aspect_rules_py", version = "2.0.0-alpha.3")
 {% endif %}
-{% if cpp %}
-bazel_dep(name = "rules_cc", version = "0.2.19")
+{% if cpp or (rust and lint) %}
+# Pinned to match the LLVM toolchain below (registered for the same condition).
+# toolchains_llvm 1.8.0's generated cc_toolchain selects on the rules_cc target
+# `//cc/toolchains/args/archiver_flags:use_libtool_on_macos_setting`, which
+# rules_cc 0.2.19 renamed away — so 0.2.18 is the newest compatible version.
+# Without this, macOS analysis fails: "no such target ...use_libtool_on_macos_setting".
+bazel_dep(name = "rules_cc", version = "0.2.18")
 {% endif %}
 {% if cpp or (rust and lint) %}
 # Hermetic C++ toolchain. Also needed by rust+lint: it links rules_rust's
@@ -193,11 +198,11 @@ register_toolchains("@uv//:all")
 # fuller toolchain from the root module takes priority and fixes that link.
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
 llvm.toolchain(
-    # NB: llvm doesn't release for all platforms on every patch release
+    # clang 19 — clang 15 can't parse the macOS 15 SDK's libc++ headers
+    # ("unknown type name '__remove_cv'"). 19.1.7 is the last 19.1.x patch that
+    # ships linux-x64 + darwin-arm64 + darwin-x64, so one entry covers all.
     llvm_versions = {
-        "": "15.0.6",
-        "darwin-aarch64": "15.0.7",
-        "darwin-x86_64": "15.0.7",
+        "": "19.1.7",
     },
 )
 use_repo(llvm, "llvm_toolchain", "llvm_toolchain_llvm")
