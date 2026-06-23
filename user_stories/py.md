@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/py` package. Build and test it:
 
 ~~~sh
-aspect build --task-key build-py-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/py:hello
-aspect test --task-key test-py-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/py:hello_test
+aspect build --task:name build-py-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/py:hello
+aspect test --task:name test-py-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/py:hello_test
 ~~~
 
 ## Add your own code
@@ -71,5 +71,5 @@ EOF
 Build the new command:
 
 ~~~sh
-aspect build --task-key build-py-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:main
+aspect build --task:name build-py-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //cmd/greet:main
 ~~~

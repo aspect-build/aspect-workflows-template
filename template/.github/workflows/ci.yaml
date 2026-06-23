@@ -26,7 +26,7 @@ jobs:
       - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect test --task-key test -- //...
+      - run: aspect test --task:name test -- //...
 
   gazelle:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect gazelle --task-key gazelle
+      - run: aspect gazelle --task:name gazelle
 
   buildifier:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
       - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect buildifier --task-key buildifier
+      - run: aspect buildifier --task:name buildifier
 {% if go or python or javascript or cpp or kotlin or rust or shell or java %}
 
   format:
@@ -54,7 +54,7 @@ jobs:
       - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect format --task-key format
+      - run: aspect format --task:name format
 {% endif %}
 {# Only presets with a wired rules_lint aspect get a lint job (matches the
    aspects list in .aspect/config.axl). go/scala have no linter. #}
@@ -67,7 +67,7 @@ jobs:
       - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect lint --task-key lint -- //...
+      - run: aspect lint --task:name lint -- //...
 {% endif %}
 {% if oci or stamp %}
 
@@ -83,5 +83,5 @@ jobs:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       # Selective delivery (change detection) requires the Aspect Workflows
       # backend; on plain ephemeral runners deliver unconditionally.
-      - run: aspect delivery --task-key delivery --track-state=false --mode=always
+      - run: aspect delivery --task:name delivery --track-state=false --mode=always
 {% endif %}

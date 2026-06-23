@@ -34,8 +34,8 @@ so skipping `direnv` means you're responsible for installing them yourself.
 The starter ships a tiny `hello/ruby` package. Build it, test it, and run it:
 
 ~~~sh
-aspect build --task-key build-ruby-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/ruby:hello
-aspect test --task-key test-ruby-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/ruby:hello_test
+aspect build --task:name build-ruby-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/ruby:hello
+aspect test --task:name test-ruby-story --github-status-comments:enabled=false --github-status-checks:enabled=false //hello/ruby:hello_test
 output=$(bazel run //hello/ruby:hello)
 echo "${output}" | grep -q "Hello, world!" || {
     echo >&2 "Wanted output containing 'Hello, world!' but got '${output}'"
@@ -74,7 +74,7 @@ EOF
 Build and run it to see the result:
 
 ~~~sh
-aspect build --task-key build-ruby-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //app:greet
+aspect build --task:name build-ruby-greet --github-status-comments:enabled=false --github-status-checks:enabled=false //app:greet
 output=$(bazel run //app:greet)
 echo "${output}" | grep -q "Greetings from Bazel + Ruby!" || {
     echo >&2 "Wanted output containing 'Greetings from Bazel + Ruby!' but got '${output}'"
