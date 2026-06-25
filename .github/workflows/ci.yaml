@@ -85,6 +85,26 @@ jobs:
           git add -A
           git -c user.email=ci@aspect.build -c user.name=CI commit -q --amend --no-edit || true
 
+      # Assert the multitool-pinned aspect-launcher matches the version in
+      # tools.lock.json. The launcher prints `aspect launcher <version>` for
+      # `--version`; we derive the expected version from this repo's lockfile so
+      # the check stays in sync with future bumps. Run the launcher target via
+      # Bazel in the rendered workspace so we exercise the exact pinned binary.
+      - name: Assert aspect-launcher version
+        working-directory: ${{ env.WS }}
+        run: |
+          expected="$(
+            grep -o 'aspect-cli/releases/download/v[^/]*/' "$GITHUB_WORKSPACE/template/tools/tools.lock.json" \
+              | head -n1 | sed -E 's#.*/download/v##; s#/$##'
+          )"
+          echo "Expected launcher version: $expected"
+          actual="$(bazel run @multitool//tools/aspect -- --version)"
+          echo "Actual: $actual"
+          if [ "$actual" != "aspect launcher $expected" ]; then
+            echo "::error::aspect-launcher version mismatch: expected 'aspect launcher $expected', got '$actual'" >&2
+            exit 1
+          fi
+
       # Statically validate the generated GitHub Actions workflow itself
       # (syntax, expressions, permissions). GitHub can't run a rendered workflow
       # as a nested CI run, so actionlint is how we gate the YAML pre-merge; the
