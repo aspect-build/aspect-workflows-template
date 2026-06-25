@@ -19,3 +19,6 @@ node_modules/
 {% if ruby %}
 vendor/bundle/
 {% endif %}
+{% if rust %}
+target/
+{% endif %}
