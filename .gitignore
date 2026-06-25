@@ -13,3 +13,5 @@
 *.swp
 .idea/
 *~
+
+template/target/
