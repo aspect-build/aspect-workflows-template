@@ -72,7 +72,7 @@ jobs:
           owner: aspect-starters
           repositories: ${{ matrix.preset }}
 
-      - uses: aspect-build/setup-aspect@36c688a9bbb0c84d55d7eca31bf3215e9d265bff # v2026.24.1
+      - uses: aspect-build/setup-aspect@b7443e6f0b4a72507d73fcc49c16eecaf28786f9 # v2026.26.7
         with:
           aspect-api-token: ${{ secrets.ASPECT_API_TOKEN }}
 
