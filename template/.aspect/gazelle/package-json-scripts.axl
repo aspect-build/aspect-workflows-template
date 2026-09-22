@@ -1,7 +1,3 @@
-aspect.gazelle_rule_kind("js_binary", {
-    "From": "@aspect_rules_js//js:defs.bzl",
-})
-
 def declare_targets(ctx):
     for file in ctx.sources:
         if not file.query_results["scripts"][0]:
