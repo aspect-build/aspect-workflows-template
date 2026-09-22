@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect test --task:name test -- //...
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect gazelle --task:name gazelle
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect buildifier --task:name buildifier
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect format --task:name format
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       - run: aspect lint --task:name lint -- //...
@@ -78,7 +78,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: aspect-build/setup-aspect@6067df673a334c103489b12d582a3ba4133997de # v2026.38.0
+      - uses: aspect-build/setup-aspect@60664fabf0aa15152c69d0ee72c9a660416c7a36 # v2026.38.2
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       # Selective delivery (change detection) requires the Aspect Workflows
