@@ -61,8 +61,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
+        timeout-minutes: 20
 
       - name: Install Aspect CLI
+        timeout-minutes: 20
         uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ secrets.ASPECT_API_TOKEN }}
@@ -73,6 +75,7 @@ jobs:
       # the SAME tasks the stamped CI (template/.github/workflows/ci.yaml) runs
       # downstream — so a green run here means the starter repos are green too.
       - name: Render + post-scaffold (repin, normalize)
+        timeout-minutes: 20
         run: |
           aspect render-preset --preset='${{ matrix.preset }}' --out="$RUNNER_TEMP/out" --name=my_project
           echo "WS=$RUNNER_TEMP/out" >> "$GITHUB_ENV"
@@ -100,6 +103,7 @@ jobs:
       # the check stays in sync with future bumps. Run the launcher target via
       # Bazel in the rendered workspace so we exercise the exact pinned binary.
       - name: Assert aspect-launcher version
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         run: |
           expected="$(
@@ -119,6 +123,7 @@ jobs:
       # as a nested CI run, so actionlint is how we gate the YAML pre-merge; the
       # aspect-starters publish job is the live end-to-end run post-merge.
       - name: Lint generated workflows (actionlint)
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         env:
           ACTIONLINT_VERSION: 1.7.7
@@ -138,6 +143,7 @@ jobs:
 
       # No separate build step: `aspect test` builds everything it needs.
       - name: Test
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         run: aspect test --task:name test-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false -- //...
 
@@ -149,11 +155,13 @@ jobs:
 
       # buildifier always runs (Starlark; only needs buildifier_prebuilt).
       - name: Buildifier
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         run: aspect buildifier --task:name buildifier-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --scope=all
 
       # gazelle runs for every preset (the stamped CI always has a gazelle job).
       - name: Gazelle (no changes expected)
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         run: aspect gazelle --task:name gazelle-check-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false
 
@@ -168,6 +176,7 @@ jobs:
       # cpp. Re-enable once https://github.com/aspect-build/rules_lint/issues/924
       # ships (PR #779).
       - name: Lint
+        timeout-minutes: 20
         if: ${{ !contains(fromJSON('["minimal","go","scala"]'), matrix.preset) && !(matrix.os == 'macos-latest' && contains(fromJSON('["cpp","kitchen-sink"]'), matrix.preset)) }}
         working-directory: ${{ env.WS }}
         run: aspect lint --task:name lint-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false -- //...
@@ -175,6 +184,7 @@ jobs:
       # format runs for every preset with a wired source formatter. scala/ruby
       # have none; minimal has no languages (buildifier covers its Starlark).
       - name: Format (no changes expected)
+        timeout-minutes: 20
         if: ${{ !contains(fromJSON('["minimal","scala","ruby"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect format --task:name format-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --scope=all
@@ -182,6 +192,7 @@ jobs:
       # delivery runs for presets whose stamped CI has a delivery job (oci/stamp).
       # --track-state=false --mode=always mirrors the stamped delivery job.
       - name: Delivery
+        timeout-minutes: 20
         if: ${{ contains(fromJSON('["go","kitchen-sink"]'), matrix.preset) }}
         working-directory: ${{ env.WS }}
         run: aspect delivery --task:name delivery-${{ matrix.preset }}-${{ matrix.os }} --github-status-comments:enabled=false --github-status-checks:enabled=false --track-state=false --mode=always
@@ -191,6 +202,7 @@ jobs:
       # trick needs POSIX-sh alias expansion; bash non-interactive won't expand
       # it). See https://gist.github.com/bwoods/1c25cb7723a06a076c2152a2781d4d49
       - name: User story
+        timeout-minutes: 20
         working-directory: ${{ env.WS }}
         run: sh "$GITHUB_WORKSPACE/user_stories/${{ matrix.preset }}.md"
 
@@ -201,6 +213,7 @@ jobs:
     if: always()
     steps:
       - name: Report
+        timeout-minutes: 20
         run: |
           if [ "${{ contains(needs.preset.result, 'failure') || needs.preset.result == 'failure' }}" = "true" ]; then
             echo "one or more presets failed" && exit 1
