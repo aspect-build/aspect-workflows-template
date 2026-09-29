@@ -3,6 +3,16 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      ubuntu:
+        description: Run the preset matrix on ubuntu-latest
+        type: boolean
+        default: true
+      macos:
+        description: Run the preset matrix on macos-latest
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -44,11 +54,10 @@ jobs:
           - ruby
           - scala
           - kitchen-sink
-        # macOS runners are billed at 10x Linux on GHA, so only exercise them
-        # on main pushes (where Apple-Silicon-only breakage like the
-        # distroless linux/arm64/v8 manifest bug would otherwise slip through);
-        # PRs stay Linux-only.
-        os: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') && fromJSON('["ubuntu-latest","macos-latest"]') || fromJSON('["ubuntu-latest"]') }}
+        # macOS runners are billed at 10x Linux on GHA, so they only run on a
+        # manual workflow_dispatch that selects them; push and PR runs are
+        # Linux-only. Selecting neither OS falls back to ubuntu-latest.
+        os: ${{ fromJSON((inputs.ubuntu && inputs.macos) && '["ubuntu-latest","macos-latest"]' || inputs.macos && '["macos-latest"]' || '["ubuntu-latest"]') }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
