@@ -26,7 +26,7 @@ jobs:
       - uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect test --task:name test -- //...
+      - run: aspect test //...
 
   gazelle:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect gazelle --task:name gazelle
+      - run: aspect gazelle
 
   buildifier:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
       - uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect buildifier --task:name buildifier
+      - run: aspect buildifier
 {% if go or python or javascript or cpp or kotlin or rust or shell or java %}
 
   format:
@@ -54,7 +54,7 @@ jobs:
       - uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect format --task:name format
+      - run: aspect format
 {% endif %}
 {# Only presets with a wired rules_lint aspect get a lint job (matches the
    aspects list in .aspect/config.axl). go/scala have no linter. #}
@@ -67,7 +67,7 @@ jobs:
       - uses: aspect-build/setup-aspect@ebca96eb49ef58c00d4226de8bd3a0813507dd87 # v2026.38.3
         with:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
-      - run: aspect lint --task:name lint -- //...
+      - run: aspect lint
 {% endif %}
 {% if oci or stamp %}
 
@@ -83,5 +83,5 @@ jobs:
           aspect-api-token: ${{ '{{' }} secrets.ASPECT_API_TOKEN {{ '}}' }}
       # Selective delivery (change detection) requires the Aspect Workflows
       # backend; on plain ephemeral runners deliver unconditionally.
-      - run: aspect delivery --task:name delivery --track-state=false --mode=always
+      - run: aspect delivery --track-state=false --mode=always
 {% endif %}
